@@ -5,7 +5,10 @@ function notFound(req, res, next) {
 }
 
 function errorHandler(error, req, res, next) {
-  const statusCode = error.statusCode || 500;
+  const isUploadError =
+    error.name === 'MulterError' ||
+    error.message === 'Only PDF, PNG, JPG, and WEBP files are allowed';
+  const statusCode = error.statusCode || (isUploadError ? 400 : 500);
 
   res.status(statusCode).json({
     message: error.message || 'Internal server error',

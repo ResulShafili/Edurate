@@ -21,6 +21,7 @@ Lucide React
 /professors/[id] Professor profile and review form
 /forum           Course Q&A forum
 /questions/[id]  Question thread with answers and votes
+/resources       Course materials and upload form
 ```
 
 ## Setup

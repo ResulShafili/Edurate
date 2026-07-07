@@ -16,7 +16,7 @@ const navItems = [
   { href: "/", label: "Ana səhifə", icon: Home },
   { href: "/professors", label: "Rəylər", icon: Star },
   { href: "/forum", label: "Forum", icon: MessageSquare },
-  { href: "/notes", label: "PDF", icon: FileText },
+  { href: "/resources", label: "Resurs", icon: FileText },
   { href: "/swap", label: "Swap", icon: ShoppingBag },
 ];
 

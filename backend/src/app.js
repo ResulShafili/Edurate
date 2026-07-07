@@ -10,7 +10,9 @@ const authRoutes = require('./routes/authRoutes');
 const courseRoutes = require('./routes/courseRoutes');
 const professorRoutes = require('./routes/professorRoutes');
 const questionRoutes = require('./routes/questionRoutes');
+const resourceRoutes = require('./routes/resourceRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
+const { uploadsDirectory } = require('./middleware/uploadMiddleware');
 const { errorHandler, notFound } = require('./middleware/errorMiddleware');
 
 const app = express();
@@ -21,6 +23,7 @@ const corsOptions = process.env.CLIENT_URL
 
 app.use(helmet());
 app.use(cors(corsOptions));
+app.use('/uploads', express.static(uploadsDirectory));
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true }));
 
@@ -40,6 +43,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/courses', courseRoutes);
 app.use('/api/professors', professorRoutes);
 app.use('/api/questions', questionRoutes);
+app.use('/api/resources', resourceRoutes);
 app.use('/api/reviews', reviewRoutes);
 
 app.use(notFound);

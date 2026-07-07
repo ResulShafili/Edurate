@@ -19,16 +19,19 @@ backend/
       courseController.js
       professorController.js
       questionController.js
+      resourceController.js
       reviewController.js
     middleware/
       authMiddleware.js
       errorMiddleware.js
+      uploadMiddleware.js
     models/
       Answer.js
       Course.js
       ForumCategory.js
       Professor.js
       Question.js
+      Resource.js
       Review.js
       User.js
       University.js
@@ -38,6 +41,7 @@ backend/
       courseRoutes.js
       professorRoutes.js
       questionRoutes.js
+      resourceRoutes.js
       reviewRoutes.js
     utils/
       email.js
@@ -86,3 +90,13 @@ PUT  /api/answers/:id/vote
 ```
 
 Question, answer, and answer vote mutations require a Bearer JWT token. Answer vote `value` can be `1`, `-1`, or `0` to clear the vote.
+
+## Resources endpoints
+
+```text
+GET  /api/resources
+GET  /api/courses/:id/resources
+POST /api/resources
+```
+
+`POST /api/resources` requires a Bearer JWT token and accepts multipart form data with `file`, `courseId`, `title`, optional `description`, and optional `isAnonymous`. Uploaded files are stored locally under `backend/uploads/resources/` and served from `/uploads/resources/...`.

@@ -31,9 +31,9 @@ const modules = [
     tone: "text-sage bg-[#eef6f1]",
   },
   {
-    title: "PDF konspektlər",
+    title: "Materiallar",
     subtitle: "316 fayl",
-    href: "/notes",
+    href: "/resources",
     icon: FileText,
     tone: "text-[#64748b] bg-[#f1f5f9]",
   },
