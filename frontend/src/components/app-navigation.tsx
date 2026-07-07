@@ -14,7 +14,7 @@ import { usePathname } from "next/navigation";
 
 const navItems = [
   { href: "/", label: "Ana səhifə", icon: Home },
-  { href: "/reviews", label: "Rəylər", icon: Star },
+  { href: "/professors", label: "Rəylər", icon: Star },
   { href: "/forum", label: "Forum", icon: MessageSquare },
   { href: "/notes", label: "PDF", icon: FileText },
   { href: "/swap", label: "Swap", icon: ShoppingBag },

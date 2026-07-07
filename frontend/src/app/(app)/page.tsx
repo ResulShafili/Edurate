@@ -19,7 +19,7 @@ const modules = [
   {
     title: "Müəllim rəyləri",
     subtitle: "128 aktiv rəy",
-    href: "/reviews",
+    href: "/professors",
     icon: Star,
     tone: "text-clay bg-[#fff4ef]",
   },
@@ -206,7 +206,7 @@ export default function HomePage() {
         <div className="grid gap-3 sm:grid-cols-2">
           <Link
             className={`rounded-lg border border-white/70 bg-white/84 p-4 shadow-[0_14px_34px_rgba(39,35,29,0.06)] backdrop-blur-xl ${cardMotion}`}
-            href="/courses"
+            href="/professors"
           >
             <BookOpen className="size-5 text-sage" />
             <p className="mt-4 text-sm font-semibold">Kurs mərkəzi</p>

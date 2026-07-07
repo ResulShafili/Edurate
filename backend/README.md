@@ -46,3 +46,13 @@ GET  /api/auth/me
 ```
 
 Registration requires a `universityId`. The email domain is checked against the selected university's `email_domains` array in PostgreSQL.
+
+## Rate endpoints
+
+```text
+GET  /api/professors
+GET  /api/professors/:id
+POST /api/reviews
+```
+
+`POST /api/reviews` requires a Bearer JWT token and stores ratings for explanation, difficulty, objectivity, plus anonymous review preference.

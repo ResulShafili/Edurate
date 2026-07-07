@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "check": "node --check src/server.js && node --check src/app.js && node --check src/config/db.js && node --check src/controllers/authController.js && node --check src/middleware/authMiddleware.js && node --check src/middleware/errorMiddleware.js && node --check src/models/User.js && node --check src/models/University.js && node --check src/routes/authRoutes.js && node --check src/utils/email.js && node --check src/utils/jwt.js"
+    "check": "node --check src/server.js && node --check src/app.js && node --check src/config/db.js && node --check src/controllers/authController.js && node --check src/controllers/professorController.js && node --check src/controllers/reviewController.js && node --check src/middleware/authMiddleware.js && node --check src/middleware/errorMiddleware.js && node --check src/models/Course.js && node --check src/models/Professor.js && node --check src/models/Review.js && node --check src/models/User.js && node --check src/models/University.js && node --check src/routes/authRoutes.js && node --check src/routes/professorRoutes.js && node --check src/routes/reviewRoutes.js && node --check src/utils/email.js && node --check src/utils/jwt.js"
   },
   "keywords": [
     "edurate",

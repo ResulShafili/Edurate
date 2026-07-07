@@ -17,6 +17,8 @@ Lucide React
 /          Main compact dashboard layout
 /login     Auth login page
 /register  Auth register page
+/professors      Professor and course search
+/professors/[id] Professor profile and review form
 ```
 
 ## Setup
