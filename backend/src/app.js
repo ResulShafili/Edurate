@@ -8,6 +8,7 @@ const morgan = require('morgan');
 const answerRoutes = require('./routes/answerRoutes');
 const authRoutes = require('./routes/authRoutes');
 const courseRoutes = require('./routes/courseRoutes');
+const marketplaceRoutes = require('./routes/marketplaceRoutes');
 const professorRoutes = require('./routes/professorRoutes');
 const questionRoutes = require('./routes/questionRoutes');
 const resourceRoutes = require('./routes/resourceRoutes');
@@ -41,6 +42,7 @@ app.get('/health', (req, res) => {
 app.use('/api/answers', answerRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/courses', courseRoutes);
+app.use('/api/marketplace', marketplaceRoutes);
 app.use('/api/professors', professorRoutes);
 app.use('/api/questions', questionRoutes);
 app.use('/api/resources', resourceRoutes);

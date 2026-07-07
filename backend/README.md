@@ -17,6 +17,7 @@ backend/
       answerController.js
       authController.js
       courseController.js
+      marketplaceController.js
       professorController.js
       questionController.js
       resourceController.js
@@ -29,6 +30,7 @@ backend/
       Answer.js
       Course.js
       ForumCategory.js
+      MarketItem.js
       Professor.js
       Question.js
       Resource.js
@@ -39,6 +41,7 @@ backend/
       answerRoutes.js
       authRoutes.js
       courseRoutes.js
+      marketplaceRoutes.js
       professorRoutes.js
       questionRoutes.js
       resourceRoutes.js
@@ -100,3 +103,14 @@ POST /api/resources
 ```
 
 `POST /api/resources` requires a Bearer JWT token and accepts multipart form data with `file`, `courseId`, `title`, optional `description`, and optional `isAnonymous`. Uploaded files are stored locally under `backend/uploads/resources/` and served from `/uploads/resources/...`.
+
+## Marketplace endpoints
+
+```text
+GET  /api/marketplace
+POST /api/marketplace
+```
+
+`GET /api/marketplace` accepts optional `category`, `search`, and `limit` query params. `POST /api/marketplace` requires a Bearer JWT token and creates a campus item from `title`, `description`, `categorySlug`, optional `price`, optional `swapNote`, `condition`, `campusLocation`, `contactMethod`, `contactValue`, and optional `imageUrl`.
+
+Marketplace is a listing board only. It stores seller contact details through `contactMethod` (`whatsapp` or `email`) and `contactValue`; it does not create internal payments, orders, or checkout flows.

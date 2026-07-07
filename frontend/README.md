@@ -22,6 +22,7 @@ Lucide React
 /forum           Course Q&A forum
 /questions/[id]  Question thread with answers and votes
 /resources       Course materials and upload form
+/swap            Campus marketplace listing board with contact-seller flow
 ```
 
 ## Setup
