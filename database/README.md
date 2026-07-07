@@ -22,5 +22,5 @@ Before creating users, insert at least one university because user emails are ch
 
 ```sql
 INSERT INTO universities (name, slug, city, email_domains)
-VALUES ('Holberton School', 'holberton', 'Baku', ARRAY['holbertonschool.com']);
+VALUES ('Qarabağ Universiteti', 'qarabag-universiteti', 'Khankendi', ARRAY['karabakh.edu.az']);
 ```

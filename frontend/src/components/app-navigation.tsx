@@ -1,16 +1,13 @@
 "use client";
 
 import {
-  Bell,
   FileText,
   Home,
-  LogIn,
   MessageSquare,
   PanelLeft,
   Settings,
   ShoppingBag,
   Star,
-  UserPlus,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -39,7 +36,7 @@ export function AppNavigation() {
           </div>
           <div>
             <p className="text-base font-semibold leading-5">EduRate</p>
-            <p className="text-xs text-muted">Campus OS</p>
+            <p className="text-xs text-muted">Kampus paneli</p>
           </div>
         </div>
 
@@ -65,40 +62,13 @@ export function AppNavigation() {
           })}
         </nav>
 
-        <div className="mt-auto space-y-2">
-          <Link
-            className="flex h-10 items-center gap-3 rounded-lg px-3 text-sm font-medium text-muted transition hover:bg-white hover:text-foreground"
-            href="/settings"
-          >
-            <Settings className="size-4" />
-            Tənzimləmələr
-          </Link>
-          <div className="rounded-lg border border-line bg-white/78 p-3">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold">Modul A</span>
-              <Bell className="size-4 text-sage" />
-            </div>
-            <p className="mt-1 text-xs leading-5 text-muted">
-              Auth ekranları hazırdır.
-            </p>
-            <div className="mt-3 grid grid-cols-2 gap-2">
-              <Link
-                className="flex h-9 items-center justify-center gap-1 rounded-lg border border-line bg-white text-xs font-medium"
-                href="/login"
-              >
-                <LogIn className="size-3.5" />
-                Giriş
-              </Link>
-              <Link
-                className="flex h-9 items-center justify-center gap-1 rounded-lg bg-ink text-xs font-medium text-white"
-                href="/register"
-              >
-                <UserPlus className="size-3.5" />
-                Qeydiyyat
-              </Link>
-            </div>
-          </div>
-        </div>
+        <Link
+          className="mt-auto flex h-10 items-center gap-3 rounded-lg px-3 text-sm font-medium text-muted transition hover:bg-white hover:text-foreground"
+          href="/settings"
+        >
+          <Settings className="size-4" />
+          Tənzimləmələr
+        </Link>
       </aside>
 
       <nav className="fixed inset-x-3 bottom-3 z-40 grid grid-cols-5 rounded-lg border border-white/70 bg-white/86 p-1 shadow-[0_18px_42px_rgba(39,35,29,0.16)] backdrop-blur-xl lg:hidden">

@@ -1,8 +1,10 @@
 "use client";
 
+import type { LucideIcon } from "lucide-react";
 import {
   ArrowRight,
   AtSign,
+  ChevronDown,
   Eye,
   EyeOff,
   LockKeyhole,
@@ -11,7 +13,6 @@ import {
   User,
 } from "lucide-react";
 import Link from "next/link";
-import type { LucideIcon } from "lucide-react";
 import type { FormEvent } from "react";
 import { useMemo, useState } from "react";
 
@@ -21,9 +22,27 @@ type AuthResponse = {
   message?: string;
   token?: string;
   errors?: string[];
+  user?: {
+    fullName?: string;
+    email?: string;
+    username?: string;
+  };
 };
 
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
+const universities = [
+  {
+    name: "Qarabağ Universiteti",
+    domain: "karabakh.edu.az",
+  },
+] as const;
+
+function emailMatchesDomain(email: string, domain: string) {
+  const emailDomain = email.split("@").pop();
+
+  return emailDomain === domain || emailDomain?.endsWith(`.${domain}`);
+}
 
 export function AuthForm({ mode }: { mode: AuthMode }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -43,7 +62,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
           }
         : {
             title: "Qeydiyyat",
-            description: "Universitet domain-i təsdiqlənən hesab yarat.",
+            description: "Universitetini seç və rəsmi emailinlə hesab yarat.",
             submit: "Hesab yarat",
             alternateText: "Artıq hesabın var?",
             alternateAction: "Giriş",
@@ -58,17 +77,26 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
     setMessage("");
 
     const formData = new FormData(event.currentTarget);
+    const email = String(formData.get("email") || "").trim().toLowerCase();
+    const universityDomain = String(formData.get("universityDomain") || universities[0].domain);
+
+    if (mode === "register" && !emailMatchesDomain(email, universityDomain)) {
+      setStatus("error");
+      setMessage(`Zəhmət olmasa @${universityDomain} emailindən istifadə et.`);
+      return;
+    }
+
     const payload =
       mode === "login"
         ? {
-            email: formData.get("email"),
+            email,
             password: formData.get("password"),
           }
         : {
             fullName: formData.get("fullName"),
             username: formData.get("username"),
-            universityId: formData.get("universityId"),
-            email: formData.get("email"),
+            universityDomain,
+            email,
             password: formData.get("password"),
           };
 
@@ -93,6 +121,11 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
         window.localStorage.setItem("edurate_token", data.token);
       }
 
+      if (data.user) {
+        window.localStorage.setItem("edurate_user", JSON.stringify(data.user));
+      }
+
+      window.dispatchEvent(new Event("edurate-auth-change"));
       setStatus("success");
       setMessage(data.message || "Uğurlu əməliyyat");
     } catch (error) {
@@ -117,12 +150,12 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
         {mode === "register" && (
           <>
             <Field icon={User} label="Ad soyad" name="fullName" placeholder="Resul Shafili" />
-            <Field icon={AtSign} label="Username" name="username" placeholder="resul" required={false} />
-            <Field icon={School} label="University ID" name="universityId" placeholder="UUID" />
+            <Field icon={AtSign} label="İstifadəçi adı" name="username" placeholder="resul" required={false} />
+            <UniversitySelect />
           </>
         )}
 
-        <Field icon={Mail} label="Universitet emaili" name="email" placeholder="name@university.edu.az" type="email" />
+        <Field icon={Mail} label="Universitet emaili" name="email" placeholder="name@karabakh.edu.az" type="email" />
 
         <label className="block">
           <span className="text-xs font-medium text-muted">Şifrə</span>
@@ -177,6 +210,30 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
         </Link>
       </div>
     </div>
+  );
+}
+
+function UniversitySelect() {
+  return (
+    <label className="block">
+      <span className="text-xs font-medium text-muted">Universitetini seç</span>
+      <span className="relative mt-1 flex h-11 items-center rounded-lg border border-line bg-white px-3 focus-within:border-sage">
+        <School className="mr-2 size-4 text-muted" />
+        <select
+          className="h-full min-w-0 flex-1 appearance-none bg-transparent pr-7 text-sm outline-none"
+          defaultValue={universities[0].domain}
+          name="universityDomain"
+          required
+        >
+          {universities.map((university) => (
+            <option key={university.domain} value={university.domain}>
+              {university.name}
+            </option>
+          ))}
+        </select>
+        <ChevronDown className="pointer-events-none absolute right-3 size-4 text-muted" />
+      </span>
+    </label>
   );
 }
 

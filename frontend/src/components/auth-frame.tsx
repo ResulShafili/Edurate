@@ -1,6 +1,30 @@
-import { ArrowLeft, GraduationCap, ShieldCheck } from "lucide-react";
+import {
+  ArrowLeft,
+  GraduationCap,
+  MessageCircle,
+  ShieldCheck,
+  ShoppingBag,
+} from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
+
+const benefits = [
+  {
+    title: "Anonim rəylər",
+    description: "Dərs və müəllim təcrübəni rahat paylaş.",
+    icon: MessageCircle,
+  },
+  {
+    title: "Kampus bazarı",
+    description: "Kitab və əşyaları tələbələrlə dəyiş.",
+    icon: ShoppingBag,
+  },
+  {
+    title: "Təhlükəsiz qeydiyyat",
+    description: "Yalnız universitet emaili ilə giriş.",
+    icon: ShieldCheck,
+  },
+];
 
 export function AuthFrame({
   children,
@@ -31,26 +55,38 @@ export function AuthFrame({
 
       <div className="mx-auto grid min-h-[calc(100vh-76px)] max-w-6xl items-center gap-8 lg:grid-cols-[0.92fr_1fr]">
         <section className="hidden lg:block">
-          <div className="inline-flex items-center gap-2 rounded-full border border-line bg-white/70 px-3 py-1 text-xs font-medium text-muted backdrop-blur-md">
-            <ShieldCheck className="size-3.5 text-sage" />
-            Modul A
-          </div>
+          <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">
+            Tələbələr üçün
+          </p>
           <h1 className="mt-4 max-w-md text-4xl font-semibold leading-tight tracking-normal text-foreground">
             {title}
           </h1>
           <p className="mt-3 max-w-md text-sm leading-6 text-muted">
-            EduRate giriş sistemi universitet email domain-ləri ilə işləyir və
-            JWT token əsasında istifadəçi sessiyası yaradır.
+            EduRate universitet həyatını daha aydın və rahat etmək üçün
+            rəyləri, sualları, konspektləri və kampus elanlarını bir araya
+            gətirir.
           </p>
-          <div className="mt-6 grid max-w-md grid-cols-3 gap-2">
-            {["Email yoxlama", "JWT", "PostgreSQL"].map((item) => (
-              <div
-                className="rounded-lg border border-white/70 bg-white/76 p-3 shadow-[0_14px_30px_rgba(39,35,29,0.06)] backdrop-blur-xl"
-                key={item}
-              >
-                <p className="text-xs font-semibold">{item}</p>
-              </div>
-            ))}
+          <div className="mt-6 grid max-w-md gap-2">
+            {benefits.map((item) => {
+              const Icon = item.icon;
+
+              return (
+                <div
+                  className="flex items-center gap-3 rounded-lg border border-white/70 bg-white/76 p-3 shadow-[0_14px_30px_rgba(39,35,29,0.06)] backdrop-blur-xl"
+                  key={item.title}
+                >
+                  <span className="flex size-9 items-center justify-center rounded-lg bg-[#eef6f1] text-sage">
+                    <Icon className="size-4" />
+                  </span>
+                  <span>
+                    <span className="block text-sm font-semibold">{item.title}</span>
+                    <span className="mt-0.5 block text-xs leading-5 text-muted">
+                      {item.description}
+                    </span>
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </section>
 

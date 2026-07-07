@@ -1,5 +1,4 @@
 import {
-  ArrowRight,
   BookOpen,
   ChevronRight,
   CircleCheck,
@@ -14,28 +13,34 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
+import { UserActions } from "@/components/user-actions";
+
 const modules = [
   {
     title: "Müəllim rəyləri",
     subtitle: "128 aktiv rəy",
+    href: "/reviews",
     icon: Star,
     tone: "text-clay bg-[#fff4ef]",
   },
   {
     title: "Sual-cavab forumu",
     subtitle: "42 açıq sual",
+    href: "/forum",
     icon: MessageSquare,
     tone: "text-sage bg-[#eef6f1]",
   },
   {
     title: "PDF konspektlər",
     subtitle: "316 fayl",
+    href: "/notes",
     icon: FileText,
     tone: "text-[#64748b] bg-[#f1f5f9]",
   },
   {
     title: "Kampus swap",
     subtitle: "58 elan",
+    href: "/swap",
     icon: ShoppingBag,
     tone: "text-[#8a6f45] bg-[#fbf4e5]",
   },
@@ -43,7 +48,7 @@ const modules = [
 
 const recentQuestions = [
   "Data Structures imtahanına necə hazırlaşım?",
-  "Express JWT refresh token hansı yerdə saxlanmalıdır?",
+  "Qeydiyyat emaili gəlmirsə nə etməliyəm?",
   "Calculus 2 üçün ən yaxşı konspekt hansıdır?",
 ];
 
@@ -52,6 +57,9 @@ const teacherRows = [
   ["Elvin Huseynli", "Databases", "4.6"],
   ["Aysel Karimova", "Web Stack", "4.5"],
 ];
+
+const cardMotion =
+  "transition-all duration-300 hover:-translate-y-1 hover:shadow-md";
 
 export default function HomePage() {
   return (
@@ -66,7 +74,7 @@ export default function HomePage() {
           </h1>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
           <label className="relative block w-full sm:w-[320px]">
             <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted" />
             <input
@@ -75,19 +83,14 @@ export default function HomePage() {
               type="search"
             />
           </label>
-          <Link
-            aria-label="Qeydiyyat"
-            className="hidden h-10 items-center gap-2 rounded-lg bg-ink px-3 text-sm font-medium text-white shadow-[0_12px_26px_rgba(38,52,47,0.18)] transition hover:bg-[#1f2b27] sm:flex"
-            href="/register"
-          >
-            Başla
-            <ArrowRight className="size-4" />
-          </Link>
+          <UserActions />
         </div>
       </header>
 
       <section className="grid gap-3 lg:grid-cols-[1.36fr_0.82fr]">
-        <div className="rounded-lg border border-white/70 bg-white/80 p-4 shadow-[0_18px_45px_rgba(39,35,29,0.08)] backdrop-blur-xl">
+        <div
+          className={`rounded-lg border border-white/70 bg-white/80 p-4 shadow-[0_18px_45px_rgba(39,35,29,0.08)] backdrop-blur-xl ${cardMotion}`}
+        >
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div className="max-w-xl">
               <div className="inline-flex items-center gap-2 rounded-full border border-line bg-white/72 px-3 py-1 text-xs font-medium text-muted">
@@ -105,19 +108,19 @@ export default function HomePage() {
             </div>
 
             <div className="grid min-w-[220px] grid-cols-2 gap-2">
-              <div className="rounded-lg border border-line bg-white p-3">
+              <div className={`rounded-lg border border-line bg-white p-3 ${cardMotion}`}>
                 <p className="text-2xl font-semibold">544</p>
                 <p className="text-xs text-muted">Aktiv tələbə</p>
               </div>
-              <div className="rounded-lg border border-line bg-white p-3">
+              <div className={`rounded-lg border border-line bg-white p-3 ${cardMotion}`}>
                 <p className="text-2xl font-semibold">4.7</p>
                 <p className="text-xs text-muted">Orta reytinq</p>
               </div>
-              <div className="rounded-lg border border-line bg-white p-3">
+              <div className={`rounded-lg border border-line bg-white p-3 ${cardMotion}`}>
                 <p className="text-2xl font-semibold">316</p>
                 <p className="text-xs text-muted">PDF fayl</p>
               </div>
-              <div className="rounded-lg border border-line bg-white p-3">
+              <div className={`rounded-lg border border-line bg-white p-3 ${cardMotion}`}>
                 <p className="text-2xl font-semibold">58</p>
                 <p className="text-xs text-muted">Swap elanı</p>
               </div>
@@ -125,7 +128,9 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="rounded-lg border border-white/70 bg-white/80 p-4 shadow-[0_18px_45px_rgba(39,35,29,0.08)] backdrop-blur-xl">
+        <div
+          className={`rounded-lg border border-white/70 bg-white/80 p-4 shadow-[0_18px_45px_rgba(39,35,29,0.08)] backdrop-blur-xl ${cardMotion}`}
+        >
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-semibold">Bugünkü axın</p>
@@ -136,7 +141,7 @@ export default function HomePage() {
           <div className="mt-4 space-y-3">
             {recentQuestions.map((question) => (
               <button
-                className="flex w-full items-center justify-between rounded-lg border border-line bg-white px-3 py-2 text-left text-sm transition hover:border-sage/45"
+                className="flex w-full items-center justify-between rounded-lg border border-line bg-white px-3 py-2 text-left text-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-sage/45 hover:shadow-md"
                 key={question}
                 type="button"
               >
@@ -153,10 +158,10 @@ export default function HomePage() {
           const Icon = item.icon;
 
           return (
-            <button
-              className="group flex min-h-[116px] flex-col justify-between rounded-lg border border-white/70 bg-white/84 p-4 text-left shadow-[0_14px_34px_rgba(39,35,29,0.06)] backdrop-blur-xl transition hover:-translate-y-0.5 hover:shadow-[0_18px_38px_rgba(39,35,29,0.1)]"
+            <Link
+              className={`group flex min-h-[116px] flex-col justify-between rounded-lg border border-white/70 bg-white/84 p-4 text-left shadow-[0_14px_34px_rgba(39,35,29,0.06)] backdrop-blur-xl ${cardMotion}`}
+              href={item.href}
               key={item.title}
-              type="button"
             >
               <span className={`flex size-9 items-center justify-center rounded-lg ${item.tone}`}>
                 <Icon className="size-4" />
@@ -165,13 +170,15 @@ export default function HomePage() {
                 <span className="block text-sm font-semibold">{item.title}</span>
                 <span className="mt-1 block text-xs text-muted">{item.subtitle}</span>
               </span>
-            </button>
+            </Link>
           );
         })}
       </section>
 
       <section className="grid gap-3 lg:grid-cols-[0.95fr_1.05fr]">
-        <div className="rounded-lg border border-white/70 bg-white/84 p-4 shadow-[0_14px_34px_rgba(39,35,29,0.06)] backdrop-blur-xl">
+        <div
+          className={`rounded-lg border border-white/70 bg-white/84 p-4 shadow-[0_14px_34px_rgba(39,35,29,0.06)] backdrop-blur-xl ${cardMotion}`}
+        >
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-semibold">Top müəllimlər</p>
@@ -197,7 +204,10 @@ export default function HomePage() {
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2">
-          <div className="rounded-lg border border-white/70 bg-white/84 p-4 shadow-[0_14px_34px_rgba(39,35,29,0.06)] backdrop-blur-xl">
+          <Link
+            className={`rounded-lg border border-white/70 bg-white/84 p-4 shadow-[0_14px_34px_rgba(39,35,29,0.06)] backdrop-blur-xl ${cardMotion}`}
+            href="/courses"
+          >
             <BookOpen className="size-5 text-sage" />
             <p className="mt-4 text-sm font-semibold">Kurs mərkəzi</p>
             <p className="mt-1 text-xs leading-5 text-muted">
@@ -207,8 +217,11 @@ export default function HomePage() {
               <Users className="size-4" />
               24 aktiv kurs
             </div>
-          </div>
-          <div className="rounded-lg border border-white/70 bg-white/84 p-4 shadow-[0_14px_34px_rgba(39,35,29,0.06)] backdrop-blur-xl">
+          </Link>
+          <Link
+            className={`rounded-lg border border-white/70 bg-white/84 p-4 shadow-[0_14px_34px_rgba(39,35,29,0.06)] backdrop-blur-xl ${cardMotion}`}
+            href="/swap"
+          >
             <ShoppingBag className="size-5 text-[#8a6f45]" />
             <p className="mt-4 text-sm font-semibold">Swap bazarı</p>
             <p className="mt-1 text-xs leading-5 text-muted">
@@ -218,7 +231,7 @@ export default function HomePage() {
               <FileText className="size-4" />
               12 yeni elan
             </div>
-          </div>
+          </Link>
         </div>
       </section>
     </div>

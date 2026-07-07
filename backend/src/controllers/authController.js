@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const University = require('../models/University');
 const User = require('../models/User');
 const {
+  getEmailDomain,
   isUniversityEmail,
   isValidEmailFormat,
   normalizeEmail
@@ -14,7 +15,7 @@ const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[
 function validateRegisterBody(body) {
   const errors = [];
 
-  if (!body.universityId || !uuidRegex.test(body.universityId)) {
+  if (body.universityId && !uuidRegex.test(body.universityId)) {
     errors.push('Valid universityId is required');
   }
 
@@ -31,6 +32,20 @@ function validateRegisterBody(body) {
   }
 
   return errors;
+}
+
+async function resolveUniversityForRegistration(body, email) {
+  if (body.universityId) {
+    return University.findById(body.universityId);
+  }
+
+  const domain = body.universityDomain || getEmailDomain(email);
+
+  if (!domain) {
+    return null;
+  }
+
+  return University.findByEmailDomain(domain);
 }
 
 function validateLoginBody(body) {
@@ -55,15 +70,14 @@ async function register(req, res, next) {
       return res.status(400).json({ errors: validationErrors });
     }
 
-    const university = await University.findById(req.body.universityId);
+    const email = normalizeEmail(req.body.email);
+    const university = await resolveUniversityForRegistration(req.body, email);
 
     if (!university) {
       return res.status(404).json({
         message: 'University not found'
       });
     }
-
-    const email = normalizeEmail(req.body.email);
 
     if (!isUniversityEmail(email, university.emailDomains)) {
       return res.status(400).json({
@@ -81,7 +95,7 @@ async function register(req, res, next) {
 
     const passwordHash = await bcrypt.hash(req.body.password, 12);
     const user = await User.create({
-      universityId: req.body.universityId,
+      universityId: university.id,
       email,
       passwordHash,
       fullName: String(req.body.fullName).trim(),
