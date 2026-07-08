@@ -60,6 +60,20 @@ cp .env.example .env
 npm run dev
 ```
 
+## Demo seed
+
+```bash
+cd backend
+npm run seed
+```
+
+The seed script clears the current database data and inserts demo content for all EduRate modules. Demo login:
+
+```text
+Email: test@karabakh.edu.az
+Password: password123
+```
+
 ## Auth endpoints
 
 ```text

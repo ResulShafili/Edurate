@@ -5,10 +5,10 @@ CREATE TYPE user_role AS ENUM ('student', 'moderator', 'admin');
 CREATE TYPE content_status AS ENUM ('active', 'pending', 'hidden', 'deleted');
 CREATE TYPE academic_term AS ENUM ('spring', 'summer', 'fall', 'winter');
 CREATE TYPE question_status AS ENUM ('open', 'resolved', 'closed');
+CREATE TYPE resource_file_type AS ENUM ('pdf', 'image');
 CREATE TYPE report_status AS ENUM ('open', 'reviewed', 'dismissed', 'actioned');
 CREATE TYPE swap_item_condition AS ENUM ('new', 'like_new', 'good', 'fair', 'poor');
 CREATE TYPE swap_item_status AS ENUM ('available', 'reserved', 'sold', 'removed');
-CREATE TYPE swap_offer_status AS ENUM ('pending', 'accepted', 'rejected', 'cancelled', 'completed');
 
 CREATE TABLE universities (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -138,6 +138,7 @@ CREATE TABLE teacher_reviews (
   rating_grading_fairness SMALLINT CHECK (rating_grading_fairness BETWEEN 1 AND 5),
   would_take_again BOOLEAN,
   comment TEXT,
+  is_anonymous BOOLEAN NOT NULL DEFAULT true,
   moderation_status content_status NOT NULL DEFAULT 'active',
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -226,6 +227,7 @@ CREATE TABLE forum_answers (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   university_id UUID NOT NULL,
   question_id UUID NOT NULL,
+  parent_answer_id UUID,
   author_id UUID NOT NULL,
   body TEXT NOT NULL,
   moderation_status content_status NOT NULL DEFAULT 'active',
@@ -236,7 +238,9 @@ CREATE TABLE forum_answers (
   FOREIGN KEY (question_id, university_id)
     REFERENCES forum_questions(id, university_id) ON DELETE CASCADE,
   FOREIGN KEY (author_id, university_id)
-    REFERENCES users(id, university_id) ON DELETE CASCADE
+    REFERENCES users(id, university_id) ON DELETE CASCADE,
+  FOREIGN KEY (parent_answer_id, question_id)
+    REFERENCES forum_answers(id, question_id) ON DELETE CASCADE
 );
 
 ALTER TABLE forum_questions
@@ -289,10 +293,13 @@ CREATE TABLE pdf_notes (
   course_id UUID NOT NULL,
   title TEXT NOT NULL,
   description TEXT,
+  file_name TEXT NOT NULL,
+  file_type resource_file_type NOT NULL DEFAULT 'pdf',
   file_url TEXT NOT NULL,
   storage_key TEXT UNIQUE,
   file_size_bytes BIGINT NOT NULL CHECK (file_size_bytes > 0),
   page_count INT CHECK (page_count IS NULL OR page_count > 0),
+  is_anonymous BOOLEAN NOT NULL DEFAULT true,
   moderation_status content_status NOT NULL DEFAULT 'active',
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -374,6 +381,9 @@ CREATE TABLE swap_items (
   condition swap_item_condition NOT NULL,
   status swap_item_status NOT NULL DEFAULT 'available',
   campus_location TEXT,
+  swap_note TEXT,
+  contact_method TEXT NOT NULL CHECK (contact_method IN ('whatsapp', 'email')),
+  contact_value TEXT NOT NULL CHECK (btrim(contact_value) <> ''),
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   UNIQUE (id, university_id),
@@ -392,66 +402,12 @@ CREATE TABLE swap_item_images (
   UNIQUE (item_id, sort_order)
 );
 
-CREATE TABLE swap_offers (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  university_id UUID NOT NULL,
-  item_id UUID NOT NULL,
-  buyer_id UUID NOT NULL,
-  offered_price_cents INT CHECK (offered_price_cents IS NULL OR offered_price_cents >= 0),
-  message TEXT,
-  status swap_offer_status NOT NULL DEFAULT 'pending',
-  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  UNIQUE (id, university_id),
-  FOREIGN KEY (item_id, university_id)
-    REFERENCES swap_items(id, university_id) ON DELETE CASCADE,
-  FOREIGN KEY (buyer_id, university_id)
-    REFERENCES users(id, university_id) ON DELETE CASCADE
-);
-
-CREATE TABLE swap_messages (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  university_id UUID NOT NULL,
-  offer_id UUID NOT NULL,
-  sender_id UUID NOT NULL,
-  body TEXT NOT NULL,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  FOREIGN KEY (offer_id, university_id)
-    REFERENCES swap_offers(id, university_id) ON DELETE CASCADE,
-  FOREIGN KEY (sender_id, university_id)
-    REFERENCES users(id, university_id) ON DELETE CASCADE
-);
-
-CREATE TABLE swap_transactions (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  university_id UUID NOT NULL,
-  offer_id UUID NOT NULL UNIQUE,
-  item_id UUID NOT NULL UNIQUE,
-  buyer_id UUID NOT NULL,
-  seller_id UUID NOT NULL,
-  final_price_cents INT NOT NULL CHECK (final_price_cents >= 0),
-  completed_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  CHECK (buyer_id <> seller_id),
-  FOREIGN KEY (offer_id, university_id)
-    REFERENCES swap_offers(id, university_id) ON DELETE RESTRICT,
-  FOREIGN KEY (item_id, university_id)
-    REFERENCES swap_items(id, university_id) ON DELETE RESTRICT,
-  FOREIGN KEY (buyer_id, university_id)
-    REFERENCES users(id, university_id) ON DELETE RESTRICT,
-  FOREIGN KEY (seller_id, university_id)
-    REFERENCES users(id, university_id) ON DELETE RESTRICT
-);
-
-CREATE UNIQUE INDEX ux_swap_offers_one_accepted_per_item
-ON swap_offers(item_id)
-WHERE status IN ('accepted'::swap_offer_status, 'completed'::swap_offer_status);
-
 CREATE INDEX idx_teacher_reviews_teacher ON teacher_reviews(teacher_id, course_id, created_at DESC);
 CREATE INDEX idx_forum_questions_feed ON forum_questions(university_id, category_id, created_at DESC);
 CREATE INDEX idx_forum_answers_question ON forum_answers(question_id, created_at);
+CREATE INDEX idx_forum_answers_parent ON forum_answers(question_id, parent_answer_id, created_at);
 CREATE INDEX idx_pdf_notes_course ON pdf_notes(course_id, created_at DESC);
 CREATE INDEX idx_swap_items_market ON swap_items(university_id, category_id, status, created_at DESC);
-CREATE INDEX idx_swap_offers_item_status ON swap_offers(item_id, status);
 
 CREATE OR REPLACE FUNCTION set_updated_at()
 RETURNS TRIGGER AS $$
@@ -496,51 +452,6 @@ CREATE TRIGGER trg_users_university_email
 BEFORE INSERT OR UPDATE OF email, university_id ON users
 FOR EACH ROW EXECUTE FUNCTION enforce_user_university_email_domain();
 
-CREATE OR REPLACE FUNCTION enforce_swap_offer_rules()
-RETURNS TRIGGER AS $$
-DECLARE
-  item_seller UUID;
-BEGIN
-  SELECT seller_id INTO item_seller
-  FROM swap_items
-  WHERE id = NEW.item_id;
-
-  IF item_seller = NEW.buyer_id THEN
-    RAISE EXCEPTION 'Seller cannot make an offer on their own item';
-  END IF;
-
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER trg_swap_offers_rules
-BEFORE INSERT OR UPDATE OF item_id, buyer_id ON swap_offers
-FOR EACH ROW EXECUTE FUNCTION enforce_swap_offer_rules();
-
-CREATE OR REPLACE FUNCTION enforce_swap_message_sender()
-RETURNS TRIGGER AS $$
-DECLARE
-  offer_buyer UUID;
-  item_seller UUID;
-BEGIN
-  SELECT o.buyer_id, i.seller_id
-  INTO offer_buyer, item_seller
-  FROM swap_offers o
-  JOIN swap_items i ON i.id = o.item_id
-  WHERE o.id = NEW.offer_id;
-
-  IF NEW.sender_id <> offer_buyer AND NEW.sender_id <> item_seller THEN
-    RAISE EXCEPTION 'Sender must be either buyer or seller';
-  END IF;
-
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER trg_swap_messages_sender
-BEFORE INSERT OR UPDATE OF offer_id, sender_id ON swap_messages
-FOR EACH ROW EXECUTE FUNCTION enforce_swap_message_sender();
-
 DO $$
 DECLARE
   tbl TEXT;
@@ -548,7 +459,7 @@ BEGIN
   FOREACH tbl IN ARRAY ARRAY[
     'universities', 'users', 'departments', 'courses', 'teachers',
     'teacher_reviews', 'forum_categories', 'tags', 'forum_questions',
-    'forum_answers', 'pdf_notes', 'swap_categories', 'swap_items', 'swap_offers'
+    'forum_answers', 'pdf_notes', 'swap_categories', 'swap_items'
   ]
   LOOP
     EXECUTE format(
