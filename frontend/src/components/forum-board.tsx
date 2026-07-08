@@ -1,12 +1,10 @@
 "use client";
 
 import {
-  BookOpen,
   ChevronRight,
   Clock3,
   MessageSquare,
   Search,
-  Sparkles,
   ThumbsUp,
 } from "lucide-react";
 import Link from "next/link";
@@ -161,30 +159,34 @@ export function ForumBoard() {
       }),
     [questions],
   );
+  const totalAnswerCount = sortedQuestions.reduce(
+    (total, question) => total + question.answerCount,
+    0,
+  );
 
   function handleQuestionCreated(question: ForumQuestionSummary) {
     setQuestions((currentQuestions) => [question, ...currentQuestions]);
   }
 
   return (
-    <div className="space-y-4">
-      <header className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+    <div className="space-y-6">
+      <header className="space-y-4 md:flex md:items-end md:justify-between md:space-y-0">
         <div>
-          <p className="text-xs font-medium uppercase tracking-[0.16em] text-muted">
+          <p className="hidden text-xs font-medium uppercase tracking-[0.16em] text-gray-400 md:block">
             Modul C · Q&A
           </p>
-          <h1 className="mt-1 text-2xl font-semibold tracking-normal text-foreground sm:text-3xl">
-            Fənn sual-cavab forumu
+          <h1 className="text-2xl font-semibold tracking-normal text-gray-900 md:mt-1 md:text-3xl">
+            Sual-cavab
           </h1>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-muted">
-            Fənn seç, mövzunu axtar və tələbələrin ən faydalı cavablarını yuxarıda gör.
+          <p className="mt-2 text-sm text-gray-500">
+            {sortedQuestions.length} aktiv sual • {totalAnswerCount} cavab
           </p>
         </div>
 
-        <label className="relative block w-full lg:w-[420px]">
-          <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted" />
+        <label className="relative block w-full md:w-[420px]">
+          <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
           <input
-            className="h-11 w-full rounded-lg border border-line bg-white/82 pl-9 pr-3 text-sm shadow-[0_10px_28px_rgba(31,28,24,0.06)] outline-none backdrop-blur-md transition focus:border-sage"
+            className="min-h-[48px] w-full rounded-2xl border border-gray-200 bg-slate-50 pl-11 pr-4 text-sm text-gray-900 shadow-[0_8px_30px_rgb(0,0,0,0.04)] outline-none transition focus:border-gray-400 focus:ring-0"
             placeholder="Sual, fənn və ya mövzu axtar"
             type="search"
             value={search}
@@ -193,14 +195,14 @@ export function ForumBoard() {
         </label>
       </header>
 
-      <section className="grid gap-4 xl:grid-cols-[1fr_380px]">
-        <div className="space-y-3">
-          <div className="flex gap-2 overflow-x-auto pb-1">
+      <section className="grid gap-6 xl:grid-cols-[1fr_380px]">
+        <div className="space-y-4">
+          <div className="flex gap-3 overflow-x-auto pb-1">
             <button
-              className={`h-9 shrink-0 rounded-lg border px-3 text-xs font-semibold transition hover:-translate-y-0.5 hover:shadow-md ${
+              className={`min-h-[44px] shrink-0 rounded-2xl px-4 text-xs font-semibold transition-all duration-300 md:hover:-translate-y-0.5 md:hover:shadow-md ${
                 selectedCourseId === "all"
-                  ? "border-ink bg-ink text-white"
-                  : "border-line bg-white/84 text-muted"
+                  ? "bg-gray-900 text-white"
+                  : "bg-white text-gray-600 shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
               }`}
               type="button"
               onClick={() => setSelectedCourseId("all")}
@@ -209,10 +211,10 @@ export function ForumBoard() {
             </button>
             {courses.map((course) => (
               <button
-                className={`h-9 shrink-0 rounded-lg border px-3 text-xs font-semibold transition hover:-translate-y-0.5 hover:shadow-md ${
+                className={`min-h-[44px] shrink-0 rounded-2xl px-4 text-xs font-semibold transition-all duration-300 md:hover:-translate-y-0.5 md:hover:shadow-md ${
                   selectedCourseId === course.id
-                    ? "border-ink bg-ink text-white"
-                    : "border-line bg-white/84 text-muted"
+                    ? "bg-gray-900 text-white"
+                    : "bg-white text-gray-600 shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
                 }`}
                 key={course.id}
                 type="button"
@@ -223,42 +225,42 @@ export function ForumBoard() {
             ))}
           </div>
 
-          <div className="grid gap-3">
+          <div className="grid gap-4">
             {sortedQuestions.map((question) => (
               <Link
-                className="group rounded-lg border border-white/70 bg-white/84 p-4 shadow-[0_14px_34px_rgba(39,35,29,0.06)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+                className="group rounded-3xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 md:hover:-translate-y-1 md:hover:shadow-md"
                 href={`/questions/${question.id}`}
                 key={question.id}
               >
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="rounded-lg bg-[#eef6f1] px-2 py-1 text-xs font-semibold text-sage">
+                      <span className="rounded-2xl bg-teal-50 px-3 py-2 text-xs font-semibold text-teal-700">
                         {question.courseCode}
                       </span>
-                      <span className="text-xs text-muted">{question.courseTitle}</span>
+                      <span className="text-xs text-gray-400">{question.courseTitle}</span>
                     </div>
-                    <h2 className="mt-3 text-base font-semibold leading-6 text-foreground">
+                    <h2 className="mt-4 text-base font-semibold leading-6 text-gray-900">
                       {question.title}
                     </h2>
-                    <p className="mt-2 line-clamp-2 text-sm leading-6 text-muted">
+                    <p className="mt-2 hidden line-clamp-2 text-sm leading-6 text-gray-600 md:block">
                       {question.body}
                     </p>
                   </div>
 
-                  <ChevronRight className="hidden size-5 shrink-0 text-muted transition group-hover:translate-x-0.5 group-hover:text-foreground sm:block" />
+                  <ChevronRight className="hidden size-5 shrink-0 text-gray-400 transition group-hover:translate-x-0.5 group-hover:text-gray-900 sm:block" />
                 </div>
 
-                <div className="mt-4 grid gap-2 sm:grid-cols-4">
-                  <div className="flex items-center gap-2 rounded-lg bg-[#f7f5f0] px-3 py-2 text-xs text-muted">
+                <div className="mt-5 grid gap-3 sm:grid-cols-4">
+                  <div className="flex items-center gap-2 text-xs text-gray-500">
                     <MessageSquare className="size-3.5" />
                     {question.answerCount} cavab
                   </div>
-                  <div className="flex items-center gap-2 rounded-lg bg-[#fff4ef] px-3 py-2 text-xs text-clay">
+                  <div className="flex min-h-[44px] items-center gap-2 rounded-2xl bg-red-50 px-4 text-xs text-red-600">
                     <ThumbsUp className="size-3.5" />
                     {question.voteScore} səs
                   </div>
-                  <div className="flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-xs text-muted sm:col-span-2">
+                  <div className="flex min-h-[44px] items-center gap-2 rounded-2xl bg-slate-50 px-4 text-xs text-gray-500 sm:col-span-2">
                     <Clock3 className="size-3.5" />
                     {formatForumDate(question.lastActivityAt)} · {question.authorName}
                   </div>
@@ -268,42 +270,19 @@ export function ForumBoard() {
           </div>
 
           {sortedQuestions.length === 0 && (
-            <div className="rounded-lg border border-white/70 bg-white/84 p-8 text-center shadow-[0_14px_34px_rgba(39,35,29,0.06)] backdrop-blur-xl">
-              <MessageSquare className="mx-auto size-6 text-sage" />
-              <p className="mt-3 text-sm font-semibold">Sual tapılmadı</p>
-              <p className="mt-1 text-sm text-muted">Başqa fənn və ya mövzu adı ilə axtar.</p>
+            <div className="rounded-3xl bg-white p-8 text-center shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+              <MessageSquare className="mx-auto size-6 text-teal-700" />
+              <p className="mt-3 text-sm font-semibold text-gray-900">Sual tapılmadı</p>
+              <p className="mt-1 text-sm text-gray-500">Başqa fənn və ya mövzu adı ilə axtar.</p>
             </div>
           )}
 
           {isLoading && (
-            <p className="text-center text-xs font-medium text-muted">Yenilənir...</p>
+            <p className="text-center text-xs font-medium text-gray-400">Yenilənir...</p>
           )}
         </div>
 
-        <aside className="space-y-3">
-          <div className="rounded-lg border border-white/70 bg-white/84 p-4 shadow-[0_14px_34px_rgba(39,35,29,0.06)] backdrop-blur-xl">
-            <div className="flex items-center gap-2 text-sm font-semibold">
-              <Sparkles className="size-4 text-clay" />
-              Forum ritmi
-            </div>
-            <div className="mt-4 grid grid-cols-2 gap-2">
-              <div className="rounded-lg border border-line bg-white p-3">
-                <p className="text-2xl font-semibold">{sortedQuestions.length}</p>
-                <p className="text-xs text-muted">Aktiv sual</p>
-              </div>
-              <div className="rounded-lg border border-line bg-white p-3">
-                <p className="text-2xl font-semibold">
-                  {sortedQuestions.reduce((total, question) => total + question.answerCount, 0)}
-                </p>
-                <p className="text-xs text-muted">Cavab</p>
-              </div>
-            </div>
-            <div className="mt-3 flex items-center gap-2 rounded-lg bg-[#eef6f1] px-3 py-2 text-xs font-medium text-sage">
-              <BookOpen className="size-3.5" />
-              Ən çox səs alan cavablar thread-də yuxarı qalxır.
-            </div>
-          </div>
-
+        <aside className="space-y-4">
           <QuestionForm courses={courses} onQuestionCreated={handleQuestionCreated} />
         </aside>
       </section>

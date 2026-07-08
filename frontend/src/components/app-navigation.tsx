@@ -5,7 +5,6 @@ import {
   Home,
   MessageSquare,
   PanelLeft,
-  Settings,
   ShoppingBag,
   Star,
 } from "lucide-react";
@@ -29,28 +28,28 @@ export function AppNavigation() {
 
   return (
     <>
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-[232px] border-r border-white/70 bg-white/72 px-3 py-4 shadow-[14px_0_44px_rgba(39,35,29,0.06)] backdrop-blur-xl lg:flex lg:flex-col">
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-[248px] border-r border-slate-200/70 bg-white px-4 py-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] md:flex md:flex-col">
         <div className="flex items-center gap-3 px-2">
-          <div className="flex size-10 items-center justify-center rounded-lg bg-ink text-white shadow-[0_12px_24px_rgba(38,52,47,0.18)]">
+          <div className="flex size-11 items-center justify-center rounded-2xl bg-gray-900 text-white shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
             <PanelLeft className="size-5" />
           </div>
           <div>
-            <p className="text-base font-semibold leading-5">EduRate</p>
-            <p className="text-xs text-muted">Kampus paneli</p>
+            <p className="text-base font-semibold leading-5 text-gray-900">EduRate</p>
+            <p className="text-xs text-gray-400">Kampus paneli</p>
           </div>
         </div>
 
-        <nav className="mt-6 space-y-1">
+        <nav className="mt-8 space-y-2">
           {navItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(pathname, item.href);
 
             return (
               <Link
-                className={`flex h-10 items-center gap-3 rounded-lg px-3 text-sm font-medium transition ${
+                className={`flex min-h-[44px] items-center gap-3 rounded-2xl px-4 text-sm font-medium transition-all duration-300 ${
                   active
-                    ? "bg-ink text-white shadow-[0_12px_26px_rgba(38,52,47,0.16)]"
-                    : "text-muted hover:bg-white hover:text-foreground"
+                    ? "bg-gray-900 text-white shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
+                    : "text-gray-600 hover:-translate-y-0.5 hover:bg-slate-50 hover:text-gray-900"
                 }`}
                 href={item.href}
                 key={item.href}
@@ -61,17 +60,9 @@ export function AppNavigation() {
             );
           })}
         </nav>
-
-        <Link
-          className="mt-auto flex h-10 items-center gap-3 rounded-lg px-3 text-sm font-medium text-muted transition hover:bg-white hover:text-foreground"
-          href="/settings"
-        >
-          <Settings className="size-4" />
-          Tənzimləmələr
-        </Link>
       </aside>
 
-      <nav className="fixed inset-x-3 bottom-3 z-40 grid grid-cols-5 rounded-lg border border-white/70 bg-white/86 p-1 shadow-[0_18px_42px_rgba(39,35,29,0.16)] backdrop-blur-xl lg:hidden">
+      <nav className="fixed inset-x-4 bottom-4 z-40 grid h-16 grid-cols-5 rounded-3xl border border-white/70 bg-white/80 p-2 shadow-[0_8px_30px_rgb(0,0,0,0.08)] backdrop-blur-md md:hidden">
         {navItems.map((item) => {
           const Icon = item.icon;
           const active = isActive(pathname, item.href);
@@ -79,14 +70,13 @@ export function AppNavigation() {
           return (
             <Link
               aria-label={item.label}
-              className={`flex h-12 flex-col items-center justify-center gap-1 rounded-lg text-[11px] font-medium transition ${
-                active ? "bg-ink text-white" : "text-muted"
+              className={`flex min-h-[44px] items-center justify-center rounded-2xl transition ${
+                active ? "bg-gray-900 text-white" : "text-gray-400"
               }`}
               href={item.href}
               key={item.href}
             >
-              <Icon className="size-4" />
-              <span>{item.label}</span>
+              <Icon className="size-5" />
             </Link>
           );
         })}

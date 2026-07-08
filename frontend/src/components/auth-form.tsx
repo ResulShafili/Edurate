@@ -135,18 +135,18 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
   }
 
   return (
-    <div className="mx-auto w-full max-w-[440px] rounded-lg border border-white/70 bg-white/84 p-4 shadow-[0_22px_60px_rgba(39,35,29,0.12)] backdrop-blur-xl sm:p-5">
+    <div className="mx-auto w-full max-w-[440px] rounded-3xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] sm:p-6">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h2 className="text-xl font-semibold">{copy.title}</h2>
-          <p className="mt-1 text-sm leading-5 text-muted">{copy.description}</p>
+          <h2 className="text-xl font-semibold text-gray-900">{copy.title}</h2>
+          <p className="mt-2 text-sm leading-6 text-gray-600">{copy.description}</p>
         </div>
-        <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-[#eef6f1] text-sage">
+        <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-teal-50 text-teal-700">
           {mode === "login" ? <LockKeyhole className="size-5" /> : <School className="size-5" />}
         </div>
       </div>
 
-      <form className="mt-5 space-y-3" onSubmit={handleSubmit}>
+      <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
         {mode === "register" && (
           <>
             <Field icon={User} label="Ad soyad" name="fullName" placeholder="Resul Shafili" />
@@ -158,11 +158,11 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
         <Field icon={Mail} label="Universitet emaili" name="email" placeholder="name@karabakh.edu.az" type="email" />
 
         <label className="block">
-          <span className="text-xs font-medium text-muted">Şifrə</span>
-          <span className="mt-1 flex h-11 items-center rounded-lg border border-line bg-white px-3 focus-within:border-sage">
-            <LockKeyhole className="mr-2 size-4 text-muted" />
+          <span className="text-xs font-medium text-gray-500">Şifrə</span>
+          <span className="mt-2 flex min-h-[44px] items-center rounded-2xl border border-gray-200 bg-slate-50 px-4 focus-within:border-gray-400 focus-within:ring-0">
+            <LockKeyhole className="mr-2 size-4 text-gray-400" />
             <input
-              className="h-full min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-[#aaa49b]"
+              className="min-h-[44px] min-w-0 flex-1 bg-slate-50 text-sm text-gray-900 outline-none placeholder:text-gray-400"
               minLength={8}
               name="password"
               placeholder="Minimum 8 simvol"
@@ -171,7 +171,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
             />
             <button
               aria-label={showPassword ? "Şifrəni gizlət" : "Şifrəni göstər"}
-              className="flex size-8 items-center justify-center rounded-lg text-muted transition hover:bg-[#f4f3ef] hover:text-foreground"
+              className="flex size-11 items-center justify-center rounded-2xl text-gray-400 transition hover:bg-slate-50 hover:text-gray-900"
               title={showPassword ? "Şifrəni gizlət" : "Şifrəni göstər"}
               type="button"
               onClick={() => setShowPassword((value) => !value)}
@@ -183,10 +183,10 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
 
         {message && (
           <p
-            className={`rounded-lg border px-3 py-2 text-xs ${
+            className={`rounded-2xl border px-4 py-3 text-xs ${
               status === "success"
-                ? "border-[#cfe3d7] bg-[#f0f8f3] text-[#3f6f58]"
-                : "border-[#efd4ca] bg-[#fff4ef] text-[#9b4d37]"
+                ? "border-teal-100 bg-teal-50 text-teal-700"
+                : "border-orange-100 bg-orange-50 text-orange-700"
             }`}
           >
             {message}
@@ -194,7 +194,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
         )}
 
         <button
-          className="flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-ink px-4 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(38,52,47,0.18)] transition hover:bg-[#1f2b27] disabled:cursor-not-allowed disabled:opacity-70"
+          className="flex min-h-[48px] w-full items-center justify-center gap-2 rounded-2xl bg-gray-900 px-4 text-sm font-semibold text-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 md:hover:-translate-y-0.5 md:hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70"
           disabled={status === "loading"}
           type="submit"
         >
@@ -203,9 +203,9 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
         </button>
       </form>
 
-      <div className="mt-4 flex items-center justify-center gap-2 text-sm text-muted">
+      <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-sm text-gray-500">
         <span>{copy.alternateText}</span>
-        <Link className="font-semibold text-ink hover:underline" href={copy.alternateHref}>
+        <Link className="inline-flex min-h-[44px] items-center font-semibold text-gray-900 hover:underline" href={copy.alternateHref}>
           {copy.alternateAction}
         </Link>
       </div>
@@ -216,11 +216,11 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
 function UniversitySelect() {
   return (
     <label className="block">
-      <span className="text-xs font-medium text-muted">Universitetini seç</span>
-      <span className="relative mt-1 flex h-11 items-center rounded-lg border border-line bg-white px-3 focus-within:border-sage">
-        <School className="mr-2 size-4 text-muted" />
+      <span className="text-xs font-medium text-gray-500">Universitetini seç</span>
+      <span className="relative mt-2 flex min-h-[44px] items-center rounded-2xl border border-gray-200 bg-slate-50 px-4 focus-within:border-gray-400 focus-within:ring-0">
+        <School className="mr-2 size-4 text-gray-400" />
         <select
-          className="h-full min-w-0 flex-1 appearance-none bg-transparent pr-7 text-sm outline-none"
+          className="min-h-[44px] min-w-0 flex-1 appearance-none bg-slate-50 pr-7 text-sm text-gray-900 outline-none"
           defaultValue={universities[0].domain}
           name="universityDomain"
           required
@@ -231,7 +231,7 @@ function UniversitySelect() {
             </option>
           ))}
         </select>
-        <ChevronDown className="pointer-events-none absolute right-3 size-4 text-muted" />
+        <ChevronDown className="pointer-events-none absolute right-4 size-4 text-gray-400" />
       </span>
     </label>
   );
@@ -254,11 +254,11 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="text-xs font-medium text-muted">{label}</span>
-      <span className="mt-1 flex h-11 items-center rounded-lg border border-line bg-white px-3 focus-within:border-sage">
-        <Icon className="mr-2 size-4 text-muted" />
+      <span className="text-xs font-medium text-gray-500">{label}</span>
+      <span className="mt-2 flex min-h-[44px] items-center rounded-2xl border border-gray-200 bg-slate-50 px-4 focus-within:border-gray-400 focus-within:ring-0">
+        <Icon className="mr-2 size-4 text-gray-400" />
         <input
-          className="h-full min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-[#aaa49b]"
+          className="min-h-[44px] min-w-0 flex-1 bg-slate-50 text-sm text-gray-900 outline-none placeholder:text-gray-400"
           name={name}
           placeholder={placeholder}
           required={required}

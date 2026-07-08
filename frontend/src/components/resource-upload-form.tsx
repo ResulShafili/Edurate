@@ -109,23 +109,23 @@ export function ResourceUploadForm({
 
   return (
     <form
-      className="rounded-lg border border-white/70 bg-white/84 p-4 shadow-[0_18px_45px_rgba(39,35,29,0.08)] backdrop-blur-xl"
+      className="rounded-3xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
       onSubmit={handleSubmit}
     >
       <div className="flex items-center gap-3">
-        <span className="flex size-10 items-center justify-center rounded-lg bg-[#eef6f1] text-sage">
+        <span className="flex size-11 items-center justify-center rounded-2xl bg-teal-50 text-teal-700">
           <UploadCloud className="size-5" />
         </span>
         <div>
-          <h2 className="text-base font-semibold">Material yüklə</h2>
-          <p className="text-xs text-muted">PDF və ya şəkil konspektini paylaş.</p>
+          <h2 className="text-base font-semibold text-gray-900">Material yüklə</h2>
+          <p className="hidden text-xs text-gray-400 md:block">PDF və ya şəkil konspektini paylaş.</p>
         </div>
       </div>
 
-      <label className="mt-4 block">
-        <span className="text-xs font-medium text-muted">Fənn</span>
+      <label className="mt-5 block">
+        <span className="text-xs font-medium text-gray-500">Fənn</span>
         <select
-          className="mt-1 h-11 w-full rounded-lg border border-line bg-white px-3 text-sm outline-none focus:border-sage"
+          className="mt-2 min-h-[44px] w-full rounded-2xl border border-gray-200 bg-slate-50 px-4 text-sm text-gray-900 outline-none focus:border-gray-400 focus:ring-0"
           name="courseId"
           required
         >
@@ -137,10 +137,10 @@ export function ResourceUploadForm({
         </select>
       </label>
 
-      <label className="mt-3 block">
-        <span className="text-xs font-medium text-muted">Başlıq</span>
+      <label className="mt-4 block">
+        <span className="text-xs font-medium text-gray-500">Başlıq</span>
         <input
-          className="mt-1 h-11 w-full rounded-lg border border-line bg-white px-3 text-sm outline-none placeholder:text-[#aaa49b] focus:border-sage"
+          className="mt-2 min-h-[44px] w-full rounded-2xl border border-gray-200 bg-slate-50 px-4 text-sm text-gray-900 outline-none placeholder:text-gray-400 focus:border-gray-400 focus:ring-0"
           maxLength={160}
           minLength={3}
           name="title"
@@ -149,10 +149,10 @@ export function ResourceUploadForm({
         />
       </label>
 
-      <label className="mt-3 block">
-        <span className="text-xs font-medium text-muted">Qısa qeyd</span>
+      <label className="mt-4 block">
+        <span className="text-xs font-medium text-gray-500">Qısa qeyd</span>
         <textarea
-          className="mt-1 min-h-20 w-full resize-none rounded-lg border border-line bg-white px-3 py-3 text-sm outline-none placeholder:text-[#aaa49b] focus:border-sage"
+          className="mt-2 min-h-24 w-full resize-none rounded-2xl border border-gray-200 bg-slate-50 px-4 py-3 text-sm text-gray-900 outline-none placeholder:text-gray-400 focus:border-gray-400 focus:ring-0"
           maxLength={600}
           name="description"
           placeholder="Nəyi əhatə etdiyini qısa yaz..."
@@ -160,10 +160,10 @@ export function ResourceUploadForm({
       </label>
 
       <label
-        className={`mt-3 flex min-h-36 cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed px-4 py-5 text-center transition ${
+        className={`mt-4 flex min-h-40 cursor-pointer flex-col items-center justify-center rounded-3xl border border-dashed px-5 py-6 text-center transition ${
           isDragging
-            ? "border-sage bg-[#eef6f1]"
-            : "border-line bg-white hover:border-sage/55 hover:bg-[#f8fbf9]"
+            ? "border-teal-300 bg-teal-50"
+            : "border-slate-200 bg-slate-50 hover:border-teal-200 hover:bg-white"
         }`}
         onDragLeave={() => setIsDragging(false)}
         onDragOver={(event) => {
@@ -180,22 +180,22 @@ export function ResourceUploadForm({
           type="file"
           onChange={(event) => handleFiles(event.target.files)}
         />
-        <FileUp className="size-7 text-sage" />
-        <span className="mt-3 text-sm font-semibold">
+        <FileUp className="size-7 text-teal-700" />
+        <span className="mt-3 text-sm font-semibold text-gray-900">
           Faylı sürüşdürüb-burax və ya seç
         </span>
-        <span className="mt-1 text-xs text-muted">PDF, PNG, JPG, WEBP · maksimum 15MB</span>
+        <span className="mt-1 text-xs text-gray-400">PDF, PNG, JPG, WEBP · maksimum 15MB</span>
       </label>
 
       {selectedFile && (
-        <div className="mt-3 flex items-center justify-between gap-3 rounded-lg border border-line bg-white px-3 py-2">
+        <div className="mt-4 flex items-center justify-between gap-4 rounded-2xl border border-gray-200 bg-slate-50 px-4 py-3">
           <div className="min-w-0">
-            <p className="truncate text-sm font-semibold">{selectedFile.name}</p>
-            <p className="text-xs text-muted">{formatFileSize(selectedFile.size)}</p>
+            <p className="truncate text-sm font-semibold text-gray-900">{selectedFile.name}</p>
+            <p className="text-xs text-gray-400">{formatFileSize(selectedFile.size)}</p>
           </div>
           <button
             aria-label="Faylı sil"
-            className="flex size-8 shrink-0 items-center justify-center rounded-lg text-muted transition hover:bg-[#fff4ef] hover:text-clay"
+            className="flex size-11 shrink-0 items-center justify-center rounded-2xl text-gray-400 transition hover:bg-orange-50 hover:text-orange-600"
             type="button"
             onClick={() => {
               setSelectedFile(null);
@@ -209,10 +209,10 @@ export function ResourceUploadForm({
         </div>
       )}
 
-      <label className="mt-3 flex min-h-11 items-center gap-3 rounded-lg border border-line bg-white px-3 text-sm font-medium">
+      <label className="mt-4 flex min-h-[44px] items-center gap-3 rounded-2xl border border-gray-200 bg-slate-50 px-4 text-sm font-medium text-gray-700">
         <input
           checked={isAnonymous}
-          className="size-4 accent-[#26342f]"
+          className="size-4 accent-gray-900"
           name="isAnonymous"
           type="checkbox"
           onChange={(event) => setIsAnonymous(event.target.checked)}
@@ -222,10 +222,10 @@ export function ResourceUploadForm({
 
       {message && (
         <p
-          className={`mt-4 rounded-lg border px-3 py-2 text-xs ${
+          className={`mt-5 rounded-2xl border px-4 py-3 text-xs ${
             status === "success"
-              ? "border-[#cfe3d7] bg-[#f0f8f3] text-[#3f6f58]"
-              : "border-[#efd4ca] bg-[#fff4ef] text-[#9b4d37]"
+              ? "border-teal-100 bg-teal-50 text-teal-700"
+              : "border-orange-100 bg-orange-50 text-orange-700"
           }`}
         >
           {message}
@@ -233,7 +233,7 @@ export function ResourceUploadForm({
       )}
 
       <button
-        className="mt-4 flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-ink px-4 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(38,52,47,0.18)] transition hover:-translate-y-0.5 hover:bg-[#1f2b27] hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70"
+        className="mt-5 flex min-h-[48px] w-full items-center justify-center gap-2 rounded-2xl bg-gray-900 px-4 text-sm font-semibold text-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 md:hover:-translate-y-0.5 md:hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70"
         disabled={status === "loading"}
         type="submit"
       >

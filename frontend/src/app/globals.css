@@ -1,16 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f6f5f1;
-  --foreground: #191713;
-  --muted: #74706a;
-  --line: rgba(25, 23, 19, 0.09);
-  --panel: rgba(255, 255, 255, 0.82);
+  --background: #f8fafc;
+  --foreground: #111827;
+  --muted: #4b5563;
+  --line: rgba(15, 23, 42, 0.08);
+  --panel: rgba(255, 255, 255, 0.88);
   --panel-solid: #ffffff;
-  --sage: #6f8b7c;
-  --ink: #26342f;
-  --clay: #b46f57;
-  --mist: #dfe7e1;
+  --sage: #0f766e;
+  --ink: #111827;
+  --clay: #ea580c;
+  --mist: #e2e8f0;
 }
 
 @theme inline {
@@ -35,11 +35,31 @@ body {
 }
 
 ::selection {
-  background: rgba(111, 139, 124, 0.22);
+  background: rgba(15, 118, 110, 0.18);
 }
 
 button,
 a,
 input {
   -webkit-tap-highlight-color: transparent;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+textarea,
+select {
+  background-color: #f8fafc;
+  border-color: #e5e7eb;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):focus,
+textarea:focus,
+select:focus {
+  border-color: #9ca3af;
+  box-shadow: none;
+  outline: none;
+}
+
+button,
+a {
+  touch-action: manipulation;
 }

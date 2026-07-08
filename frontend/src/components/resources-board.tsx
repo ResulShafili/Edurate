@@ -6,7 +6,6 @@ import {
   FileText,
   FolderOpen,
   Search,
-  UploadCloud,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
@@ -65,30 +64,30 @@ function ResourceCard({ resource }: { resource: ResourceItem }) {
   const downloadUrl = resolveResourceUrl(resource.fileUrl);
 
   return (
-    <article className="group rounded-lg border border-white/70 bg-white/84 p-4 shadow-[0_14px_34px_rgba(39,35,29,0.06)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex min-w-0 gap-3">
+    <article className="group rounded-3xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 md:hover:-translate-y-1 md:hover:shadow-md">
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex min-w-0 gap-4">
           <span
-            className={`flex size-11 shrink-0 items-center justify-center rounded-lg ${
+            className={`flex size-12 shrink-0 items-center justify-center rounded-2xl ${
               resource.fileType === "pdf"
-                ? "bg-[#fff4ef] text-clay"
-                : "bg-[#eef6f1] text-sage"
+                ? "bg-orange-50 text-orange-600"
+                : "bg-teal-50 text-teal-700"
             }`}
           >
             <ResourceFileIcon fileType={resource.fileType} />
           </span>
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded-lg bg-[#f7f5f0] px-2 py-1 text-xs font-semibold text-muted">
+              <span className="rounded-2xl bg-slate-50 px-3 py-2 text-xs font-semibold text-gray-600">
                 {resource.courseCode}
               </span>
-              <span className="text-xs text-muted">{resource.courseTitle}</span>
+              <span className="hidden text-xs text-gray-400 md:inline">{resource.courseTitle}</span>
             </div>
-            <h2 className="mt-3 text-base font-semibold leading-6 text-foreground">
+            <h2 className="mt-4 text-base font-semibold leading-6 text-gray-900">
               {resource.title}
             </h2>
             {resource.description && (
-              <p className="mt-2 line-clamp-2 text-sm leading-6 text-muted">
+              <p className="mt-2 hidden line-clamp-2 text-sm leading-6 text-gray-600 md:block">
                 {resource.description}
               </p>
             )}
@@ -97,7 +96,7 @@ function ResourceCard({ resource }: { resource: ResourceItem }) {
 
         <a
           aria-label="Yüklə"
-          className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-line bg-white text-muted transition hover:-translate-y-0.5 hover:text-foreground hover:shadow-md"
+          className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-slate-50 text-gray-500 transition-all duration-300 md:hover:-translate-y-0.5 md:hover:text-gray-900 md:hover:shadow-md"
           download
           href={downloadUrl}
         >
@@ -105,16 +104,16 @@ function ResourceCard({ resource }: { resource: ResourceItem }) {
         </a>
       </div>
 
-      <div className="mt-4 grid gap-2 sm:grid-cols-3">
-        <div className="rounded-lg bg-white px-3 py-2 text-xs text-muted">
-          <p className="font-medium text-foreground">{resource.fileName}</p>
+      <div className="mt-5 grid gap-3 sm:grid-cols-3">
+        <div className="rounded-2xl bg-slate-50 px-4 py-3 text-xs text-gray-500">
+          <p className="truncate font-medium text-gray-900">{resource.fileName}</p>
           <p className="mt-1">{formatFileSize(resource.fileSizeBytes)}</p>
         </div>
-        <div className="rounded-lg bg-[#f7f5f0] px-3 py-2 text-xs text-muted">
+        <div className="rounded-2xl bg-slate-50 px-4 py-3 text-xs text-gray-500">
           <p>Yükləyən</p>
-          <p className="mt-1 font-medium text-foreground">{resource.uploaderName}</p>
+          <p className="mt-1 font-medium text-gray-900">{resource.uploaderName}</p>
         </div>
-        <div className="rounded-lg bg-[#eef6f1] px-3 py-2 text-xs text-sage">
+        <div className="rounded-2xl bg-teal-50 px-4 py-3 text-xs text-teal-700">
           <p>Tarix</p>
           <p className="mt-1 font-semibold">{formatResourceDate(resource.createdAt)}</p>
         </div>
@@ -245,30 +244,33 @@ export function ResourcesBoard() {
       ),
     [resources],
   );
+  const pdfResourceCount = sortedResources.filter(
+    (resource) => resource.fileType === "pdf",
+  ).length;
 
   function handleResourceCreated(resource: ResourceItem) {
     setResources((currentResources) => [resource, ...currentResources]);
   }
 
   return (
-    <div className="space-y-4">
-      <header className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+    <div className="space-y-6">
+      <header className="space-y-4 md:flex md:items-end md:justify-between md:space-y-0">
         <div>
-          <p className="text-xs font-medium uppercase tracking-[0.16em] text-muted">
+          <p className="hidden text-xs font-medium uppercase tracking-[0.16em] text-gray-400 md:block">
             Modul D · Resources
           </p>
-          <h1 className="mt-1 text-2xl font-semibold tracking-normal text-foreground sm:text-3xl">
-            Konspekt və materiallar
+          <h1 className="text-2xl font-semibold tracking-normal text-gray-900 md:mt-1 md:text-3xl">
+            Materiallar
           </h1>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-muted">
-            PDF və şəkil konspektlərini fənnə görə süz, yüklə və imtahana hazırlığı paylaş.
+          <p className="mt-2 text-sm text-gray-500">
+            {sortedResources.length} material • {pdfResourceCount} PDF
           </p>
         </div>
 
-        <label className="relative block w-full lg:w-[420px]">
-          <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted" />
+        <label className="relative block w-full md:w-[420px]">
+          <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
           <input
-            className="h-11 w-full rounded-lg border border-line bg-white/82 pl-9 pr-3 text-sm shadow-[0_10px_28px_rgba(31,28,24,0.06)] outline-none backdrop-blur-md transition focus:border-sage"
+            className="min-h-[48px] w-full rounded-2xl border border-gray-200 bg-slate-50 pl-11 pr-4 text-sm text-gray-900 shadow-[0_8px_30px_rgb(0,0,0,0.04)] outline-none transition focus:border-gray-400 focus:ring-0"
             placeholder="Material, fənn və ya fayl adı axtar"
             type="search"
             value={search}
@@ -277,14 +279,14 @@ export function ResourcesBoard() {
         </label>
       </header>
 
-      <section className="grid gap-4 xl:grid-cols-[1fr_390px]">
-        <div className="space-y-3">
-          <div className="flex gap-2 overflow-x-auto pb-1">
+      <section className="grid gap-6 xl:grid-cols-[1fr_390px]">
+        <div className="space-y-4">
+          <div className="flex gap-3 overflow-x-auto pb-1">
             <button
-              className={`h-9 shrink-0 rounded-lg border px-3 text-xs font-semibold transition hover:-translate-y-0.5 hover:shadow-md ${
+              className={`min-h-[44px] shrink-0 rounded-2xl px-4 text-xs font-semibold transition-all duration-300 md:hover:-translate-y-0.5 md:hover:shadow-md ${
                 selectedCourseId === "all"
-                  ? "border-ink bg-ink text-white"
-                  : "border-line bg-white/84 text-muted"
+                  ? "bg-gray-900 text-white"
+                  : "bg-white text-gray-600 shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
               }`}
               type="button"
               onClick={() => setSelectedCourseId("all")}
@@ -293,10 +295,10 @@ export function ResourcesBoard() {
             </button>
             {courses.map((course) => (
               <button
-                className={`h-9 shrink-0 rounded-lg border px-3 text-xs font-semibold transition hover:-translate-y-0.5 hover:shadow-md ${
+                className={`min-h-[44px] shrink-0 rounded-2xl px-4 text-xs font-semibold transition-all duration-300 md:hover:-translate-y-0.5 md:hover:shadow-md ${
                   selectedCourseId === course.id
-                    ? "border-ink bg-ink text-white"
-                    : "border-line bg-white/84 text-muted"
+                    ? "bg-gray-900 text-white"
+                    : "bg-white text-gray-600 shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
                 }`}
                 key={course.id}
                 type="button"
@@ -307,13 +309,13 @@ export function ResourcesBoard() {
             ))}
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex gap-3">
             {fileTypeFilters.map((filter) => (
               <button
-                className={`h-9 rounded-lg border px-3 text-xs font-semibold transition hover:-translate-y-0.5 hover:shadow-md ${
+                className={`min-h-[44px] rounded-2xl px-4 text-xs font-semibold transition-all duration-300 md:hover:-translate-y-0.5 md:hover:shadow-md ${
                   selectedFileType === filter.value
-                    ? "border-sage bg-[#eef6f1] text-sage"
-                    : "border-line bg-white/84 text-muted"
+                    ? "bg-teal-50 text-teal-700"
+                    : "bg-white text-gray-600 shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
                 }`}
                 key={filter.value}
                 type="button"
@@ -324,45 +326,26 @@ export function ResourcesBoard() {
             ))}
           </div>
 
-          <div className="grid gap-3">
+          <div className="grid gap-4">
             {sortedResources.map((resource) => (
               <ResourceCard key={resource.id} resource={resource} />
             ))}
           </div>
 
           {sortedResources.length === 0 && (
-            <div className="rounded-lg border border-white/70 bg-white/84 p-8 text-center shadow-[0_14px_34px_rgba(39,35,29,0.06)] backdrop-blur-xl">
-              <FolderOpen className="mx-auto size-6 text-sage" />
-              <p className="mt-3 text-sm font-semibold">Material tapılmadı</p>
-              <p className="mt-1 text-sm text-muted">Başqa fənn və ya fayl adı ilə axtar.</p>
+            <div className="rounded-3xl bg-white p-8 text-center shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+              <FolderOpen className="mx-auto size-6 text-teal-700" />
+              <p className="mt-3 text-sm font-semibold text-gray-900">Material tapılmadı</p>
+              <p className="mt-1 text-sm text-gray-500">Başqa fənn və ya fayl adı ilə axtar.</p>
             </div>
           )}
 
           {isLoading && (
-            <p className="text-center text-xs font-medium text-muted">Yenilənir...</p>
+            <p className="text-center text-xs font-medium text-gray-400">Yenilənir...</p>
           )}
         </div>
 
-        <aside className="space-y-3">
-          <div className="rounded-lg border border-white/70 bg-white/84 p-4 shadow-[0_14px_34px_rgba(39,35,29,0.06)] backdrop-blur-xl">
-            <div className="flex items-center gap-2 text-sm font-semibold">
-              <UploadCloud className="size-4 text-clay" />
-              Material axını
-            </div>
-            <div className="mt-4 grid grid-cols-2 gap-2">
-              <div className="rounded-lg border border-line bg-white p-3">
-                <p className="text-2xl font-semibold">{sortedResources.length}</p>
-                <p className="text-xs text-muted">Görünən fayl</p>
-              </div>
-              <div className="rounded-lg border border-line bg-white p-3">
-                <p className="text-2xl font-semibold">
-                  {sortedResources.filter((resource) => resource.fileType === "pdf").length}
-                </p>
-                <p className="text-xs text-muted">PDF</p>
-              </div>
-            </div>
-          </div>
-
+        <aside className="space-y-4">
           <ResourceUploadForm courses={courses} onResourceCreated={handleResourceCreated} />
         </aside>
       </section>

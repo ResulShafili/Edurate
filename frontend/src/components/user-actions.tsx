@@ -71,16 +71,16 @@ export function UserActions() {
 
   if (!isReady || !user) {
     return (
-      <div className="flex shrink-0 items-center gap-2">
+      <div className="grid w-full shrink-0 grid-cols-2 gap-3 md:flex md:w-auto md:items-center md:gap-2">
         <Link
-          className="flex h-10 items-center gap-2 rounded-lg border border-line bg-white/78 px-3 text-sm font-medium text-foreground shadow-[0_10px_28px_rgba(31,28,24,0.06)] backdrop-blur-md transition hover:-translate-y-0.5 hover:border-sage/50 hover:shadow-md"
+          className="flex min-h-[44px] items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-gray-900 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 md:hover:-translate-y-0.5 md:hover:shadow-md"
           href="/login"
         >
           <LogIn className="size-4" />
           Giriş
         </Link>
         <Link
-          className="flex h-10 items-center gap-2 rounded-lg bg-ink px-3 text-sm font-medium text-white shadow-[0_12px_26px_rgba(38,52,47,0.18)] transition hover:-translate-y-0.5 hover:bg-[#1f2b27] hover:shadow-md"
+          className="flex min-h-[44px] items-center justify-center gap-2 rounded-2xl bg-gray-900 px-4 text-sm font-medium text-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 md:hover:-translate-y-0.5 md:hover:shadow-md"
           href="/register"
         >
           <UserPlus className="size-4" />
@@ -91,10 +91,10 @@ export function UserActions() {
   }
 
   return (
-    <div className="flex shrink-0 items-center gap-2">
+    <div className="flex shrink-0 items-center gap-3">
       <button
         aria-label="Bildirişlər"
-        className="flex size-10 items-center justify-center rounded-lg border border-line bg-white/78 text-muted shadow-[0_10px_28px_rgba(31,28,24,0.06)] backdrop-blur-md transition hover:-translate-y-0.5 hover:border-sage/50 hover:text-foreground hover:shadow-md"
+        className="flex size-11 items-center justify-center rounded-2xl border border-slate-200 bg-white text-gray-500 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 md:hover:-translate-y-0.5 md:hover:text-gray-900 md:hover:shadow-md"
         title="Bildirişlər"
         type="button"
       >
@@ -102,7 +102,7 @@ export function UserActions() {
       </button>
       <button
         aria-label="Profil"
-        className="flex size-10 items-center justify-center rounded-lg bg-ink text-sm font-semibold text-white shadow-[0_12px_26px_rgba(38,52,47,0.18)] transition hover:-translate-y-0.5 hover:bg-[#1f2b27] hover:shadow-md"
+        className="flex size-11 items-center justify-center rounded-2xl bg-gray-900 text-sm font-semibold text-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 md:hover:-translate-y-0.5 md:hover:shadow-md"
         title="Profil"
         type="button"
       >

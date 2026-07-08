@@ -56,8 +56,8 @@ function MarketItemCard({ item, priority }: { item: MarketItem; priority: boolea
     );
 
   return (
-    <article className="group overflow-hidden rounded-lg border border-white/70 bg-white/84 shadow-[0_14px_34px_rgba(39,35,29,0.06)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
-      <div className="relative aspect-[4/3] overflow-hidden bg-[#f7f5f0]">
+    <article className="group overflow-hidden rounded-3xl bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 md:hover:-translate-y-1 md:hover:shadow-md">
+      <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
         <Image
           alt={item.title}
           className="object-cover transition duration-500 group-hover:scale-[1.03]"
@@ -66,42 +66,42 @@ function MarketItemCard({ item, priority }: { item: MarketItem; priority: boolea
           sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 100vw"
           src={item.imageUrl}
         />
-        <div className="absolute left-3 top-3 rounded-lg border border-white/70 bg-white/86 px-2 py-1 text-xs font-semibold text-foreground shadow-[0_8px_20px_rgba(31,28,24,0.10)] backdrop-blur-md">
+        <div className="absolute left-4 top-4 rounded-xl bg-white/85 px-2 py-1 text-xs font-semibold text-gray-900 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-md">
           {item.categoryName}
         </div>
         <div
-          className={`absolute bottom-3 left-3 rounded-lg px-3 py-2 text-sm font-semibold shadow-[0_10px_24px_rgba(31,28,24,0.14)] backdrop-blur-md ${
+          className={`absolute bottom-4 left-4 rounded-xl px-2 py-1 text-xs font-semibold shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-md ${
             isSwap
-              ? "bg-[#eef6f1]/92 text-sage"
-              : "bg-white/92 text-foreground"
+              ? "bg-teal-50/92 text-teal-700"
+              : "bg-white/92 text-gray-900"
           }`}
         >
           {formatMarketPrice(item)}
         </div>
       </div>
 
-      <div className="p-4">
-        <div className="flex items-start justify-between gap-3">
+      <div className="p-5">
+        <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
-            <h2 className="text-base font-semibold leading-6 text-foreground">{item.title}</h2>
-            <p className="mt-2 line-clamp-2 text-sm leading-6 text-muted">{item.description}</p>
+            <h2 className="text-base font-semibold leading-6 text-gray-900">{item.title}</h2>
+            <p className="mt-2 hidden line-clamp-2 text-sm leading-6 text-gray-600 md:block">{item.description}</p>
           </div>
-          <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-[#fbf4e5] text-[#8a6f45]">
+          <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
             <ShoppingBag className="size-4" />
           </span>
         </div>
 
-        <div className="mt-4 grid gap-2">
-          <div className="flex items-center justify-between gap-3 rounded-lg bg-[#f7f5f0] px-3 py-2 text-xs text-muted">
+        <div className="mt-5 grid gap-3">
+          <div className="flex items-center justify-between gap-3 rounded-xl bg-slate-50 px-2 py-1 text-xs text-gray-500">
             <span>{item.sellerName}</span>
             <span>{formatMarketDate(item.createdAt)}</span>
           </div>
-          <div className="grid grid-cols-2 gap-2">
-            <div className="flex items-center gap-2 rounded-lg border border-line bg-white px-3 py-2 text-xs text-muted">
+          <div className="grid grid-cols-2 gap-3">
+            <div className="flex items-center gap-1.5 rounded-xl bg-slate-50 px-2 py-1 text-xs text-gray-500">
               <Tag className="size-3.5" />
               {conditionLabels[item.condition]}
             </div>
-            <div className="flex items-center gap-2 rounded-lg border border-line bg-white px-3 py-2 text-xs text-muted">
+            <div className="flex items-center gap-1.5 rounded-xl bg-slate-50 px-2 py-1 text-xs text-gray-500">
               <MapPin className="size-3.5" />
               <span className="truncate">{item.campusLocation || "Kampus"}</span>
             </div>
@@ -109,14 +109,14 @@ function MarketItemCard({ item, priority }: { item: MarketItem; priority: boolea
         </div>
 
         {isSwap && item.swapNote && (
-          <p className="mt-3 rounded-lg border border-[#dce8de] bg-[#f3faf5] px-3 py-2 text-xs leading-5 text-[#4f745f]">
+          <p className="mt-4 rounded-xl bg-teal-50 px-2 py-1 text-xs leading-5 text-teal-700">
             {item.swapNote}
           </p>
         )}
 
         <a
           aria-label={`Satıcı ilə əlaqə: ${getSellerContactText(item)}`}
-          className="mt-4 flex h-10 items-center justify-center gap-2 rounded-lg bg-ink px-3 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(38,52,47,0.16)] transition hover:-translate-y-0.5 hover:bg-[#1f2b27] hover:shadow-md"
+          className="mt-5 flex min-h-[48px] w-full items-center justify-center gap-2 rounded-2xl bg-gray-900 px-4 text-sm font-semibold text-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 md:hover:-translate-y-0.5 md:hover:shadow-md"
           href={getSellerContactHref(item)}
           rel="noreferrer"
           target={item.contactMethod === "whatsapp" ? "_blank" : undefined}
@@ -212,25 +212,25 @@ export function SwapMarketplace() {
   }
 
   return (
-    <div className="space-y-4">
-      <header className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+    <div className="space-y-6">
+      <header className="space-y-4 md:flex md:items-end md:justify-between md:space-y-0">
         <div>
-          <p className="text-xs font-medium uppercase tracking-[0.16em] text-muted">
+          <p className="hidden text-xs font-medium uppercase tracking-[0.16em] text-gray-400 md:block">
             Modul E · Swap
           </p>
-          <h1 className="mt-1 text-2xl font-semibold tracking-normal text-foreground sm:text-3xl">
+          <h1 className="text-2xl font-semibold tracking-normal text-gray-900 md:mt-1 md:text-3xl">
             Kampus bazarı
           </h1>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-muted">
+          <p className="mt-2 hidden max-w-2xl text-sm leading-6 text-gray-600 md:block">
             Kitab, texnologiya və kampus əşyalarını elan kimi paylaş, sonra satıcı ilə kənarda əlaqə saxla.
           </p>
         </div>
 
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-          <label className="relative block w-full sm:w-[360px]">
-            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted" />
+        <div className="space-y-3 md:flex md:items-center md:gap-3 md:space-y-0">
+          <label className="relative block w-full md:w-[360px]">
+            <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
             <input
-              className="h-11 w-full rounded-lg border border-line bg-white/82 pl-9 pr-3 text-sm shadow-[0_10px_28px_rgba(31,28,24,0.06)] outline-none backdrop-blur-md transition focus:border-sage"
+              className="min-h-[48px] w-full rounded-2xl border border-gray-200 bg-slate-50 pl-11 pr-4 text-sm text-gray-900 shadow-[0_8px_30px_rgb(0,0,0,0.04)] outline-none transition focus:border-gray-400 focus:ring-0"
               placeholder="Elan, kateqoriya və ya məkan axtar"
               type="search"
               value={search}
@@ -238,7 +238,7 @@ export function SwapMarketplace() {
             />
           </label>
           <button
-            className="flex h-11 items-center justify-center gap-2 rounded-lg bg-ink px-4 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(38,52,47,0.18)] transition hover:-translate-y-0.5 hover:bg-[#1f2b27] hover:shadow-md"
+            className="flex min-h-[48px] w-full items-center justify-center gap-2 rounded-2xl bg-gray-900 px-4 text-sm font-semibold text-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 md:w-auto md:hover:-translate-y-0.5 md:hover:shadow-md"
             type="button"
             onClick={() => setIsModalOpen(true)}
           >
@@ -248,14 +248,14 @@ export function SwapMarketplace() {
         </div>
       </header>
 
-      <section className="rounded-lg border border-white/70 bg-white/68 p-3 shadow-[0_14px_34px_rgba(39,35,29,0.06)] backdrop-blur-xl">
-        <div className="flex gap-2 overflow-x-auto">
+      <section className="rounded-3xl bg-white p-3 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+        <div className="flex gap-3 overflow-x-auto">
           {marketplaceCategories.map((category) => (
             <button
-              className={`h-9 shrink-0 rounded-lg border px-3 text-xs font-semibold transition hover:-translate-y-0.5 hover:shadow-md ${
+              className={`min-h-[44px] shrink-0 rounded-2xl px-4 text-xs font-semibold transition-all duration-300 md:hover:-translate-y-0.5 md:hover:shadow-md ${
                 selectedCategory === category.slug
-                  ? "border-ink bg-ink text-white"
-                  : "border-line bg-white/84 text-muted"
+                  ? "bg-gray-900 text-white"
+                  : "bg-slate-50 text-gray-600"
               }`}
               key={category.slug}
               type="button"
@@ -267,22 +267,22 @@ export function SwapMarketplace() {
         </div>
       </section>
 
-      <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {sortedItems.map((item, index) => (
           <MarketItemCard item={item} key={item.id} priority={index < 4} />
         ))}
       </section>
 
       {sortedItems.length === 0 && (
-        <div className="rounded-lg border border-white/70 bg-white/84 p-8 text-center shadow-[0_14px_34px_rgba(39,35,29,0.06)] backdrop-blur-xl">
-          <ShoppingBag className="mx-auto size-6 text-sage" />
-          <p className="mt-3 text-sm font-semibold">Elan tapılmadı</p>
-          <p className="mt-1 text-sm text-muted">Başqa kateqoriya və ya açar sözlə axtar.</p>
+        <div className="rounded-3xl bg-white p-8 text-center shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+          <ShoppingBag className="mx-auto size-6 text-teal-700" />
+          <p className="mt-3 text-sm font-semibold text-gray-900">Elan tapılmadı</p>
+          <p className="mt-1 text-sm text-gray-500">Başqa kateqoriya və ya açar sözlə axtar.</p>
         </div>
       )}
 
       {isLoading && (
-        <p className="text-center text-xs font-medium text-muted">Yenilənir...</p>
+        <p className="text-center text-xs font-medium text-gray-400">Yenilənir...</p>
       )}
 
       <MarketplaceItemForm

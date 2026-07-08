@@ -110,26 +110,26 @@ export function MarketplaceItemForm({
   return (
     <div
       aria-modal="true"
-      className="fixed inset-0 z-50 flex items-end bg-black/18 px-3 py-3 backdrop-blur-sm sm:items-center sm:justify-center"
+      className="fixed inset-0 z-50 flex items-end bg-slate-950/20 px-3 py-3 backdrop-blur-sm sm:items-center sm:justify-center"
       role="dialog"
     >
       <form
-        className="max-h-[92vh] w-full max-w-[560px] overflow-y-auto rounded-lg border border-white/70 bg-white/92 p-4 shadow-[0_26px_70px_rgba(31,28,24,0.20)] backdrop-blur-xl"
+        className="max-h-[92vh] w-full max-w-[560px] overflow-y-auto rounded-3xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.08)]"
         onSubmit={handleSubmit}
       >
-        <div className="flex items-start justify-between gap-3">
+        <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-3">
-            <span className="flex size-10 items-center justify-center rounded-lg bg-[#fbf4e5] text-[#8a6f45]">
+            <span className="flex size-11 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
               <Plus className="size-5" />
             </span>
             <div>
-              <h2 className="text-base font-semibold">Elan əlavə et</h2>
-              <p className="text-xs text-muted">Məhsul məlumatlarını və əlaqə yolunu yaz.</p>
+              <h2 className="text-base font-semibold text-gray-900">Elan əlavə et</h2>
+              <p className="hidden text-xs text-gray-400 md:block">Məhsul məlumatlarını və əlaqə yolunu yaz.</p>
             </div>
           </div>
           <button
             aria-label="Modalı bağla"
-            className="flex size-9 shrink-0 items-center justify-center rounded-lg text-muted transition hover:bg-[#f7f5f0] hover:text-foreground"
+            className="flex size-11 shrink-0 items-center justify-center rounded-2xl text-gray-400 transition hover:bg-slate-50 hover:text-gray-900"
             type="button"
             onClick={onClose}
           >
@@ -137,10 +137,10 @@ export function MarketplaceItemForm({
           </button>
         </div>
 
-        <div className="mt-4 grid grid-cols-2 gap-2 rounded-lg border border-line bg-white p-1">
+        <div className="mt-5 grid grid-cols-2 gap-2 rounded-2xl bg-slate-50 p-1">
           <button
-            className={`h-9 rounded-md text-sm font-semibold transition ${
-              listingMode === "sale" ? "bg-ink text-white" : "text-muted hover:bg-[#f7f5f0]"
+            className={`min-h-[44px] rounded-2xl text-sm font-semibold transition ${
+              listingMode === "sale" ? "bg-gray-900 text-white" : "text-gray-500 hover:bg-white"
             }`}
             type="button"
             onClick={() => setListingMode("sale")}
@@ -148,8 +148,8 @@ export function MarketplaceItemForm({
             Satış
           </button>
           <button
-            className={`h-9 rounded-md text-sm font-semibold transition ${
-              listingMode === "swap" ? "bg-ink text-white" : "text-muted hover:bg-[#f7f5f0]"
+            className={`min-h-[44px] rounded-2xl text-sm font-semibold transition ${
+              listingMode === "swap" ? "bg-gray-900 text-white" : "text-gray-500 hover:bg-white"
             }`}
             type="button"
             onClick={() => setListingMode("swap")}
@@ -158,11 +158,11 @@ export function MarketplaceItemForm({
           </button>
         </div>
 
-        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <div className="mt-5 grid gap-4 sm:grid-cols-2">
           <label className="block">
-            <span className="text-xs font-medium text-muted">Kateqoriya</span>
+            <span className="text-xs font-medium text-gray-500">Kateqoriya</span>
             <select
-              className="mt-1 h-11 w-full rounded-lg border border-line bg-white px-3 text-sm outline-none focus:border-sage"
+              className="mt-2 min-h-[44px] w-full rounded-2xl border border-gray-200 bg-slate-50 px-4 text-sm text-gray-900 outline-none focus:border-gray-400 focus:ring-0"
               name="categorySlug"
               required
             >
@@ -175,9 +175,9 @@ export function MarketplaceItemForm({
           </label>
 
           <label className="block">
-            <span className="text-xs font-medium text-muted">Vəziyyət</span>
+            <span className="text-xs font-medium text-gray-500">Vəziyyət</span>
             <select
-              className="mt-1 h-11 w-full rounded-lg border border-line bg-white px-3 text-sm outline-none focus:border-sage"
+              className="mt-2 min-h-[44px] w-full rounded-2xl border border-gray-200 bg-slate-50 px-4 text-sm text-gray-900 outline-none focus:border-gray-400 focus:ring-0"
               defaultValue="good"
               name="condition"
             >
@@ -190,10 +190,10 @@ export function MarketplaceItemForm({
           </label>
         </div>
 
-        <label className="mt-3 block">
-          <span className="text-xs font-medium text-muted">Başlıq</span>
+        <label className="mt-4 block">
+          <span className="text-xs font-medium text-gray-500">Başlıq</span>
           <input
-            className="mt-1 h-11 w-full rounded-lg border border-line bg-white px-3 text-sm outline-none placeholder:text-[#aaa49b] focus:border-sage"
+            className="mt-2 min-h-[44px] w-full rounded-2xl border border-gray-200 bg-slate-50 px-4 text-sm text-gray-900 outline-none placeholder:text-gray-400 focus:border-gray-400 focus:ring-0"
             maxLength={140}
             minLength={3}
             name="title"
@@ -202,10 +202,10 @@ export function MarketplaceItemForm({
           />
         </label>
 
-        <label className="mt-3 block">
-          <span className="text-xs font-medium text-muted">Təsvir</span>
+        <label className="mt-4 block">
+          <span className="text-xs font-medium text-gray-500">Təsvir</span>
           <textarea
-            className="mt-1 min-h-24 w-full resize-none rounded-lg border border-line bg-white px-3 py-3 text-sm outline-none placeholder:text-[#aaa49b] focus:border-sage"
+            className="mt-2 min-h-28 w-full resize-none rounded-2xl border border-gray-200 bg-slate-50 px-4 py-3 text-sm text-gray-900 outline-none placeholder:text-gray-400 focus:border-gray-400 focus:ring-0"
             maxLength={1200}
             minLength={8}
             name="description"
@@ -214,13 +214,13 @@ export function MarketplaceItemForm({
           />
         </label>
 
-        <div className="mt-3 grid gap-3 sm:grid-cols-2">
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
           <label className="block">
-            <span className="text-xs font-medium text-muted">
+            <span className="text-xs font-medium text-gray-500">
               {listingMode === "swap" ? "Qiymət" : "Qiymət (AZN)"}
             </span>
             <input
-              className="mt-1 h-11 w-full rounded-lg border border-line bg-white px-3 text-sm outline-none placeholder:text-[#aaa49b] focus:border-sage disabled:bg-[#f7f5f0]"
+              className="mt-2 min-h-[44px] w-full rounded-2xl border border-gray-200 bg-slate-50 px-4 text-sm text-gray-900 outline-none placeholder:text-gray-400 focus:border-gray-400 focus:ring-0 disabled:bg-slate-50"
               disabled={listingMode === "swap"}
               min={0}
               name="price"
@@ -231,9 +231,9 @@ export function MarketplaceItemForm({
           </label>
 
           <label className="block">
-            <span className="text-xs font-medium text-muted">Görüş yeri</span>
+            <span className="text-xs font-medium text-gray-500">Görüş yeri</span>
             <input
-              className="mt-1 h-11 w-full rounded-lg border border-line bg-white px-3 text-sm outline-none placeholder:text-[#aaa49b] focus:border-sage"
+              className="mt-2 min-h-[44px] w-full rounded-2xl border border-gray-200 bg-slate-50 px-4 text-sm text-gray-900 outline-none placeholder:text-gray-400 focus:border-gray-400 focus:ring-0"
               maxLength={120}
               name="campusLocation"
               placeholder="Məsələn: Kitabxana"
@@ -242,10 +242,10 @@ export function MarketplaceItemForm({
         </div>
 
         {listingMode === "swap" && (
-          <label className="mt-3 block">
-            <span className="text-xs font-medium text-muted">Dəyiş-toxuş şərti</span>
+          <label className="mt-4 block">
+            <span className="text-xs font-medium text-gray-500">Dəyiş-toxuş şərti</span>
             <input
-              className="mt-1 h-11 w-full rounded-lg border border-line bg-white px-3 text-sm outline-none placeholder:text-[#aaa49b] focus:border-sage"
+              className="mt-2 min-h-[44px] w-full rounded-2xl border border-gray-200 bg-slate-50 px-4 text-sm text-gray-900 outline-none placeholder:text-gray-400 focus:border-gray-400 focus:ring-0"
               maxLength={240}
               name="swapNote"
               placeholder="Məsələn: Data structures kitabı ilə dəyişmək olar"
@@ -253,12 +253,12 @@ export function MarketplaceItemForm({
           </label>
         )}
 
-        <div className="mt-3 rounded-lg border border-line bg-white p-3">
-          <span className="text-xs font-medium text-muted">Əlaqə vasitəsi</span>
-          <div className="mt-2 grid grid-cols-2 gap-2">
+        <div className="mt-4 rounded-3xl border border-gray-200 bg-white p-4">
+          <span className="text-xs font-medium text-gray-500">Əlaqə vasitəsi</span>
+          <div className="mt-3 grid grid-cols-2 gap-2">
             <button
-              className={`flex h-9 items-center justify-center gap-2 rounded-md text-sm font-semibold transition ${
-                contactMethod === "whatsapp" ? "bg-ink text-white" : "bg-[#f7f5f0] text-muted"
+              className={`flex min-h-[44px] items-center justify-center gap-2 rounded-2xl text-sm font-semibold transition ${
+                contactMethod === "whatsapp" ? "bg-gray-900 text-white" : "bg-slate-50 text-gray-500"
               }`}
               type="button"
               onClick={() => setContactMethod("whatsapp")}
@@ -267,8 +267,8 @@ export function MarketplaceItemForm({
               WhatsApp
             </button>
             <button
-              className={`flex h-9 items-center justify-center gap-2 rounded-md text-sm font-semibold transition ${
-                contactMethod === "email" ? "bg-ink text-white" : "bg-[#f7f5f0] text-muted"
+              className={`flex min-h-[44px] items-center justify-center gap-2 rounded-2xl text-sm font-semibold transition ${
+                contactMethod === "email" ? "bg-gray-900 text-white" : "bg-slate-50 text-gray-500"
               }`}
               type="button"
               onClick={() => setContactMethod("email")}
@@ -278,7 +278,7 @@ export function MarketplaceItemForm({
             </button>
           </div>
           <input
-            className="mt-2 h-11 w-full rounded-lg border border-line bg-white px-3 text-sm outline-none placeholder:text-[#aaa49b] focus:border-sage"
+            className="mt-3 min-h-[44px] w-full rounded-2xl border border-gray-200 bg-slate-50 px-4 text-sm text-gray-900 outline-none placeholder:text-gray-400 focus:border-gray-400 focus:ring-0"
             name="contactValue"
             placeholder={contactMethod === "whatsapp" ? "+994501234567" : "ad@karabakh.edu.az"}
             required
@@ -286,12 +286,12 @@ export function MarketplaceItemForm({
           />
         </div>
 
-        <label className="mt-3 block">
-          <span className="text-xs font-medium text-muted">Şəkil URL-i</span>
-          <div className="mt-1 flex items-center gap-2 rounded-lg border border-line bg-white px-3">
-            <ImagePlus className="size-4 text-sage" />
+        <label className="mt-4 block">
+          <span className="text-xs font-medium text-gray-500">Şəkil URL-i</span>
+          <div className="mt-2 flex min-h-[44px] items-center gap-2 rounded-2xl border border-gray-200 bg-slate-50 px-4 focus-within:border-gray-400 focus-within:ring-0">
+            <ImagePlus className="size-4 text-teal-700" />
             <input
-              className="h-11 min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-[#aaa49b]"
+              className="min-h-[44px] min-w-0 flex-1 bg-slate-50 text-sm text-gray-900 outline-none placeholder:text-gray-400"
               name="imageUrl"
               placeholder="Boş qalsa kateqoriyaya uyğun mock şəkil seçiləcək"
               type="url"
@@ -301,10 +301,10 @@ export function MarketplaceItemForm({
 
         {message && (
           <p
-            className={`mt-4 rounded-lg border px-3 py-2 text-xs ${
+            className={`mt-5 rounded-2xl border px-4 py-3 text-xs ${
               status === "success"
-                ? "border-[#cfe3d7] bg-[#f0f8f3] text-[#3f6f58]"
-                : "border-[#efd4ca] bg-[#fff4ef] text-[#9b4d37]"
+                ? "border-teal-100 bg-teal-50 text-teal-700"
+                : "border-orange-100 bg-orange-50 text-orange-700"
             }`}
           >
             {message}
@@ -312,7 +312,7 @@ export function MarketplaceItemForm({
         )}
 
         <button
-          className="mt-4 flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-ink px-4 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(38,52,47,0.18)] transition hover:-translate-y-0.5 hover:bg-[#1f2b27] hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70"
+          className="mt-5 flex min-h-[48px] w-full items-center justify-center gap-2 rounded-2xl bg-gray-900 px-4 text-sm font-semibold text-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 md:hover:-translate-y-0.5 md:hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70"
           disabled={status === "loading"}
           type="submit"
         >

@@ -90,20 +90,20 @@ export function AnswerComposer({
     <form
       className={
         compact
-          ? "mt-3 rounded-lg border border-line bg-white px-3 py-3"
-          : "rounded-lg border border-white/70 bg-white/84 p-4 shadow-[0_18px_45px_rgba(39,35,29,0.08)] backdrop-blur-xl"
+          ? "mt-4 rounded-2xl border border-gray-200 bg-white p-4"
+          : "rounded-3xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
       }
       onSubmit={handleSubmit}
     >
       {!compact && (
         <div>
-          <h2 className="text-base font-semibold">Cavab yaz</h2>
-          <p className="mt-1 text-xs text-muted">Mövzunu bilirsənsə, qısa və faydalı izah paylaş.</p>
+          <h2 className="text-base font-semibold text-gray-900">Cavab yaz</h2>
+          <p className="mt-1 hidden text-xs text-gray-400 md:block">Mövzunu bilirsənsə, qısa və faydalı izah paylaş.</p>
         </div>
       )}
 
       <textarea
-        className={`${compact ? "min-h-20" : "mt-4 min-h-32"} w-full resize-none rounded-lg border border-line bg-white px-3 py-3 text-sm outline-none placeholder:text-[#aaa49b] focus:border-sage`}
+        className={`${compact ? "min-h-24" : "mt-5 min-h-32"} w-full resize-none rounded-2xl border border-gray-200 bg-slate-50 px-4 py-3 text-sm text-gray-900 outline-none placeholder:text-gray-400 focus:border-gray-400 focus:ring-0`}
         maxLength={3000}
         minLength={2}
         name="body"
@@ -113,10 +113,10 @@ export function AnswerComposer({
 
       {message && (
         <p
-          className={`mt-3 rounded-lg border px-3 py-2 text-xs ${
+          className={`mt-4 rounded-2xl border px-4 py-3 text-xs ${
             status === "success"
-              ? "border-[#cfe3d7] bg-[#f0f8f3] text-[#3f6f58]"
-              : "border-[#efd4ca] bg-[#fff4ef] text-[#9b4d37]"
+              ? "border-teal-100 bg-teal-50 text-teal-700"
+              : "border-orange-100 bg-orange-50 text-orange-700"
           }`}
         >
           {message}
@@ -124,7 +124,7 @@ export function AnswerComposer({
       )}
 
       <button
-        className="mt-3 flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-ink px-4 text-sm font-semibold text-white shadow-[0_12px_26px_rgba(38,52,47,0.16)] transition hover:-translate-y-0.5 hover:bg-[#1f2b27] hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70"
+        className="mt-4 flex min-h-[48px] w-full items-center justify-center gap-2 rounded-2xl bg-gray-900 px-4 text-sm font-semibold text-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 md:hover:-translate-y-0.5 md:hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70"
         disabled={status === "loading"}
         type="submit"
       >
