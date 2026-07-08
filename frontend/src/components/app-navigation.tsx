@@ -62,7 +62,7 @@ export function AppNavigation() {
         </nav>
       </aside>
 
-      <nav className="fixed inset-x-4 bottom-4 z-40 grid h-16 grid-cols-5 rounded-3xl border border-white/70 bg-white/80 p-2 shadow-[0_8px_30px_rgb(0,0,0,0.08)] backdrop-blur-md md:hidden">
+      <nav className="fixed inset-x-6 bottom-3 z-40 grid h-14 grid-cols-5 rounded-[1.6rem] border border-white/70 bg-white/82 p-1.5 shadow-[0_8px_30px_rgb(0,0,0,0.07)] backdrop-blur-md md:hidden">
         {navItems.map((item) => {
           const Icon = item.icon;
           const active = isActive(pathname, item.href);
@@ -76,7 +76,7 @@ export function AppNavigation() {
               href={item.href}
               key={item.href}
             >
-              <Icon className="size-5" />
+              <Icon className="size-[18px]" />
             </Link>
           );
         })}

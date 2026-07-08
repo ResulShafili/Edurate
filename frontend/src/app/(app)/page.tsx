@@ -1,9 +1,11 @@
 import {
+  ArrowRight,
   BookOpen,
   FileText,
   GraduationCap,
   MessageSquare,
   Search,
+  ShieldCheck,
   ShoppingBag,
   Star,
   Users,
@@ -49,6 +51,13 @@ const teacherRows = [
   ["Aysel Karimova", "Web Stack", "4.5"],
 ];
 
+const pulseStats = [
+  ["544", "tələbə"],
+  ["4.7", "orta rəy"],
+  ["316", "material"],
+  ["58", "elan"],
+];
+
 const cardMotion = "transition-all duration-300 md:hover:-translate-y-1 md:hover:shadow-md";
 
 export default function HomePage() {
@@ -60,10 +69,10 @@ export default function HomePage() {
             EduRate Kampus
           </p>
           <h1 className="text-2xl font-semibold tracking-normal text-gray-900 md:mt-1 md:text-3xl">
-            Ana səhifə
+            EduRate
           </h1>
-          <p className="mt-2 hidden max-w-xl text-sm leading-6 text-gray-600 md:block">
-            Rəylər, suallar, konspektlər və kampus elanları Qarabağ Universiteti tələbələri üçün eyni yerdə.
+          <p className="mt-2 max-w-xl text-sm leading-6 text-gray-500 md:text-gray-600">
+            Qarabağ Universiteti tələbələri üçün sakit, sürətli və faydalı kampus paneli.
           </p>
         </div>
 
@@ -80,60 +89,74 @@ export default function HomePage() {
         </div>
       </header>
 
-      <section className="hidden rounded-3xl bg-white p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] md:block">
-        <div className="grid gap-6 lg:grid-cols-[1.25fr_0.75fr]">
+      <section className="rounded-[2rem] bg-gray-900 p-4 text-white shadow-[0_8px_30px_rgb(0,0,0,0.06)] md:p-6">
+        <div className="grid gap-5 lg:grid-cols-[1fr_330px] lg:items-end">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-slate-50 px-3 py-1 text-xs font-medium text-gray-600">
-              <GraduationCap className="size-3.5 text-teal-700" />
-              Universitet emaili ilə qorunan platforma
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-gray-200">
+              <ShieldCheck className="size-3.5 text-teal-300" />
+              Universitet emaili ilə qorunur
             </div>
-            <h2 className="mt-4 max-w-2xl text-4xl font-semibold leading-tight text-gray-900">
-              Kampus həyatını daha aydın, daha rahat və daha sürətli idarə et.
+            <h2 className="mt-4 max-w-2xl text-xl font-semibold leading-tight md:text-4xl">
+              Kampusdakı lazım olan şeylər bir yerdə.
             </h2>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-600">
-              EduRate müəllim rəylərini, Q&A forumunu, material paylaşımını və swap elanlarını vahid tələbə panelində birləşdirir.
+            <p className="mt-3 hidden max-w-2xl text-sm leading-6 text-gray-300 sm:block">
+              Rəy oxu, sual ver, konspekt tap və kampus elanlarına bax. Hamısı tələbə ritminə uyğun yığcam paneldə.
             </p>
+
+            <div className="mt-5 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
+              <Link
+                className="flex min-h-[44px] items-center justify-center gap-2 rounded-2xl bg-white px-4 text-sm font-semibold text-gray-900 transition hover:bg-gray-100"
+                href="/professors"
+              >
+                Müəllim tap
+                <ArrowRight className="size-4" />
+              </Link>
+              <Link
+                className="flex min-h-[44px] items-center justify-center gap-2 rounded-2xl bg-white/10 px-4 text-sm font-semibold text-white ring-1 ring-white/15 transition hover:bg-white/15"
+                href="/swap"
+              >
+                Elanlara bax
+                <ArrowRight className="size-4" />
+              </Link>
+            </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            {[
-              ["544", "Aktiv tələbə"],
-              ["4.7", "Orta reytinq"],
-              ["316", "PDF fayl"],
-              ["58", "Swap elanı"],
-            ].map(([value, label]) => (
-              <div className="rounded-3xl bg-slate-50 p-5" key={label}>
-                <p className="text-3xl font-semibold text-gray-900">{value}</p>
-                <p className="mt-1 text-sm text-gray-500">{label}</p>
+          <div className="hidden grid-cols-4 gap-2 sm:grid lg:grid-cols-2">
+            {pulseStats.map(([value, label]) => (
+              <div className="rounded-2xl bg-white/10 p-3 ring-1 ring-white/10 md:p-4" key={label}>
+                <p className="text-lg font-semibold leading-6 md:text-2xl">{value}</p>
+                <p className="mt-1 text-[11px] text-gray-300 md:text-xs">{label}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <section className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
         {modules.map((item) => {
           const Icon = item.icon;
 
           return (
             <Link
-              className={`group flex min-h-[132px] flex-col justify-between rounded-3xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] ${cardMotion}`}
+              className={`group flex min-h-[112px] flex-col justify-between rounded-3xl bg-white p-4 shadow-[0_8px_30px_rgb(0,0,0,0.035)] md:min-h-[132px] md:p-5 ${cardMotion}`}
               href={item.href}
               key={item.title}
             >
-              <span className={`flex size-12 items-center justify-center rounded-2xl ${item.tone}`}>
-                <Icon className="size-5" />
+              <span className={`flex size-10 items-center justify-center rounded-2xl md:size-12 ${item.tone}`}>
+                <Icon className="size-4 md:size-5" />
               </span>
               <span>
-                <span className="block text-base font-semibold text-gray-900">{item.title}</span>
-                <span className="mt-1 block text-sm text-gray-400">{item.subtitle}</span>
+                <span className="block text-sm font-semibold leading-5 text-gray-900 md:text-base">
+                  {item.title}
+                </span>
+                <span className="mt-1 block text-xs text-gray-400 md:text-sm">{item.subtitle}</span>
               </span>
             </Link>
           );
         })}
       </section>
 
-      <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-[0.95fr_1.05fr]">
+      <section className="hidden gap-4 md:grid md:grid-cols-2 lg:grid-cols-[0.95fr_1.05fr]">
         <div className={`rounded-3xl bg-white p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] ${cardMotion}`}>
           <div className="flex items-center justify-between">
             <div>
