@@ -279,8 +279,8 @@ export function ResourcesBoard() {
         </label>
       </header>
 
-      <section className="grid gap-6 xl:grid-cols-[1fr_390px]">
-        <div className="space-y-4">
+      <section className="grid min-w-0 gap-6 xl:grid-cols-[minmax(0,1fr)_390px]">
+        <div className="min-w-0 space-y-4">
           <div className="flex gap-3 overflow-x-auto pb-1">
             <button
               className={`min-h-[44px] shrink-0 rounded-2xl px-4 text-xs font-semibold transition-all duration-300 md:hover:-translate-y-0.5 md:hover:shadow-md ${
@@ -345,7 +345,7 @@ export function ResourcesBoard() {
           )}
         </div>
 
-        <aside className="space-y-4">
+        <aside className="min-w-0 max-w-full space-y-4">
           <ResourceUploadForm courses={courses} onResourceCreated={handleResourceCreated} />
         </aside>
       </section>

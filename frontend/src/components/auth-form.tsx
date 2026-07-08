@@ -149,8 +149,8 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
       <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
         {mode === "register" && (
           <>
-            <Field icon={User} label="Ad soyad" name="fullName" placeholder="Resul Shafili" />
-            <Field icon={AtSign} label="İstifadəçi adı" name="username" placeholder="resul" required={false} />
+            <Field icon={User} label="Ad soyad" name="fullName" placeholder="Ad və soyad" />
+            <Field icon={AtSign} label="İstifadəçi adı" name="username" placeholder="istifadeci_adi" required={false} />
             <UniversitySelect />
           </>
         )}
