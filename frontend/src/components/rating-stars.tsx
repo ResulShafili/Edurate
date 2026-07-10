@@ -26,7 +26,7 @@ export function RatingStars({
           <button
             aria-checked={value === rating}
             aria-label={`${label}: ${rating}`}
-            className="flex min-h-[44px] items-center justify-center rounded-2xl border border-slate-200 bg-white text-orange-600 transition-all duration-300 md:hover:-translate-y-0.5 md:hover:shadow-md"
+            className="flex min-h-[44px] items-center justify-center rounded-2xl border border-slate-200 bg-white text-orange-600 transition-all duration-200 md:hover:-translate-y-0.5 md:hover:shadow-md"
             key={rating}
             name={name}
             role="radio"

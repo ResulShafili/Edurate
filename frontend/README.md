@@ -18,11 +18,11 @@ Lucide React
 /login     Auth login page
 /register  Auth register page
 /professors      Professor and course search
-/professors/[id] Professor profile and review form
+/professors/[slug] Professor profile and review form
 /forum           Course Q&A forum
-/questions/[id]  Question thread with answers and votes
+/forum/[slug]    Question thread with answers and votes
 /resources       Course materials and upload form
-/swap            Campus marketplace listing board with contact-seller flow
+/profile         Signed-in user activity overview
 ```
 
 ## Setup
@@ -38,4 +38,5 @@ The frontend expects the backend API URL in:
 
 ```text
 NEXT_PUBLIC_API_URL=http://localhost:5000
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```

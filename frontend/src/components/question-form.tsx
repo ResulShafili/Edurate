@@ -12,6 +12,7 @@ import type {
   ForumCourse,
   ForumQuestionSummary,
 } from "@/lib/forum";
+import { showToast } from "@/lib/toast";
 
 type QuestionFormProps = {
   courses?: ForumCourse[];
@@ -79,14 +80,18 @@ export function QuestionForm({
       event.currentTarget.reset();
       setStatus("success");
       setMessage("Sualın foruma əlavə edildi.");
+      showToast({ message: "Sual uğurla paylaşıldı" });
     } catch (error) {
       setStatus("error");
-      setMessage(error instanceof Error ? error.message : "Server ilə əlaqə alınmadı");
+      const errorMessage = error instanceof Error ? error.message : "Server ilə əlaqə alınmadı";
+      setMessage(errorMessage);
+      showToast({ message: errorMessage, tone: "error" });
     }
   }
 
   return (
     <form
+      id="question-form"
       className="rounded-3xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
       onSubmit={handleSubmit}
     >
@@ -152,7 +157,7 @@ export function QuestionForm({
       )}
 
       <button
-        className="mt-5 flex min-h-[48px] w-full items-center justify-center gap-2 rounded-2xl bg-gray-900 px-4 text-sm font-semibold text-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 md:hover:-translate-y-0.5 md:hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70"
+        className="mt-5 flex min-h-[48px] w-full items-center justify-center gap-2 rounded-2xl bg-gray-900 px-4 text-sm font-semibold text-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-200 md:hover:-translate-y-0.5 md:hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70"
         disabled={status === "loading"}
         type="submit"
       >

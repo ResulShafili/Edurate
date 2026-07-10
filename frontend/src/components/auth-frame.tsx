@@ -1,12 +1,14 @@
 import {
   ArrowLeft,
+  FileText,
   GraduationCap,
   MessageCircle,
   ShieldCheck,
-  ShoppingBag,
 } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
+
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const benefits = [
   {
@@ -15,9 +17,9 @@ const benefits = [
     icon: MessageCircle,
   },
   {
-    title: "Kampus bazarı",
-    description: "Kitab və əşyaları tələbələrlə dəyiş.",
-    icon: ShoppingBag,
+    title: "Dərs materialları",
+    description: "Konspekt və faydalı PDF-ləri bir yerdə tap.",
+    icon: FileText,
   },
   {
     title: "Təhlükəsiz qeydiyyat",
@@ -44,18 +46,21 @@ export function AuthFrame({
           </span>
           EduRate
         </Link>
-        <Link
-          className="flex min-h-[44px] items-center gap-2 rounded-2xl bg-white px-4 text-xs font-medium text-gray-600 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition hover:text-gray-900"
-          href="/"
-        >
-          <ArrowLeft className="size-4" />
-          Ana səhifə
-        </Link>
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <Link
+            className="flex min-h-[44px] items-center gap-2 rounded-2xl bg-white px-4 text-xs font-medium text-gray-600 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition hover:text-gray-900"
+            href="/"
+          >
+            <ArrowLeft className="size-4" />
+            <span className="hidden sm:inline">Ana səhifə</span>
+          </Link>
+        </div>
       </div>
 
       <div className="mx-auto grid min-h-[calc(100vh-76px)] max-w-6xl items-center gap-8 lg:grid-cols-[0.92fr_1fr]">
         <section className="hidden lg:block">
-          <p className="text-xs font-medium uppercase tracking-[0.18em] text-gray-400">
+          <p className="text-xs font-medium uppercase tracking-normal text-gray-400">
             Tələbələr üçün
           </p>
           <h1 className="mt-4 max-w-md text-4xl font-semibold leading-tight tracking-normal text-gray-900">
@@ -63,7 +68,7 @@ export function AuthFrame({
           </h1>
           <p className="mt-3 max-w-md text-sm leading-6 text-gray-600">
             EduRate universitet həyatını daha aydın və rahat etmək üçün
-            rəyləri, sualları, konspektləri və kampus elanlarını bir araya
+            rəyləri, sualları və konspektləri bir araya
             gətirir.
           </p>
           <div className="mt-6 grid max-w-md gap-4">
@@ -91,7 +96,7 @@ export function AuthFrame({
         </section>
 
         <section>
-          <p className="mb-4 text-center text-xs font-medium uppercase tracking-[0.18em] text-gray-400 lg:text-left">
+          <p className="mb-4 text-center text-xs font-medium uppercase tracking-normal text-gray-400 lg:text-left">
             {eyebrow}
           </p>
           {children}

@@ -2,6 +2,7 @@ const Answer = require('../models/Answer');
 const Course = require('../models/Course');
 const ForumCategory = require('../models/ForumCategory');
 const Question = require('../models/Question');
+const { toSlug } = require('../utils/slug');
 
 const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -15,6 +16,13 @@ function cleanText(value) {
 
 function normalizeLimit(value) {
   return Math.min(Number(value) || 40, 100);
+}
+
+function withSlug(question) {
+  return {
+    ...question,
+    slug: toSlug(question.title)
+  };
 }
 
 async function listQuestions(req, res, next) {
@@ -34,7 +42,7 @@ async function listQuestions(req, res, next) {
       limit: normalizeLimit(req.query.limit)
     });
 
-    return res.status(200).json({ questions });
+    return res.status(200).json({ questions: questions.map(withSlug) });
   } catch (error) {
     return next(error);
   }
@@ -55,7 +63,7 @@ async function listCourseQuestions(req, res, next) {
       limit: normalizeLimit(req.query.limit)
     });
 
-    return res.status(200).json({ questions });
+    return res.status(200).json({ questions: questions.map(withSlug) });
   } catch (error) {
     return next(error);
   }
@@ -63,13 +71,15 @@ async function listCourseQuestions(req, res, next) {
 
 async function getQuestion(req, res, next) {
   try {
-    if (!isUuid(req.params.id)) {
-      return res.status(400).json({
-        message: 'Valid question id is required'
-      });
-    }
+    const identifier = String(req.params.id || '').trim().toLowerCase();
+    let question = null;
 
-    const question = await Question.findById(req.params.id);
+    if (isUuid(identifier)) {
+      question = await Question.findById(identifier);
+    } else {
+      const candidates = await Question.list({ limit: 100 });
+      question = candidates.find((candidate) => toSlug(candidate.title) === identifier) || null;
+    }
 
     if (!question) {
       return res.status(404).json({
@@ -77,11 +87,11 @@ async function getQuestion(req, res, next) {
       });
     }
 
-    const answers = await Answer.listByQuestion(req.params.id);
+    const answers = await Answer.listByQuestion(question.id);
 
     return res.status(200).json({
       question: {
-        ...question,
+        ...withSlug(question),
         answers
       }
     });
@@ -147,7 +157,7 @@ async function createQuestion(req, res, next) {
 
     return res.status(201).json({
       message: 'Question created successfully',
-      question
+      question: withSlug(question)
     });
   } catch (error) {
     return next(error);

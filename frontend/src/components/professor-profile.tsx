@@ -1,10 +1,18 @@
 "use client";
 
-import { ArrowLeft, BookOpen, GraduationCap, MessageSquare, Star, Users } from "lucide-react";
+import {
+  ArrowLeft,
+  BookOpen,
+  GraduationCap,
+  MessageSquare,
+  PencilLine,
+  ShieldCheck,
+  Star,
+} from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
-import { ReviewForm } from "@/components/review-form";
+import { ReviewDialog } from "@/components/review-dialog";
 import {
   apiBaseUrl,
   findMockProfessor,
@@ -19,6 +27,8 @@ type ProfessorResponse = {
   professor?: ProfessorProfileType;
 };
 
+type ReviewSort = "newest" | "highest";
+
 function RatingCard({
   label,
   value,
@@ -29,13 +39,19 @@ function RatingCard({
   hint: string;
 }) {
   return (
-    <div className="rounded-3xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 md:hover:-translate-y-1 md:hover:shadow-md">
+    <div className="rounded-3xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-200 md:hover:-translate-y-1 md:hover:shadow-md">
       <p className="text-xs font-medium text-gray-400">{label}</p>
       <div className="mt-2 flex items-center gap-2">
         <Star className="size-4 fill-orange-500 text-orange-500" />
         <p className="text-2xl font-semibold text-gray-900">{formatRating(value)}</p>
       </div>
       <p className="mt-1 hidden text-xs text-gray-500 md:block">{hint}</p>
+      <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-slate-100">
+        <div
+          className="h-full rounded-full bg-teal-600 transition-[width] duration-200"
+          style={{ width: `${Math.max(0, Math.min(value, 5)) * 20}%` }}
+        />
+      </div>
     </div>
   );
 }
@@ -49,17 +65,19 @@ function formatReviewDate(value: string) {
   return `${year}.${month}.${day}`;
 }
 
-export function ProfessorProfile({ professorId }: { professorId: string }) {
-  const [professor, setProfessor] = useState<ProfessorProfileType>(() => findMockProfessor(professorId));
-  const [reviews, setReviews] = useState<ReviewSummary[]>(() => findMockProfessor(professorId).reviews);
+export function ProfessorProfile({ professorSlug }: { professorSlug: string }) {
+  const [professor, setProfessor] = useState<ProfessorProfileType>(() => findMockProfessor(professorSlug));
+  const [reviews, setReviews] = useState<ReviewSummary[]>(() => findMockProfessor(professorSlug).reviews);
   const [isLoading, setIsLoading] = useState(false);
+  const [reviewSort, setReviewSort] = useState<ReviewSort>("newest");
+  const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
 
     async function loadProfessor() {
       if (!apiBaseUrl) {
-        const fallback = findMockProfessor(professorId);
+        const fallback = findMockProfessor(professorSlug);
         setProfessor(fallback);
         setReviews(fallback.reviews);
         return;
@@ -68,7 +86,7 @@ export function ProfessorProfile({ professorId }: { professorId: string }) {
       setIsLoading(true);
 
       try {
-        const response = await fetch(`${apiBaseUrl}/api/professors/${professorId}`, {
+        const response = await fetch(`${apiBaseUrl}/api/professors/${encodeURIComponent(professorSlug)}`, {
           signal: controller.signal,
         });
 
@@ -84,7 +102,7 @@ export function ProfessorProfile({ professorId }: { professorId: string }) {
         }
       } catch {
         if (!controller.signal.aborted) {
-          const fallback = findMockProfessor(professorId);
+          const fallback = findMockProfessor(professorSlug);
           setProfessor(fallback);
           setReviews(fallback.reviews);
         }
@@ -98,17 +116,18 @@ export function ProfessorProfile({ professorId }: { professorId: string }) {
     loadProfessor();
 
     return () => controller.abort();
-  }, [professorId]);
+  }, [professorSlug]);
 
   const reviewCount = reviews.length || professor.reviewCount;
-  const sortedReviews = useMemo(
-    () =>
-      [...reviews].sort(
-        (first, second) =>
-          new Date(second.createdAt).getTime() - new Date(first.createdAt).getTime(),
-      ),
-    [reviews],
-  );
+  const sortedReviews = useMemo(() => {
+    return [...reviews].sort((first, second) => {
+      if (reviewSort === "highest" && second.ratingOverall !== first.ratingOverall) {
+        return second.ratingOverall - first.ratingOverall;
+      }
+
+      return new Date(second.createdAt).getTime() - new Date(first.createdAt).getTime();
+    });
+  }, [reviewSort, reviews]);
 
   function handleReviewCreated(review: ReviewSummary) {
     setReviews((currentReviews) => [review, ...currentReviews]);
@@ -117,7 +136,7 @@ export function ProfessorProfile({ professorId }: { professorId: string }) {
   return (
     <div className="space-y-6">
       <Link
-        className="inline-flex min-h-[44px] items-center gap-2 rounded-2xl bg-white px-4 text-xs font-medium text-gray-600 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 md:hover:-translate-y-0.5 md:hover:text-gray-900 md:hover:shadow-md"
+        className="inline-flex min-h-[44px] items-center gap-2 rounded-2xl bg-white px-4 text-xs font-medium text-gray-600 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-200 md:hover:-translate-y-0.5 md:hover:text-gray-900 md:hover:shadow-md"
         href="/professors"
       >
         <ArrowLeft className="size-4" />
@@ -132,7 +151,7 @@ export function ProfessorProfile({ professorId }: { professorId: string }) {
                 <GraduationCap className="size-6" />
               </span>
               <div>
-                <p className="hidden text-xs font-medium uppercase tracking-[0.16em] text-gray-400 md:block">
+                <p className="hidden text-xs font-medium uppercase tracking-normal text-gray-400 md:block">
                   {professor.departmentName}
                 </p>
                 <h1 className="text-2xl font-semibold tracking-normal text-gray-900 md:mt-1 md:text-3xl">
@@ -142,6 +161,14 @@ export function ProfessorProfile({ professorId }: { professorId: string }) {
             </div>
             <p className="mt-4 text-sm text-gray-600">{professor.title}</p>
             <p className="mt-3 hidden max-w-2xl text-sm leading-6 text-gray-600 md:block">{professor.bio}</p>
+            <button
+              className="mt-5 flex min-h-[44px] w-full items-center justify-center gap-2 rounded-2xl bg-gray-900 px-4 text-sm font-semibold text-white transition-all duration-200 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2 sm:w-auto md:hover:-translate-y-0.5 md:hover:shadow-md"
+              type="button"
+              onClick={() => setIsReviewDialogOpen(true)}
+            >
+              <PencilLine className="size-4" />
+              Rəy yaz
+            </button>
           </div>
 
           <div className="grid min-w-[240px] grid-cols-2 gap-3">
@@ -153,13 +180,27 @@ export function ProfessorProfile({ professorId }: { professorId: string }) {
               <p className="mt-1 text-2xl font-semibold text-gray-900">
                 {formatRating(professor.averageRating)}
               </p>
+              <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white">
+                <div
+                  className="h-full rounded-full bg-orange-500"
+                  style={{ width: `${Math.max(0, Math.min(professor.averageRating, 5)) * 20}%` }}
+                />
+              </div>
             </div>
             <div className="rounded-2xl bg-slate-50 p-4">
               <div className="flex items-center gap-2 text-xs text-gray-500">
-                <Users className="size-3.5" />
-                Rəy
+                <BookOpen className="size-3.5" />
+                Çətinlik
               </div>
-              <p className="mt-1 text-2xl font-semibold text-gray-900">{reviewCount}</p>
+              <p className="mt-1 text-2xl font-semibold text-gray-900">
+                {formatRating(professor.averageDifficulty)}
+              </p>
+              <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white">
+                <div
+                  className="h-full rounded-full bg-teal-600"
+                  style={{ width: `${Math.max(0, Math.min(professor.averageDifficulty, 5)) * 20}%` }}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -183,24 +224,45 @@ export function ProfessorProfile({ professorId }: { professorId: string }) {
         />
       </section>
 
-      <section className="grid gap-6 xl:grid-cols-[1fr_420px]">
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
+      <section className="grid min-w-0 gap-6 xl:grid-cols-[minmax(0,1fr)_420px]">
+        <div className="min-w-0 space-y-4">
+          <div className="flex flex-wrap items-end justify-between gap-3">
             <div>
               <h2 className="text-base font-semibold text-gray-900">Tələbə rəyləri</h2>
-              <p className="hidden text-xs text-gray-400 md:block">Digər tələbələrin real təcrübələri</p>
+              <p className="mt-1 text-xs text-gray-400">{reviewCount} paylaşılmış təcrübə</p>
             </div>
-            {isLoading && <span className="text-xs text-gray-400">Yenilənir...</span>}
+            <div className="flex items-center gap-2">
+              {isLoading && <span className="text-xs text-gray-400">Yenilənir...</span>}
+              <label>
+                <span className="sr-only">Rəyləri sırala</span>
+                <select
+                  className="min-h-[44px] rounded-2xl border border-gray-200 bg-slate-50 px-4 text-xs font-semibold text-gray-700 outline-none focus:border-gray-400 focus:ring-0"
+                  value={reviewSort}
+                  onChange={(event) => setReviewSort(event.target.value as ReviewSort)}
+                >
+                  <option value="newest">Ən yeni</option>
+                  <option value="highest">Ən yüksək reytinq</option>
+                </select>
+              </label>
+            </div>
           </div>
 
           {sortedReviews.map((review) => (
             <article
-              className="rounded-3xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 md:hover:-translate-y-1 md:hover:shadow-md"
+              className="rounded-3xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-200 md:hover:-translate-y-1 md:hover:shadow-md"
               key={review.id}
             >
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div>
-                  <p className="text-sm font-semibold text-gray-900">{review.reviewerName}</p>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="text-sm font-semibold text-gray-900">{review.reviewerName}</p>
+                    {review.isAnonymous && (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-teal-50 px-2 py-1 text-[11px] font-medium text-teal-700">
+                        <ShieldCheck className="size-3" />
+                        Anonim tələbə
+                      </span>
+                    )}
+                  </div>
                   <p className="mt-1 text-xs text-gray-400">
                     {review.courseCode} · {review.courseTitle} · {formatReviewDate(review.createdAt)}
                   </p>
@@ -230,11 +292,18 @@ export function ProfessorProfile({ professorId }: { professorId: string }) {
               <MessageSquare className="mx-auto size-6 text-teal-700" />
               <p className="mt-3 text-sm font-semibold text-gray-900">Hələ rəy yoxdur</p>
               <p className="mt-1 text-sm text-gray-500">İlk rəyi sən paylaşa bilərsən.</p>
+              <button
+                className="mx-auto mt-5 flex min-h-[44px] items-center justify-center rounded-2xl bg-gray-900 px-5 text-sm font-semibold text-white"
+                type="button"
+                onClick={() => setIsReviewDialogOpen(true)}
+              >
+                İlk rəyi yaz
+              </button>
             </div>
           )}
         </div>
 
-        <aside className="space-y-4">
+        <aside className="min-w-0 space-y-4">
           <div className="rounded-3xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
             <div className="flex items-center gap-2 text-sm font-semibold text-gray-900">
               <BookOpen className="size-4 text-teal-700" />
@@ -250,13 +319,32 @@ export function ProfessorProfile({ professorId }: { professorId: string }) {
             </div>
           </div>
 
-          <ReviewForm
-            courses={professor.courses}
-            professorId={professor.id}
-            onReviewCreated={handleReviewCreated}
-          />
+          <div className="rounded-3xl bg-gray-900 p-5 text-white shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+            <MessageSquare className="size-5 text-teal-300" />
+            <p className="mt-4 text-base font-semibold">Təcrübən başqasına yol göstərə bilər.</p>
+            <p className="mt-2 text-sm leading-6 text-gray-300">
+              Qiymətləndirməni anonim və ya öz adınla paylaş.
+            </p>
+            <button
+              className="mt-5 flex min-h-[44px] w-full items-center justify-center gap-2 rounded-2xl bg-white px-4 text-sm font-semibold text-gray-900 transition active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300"
+              type="button"
+              onClick={() => setIsReviewDialogOpen(true)}
+            >
+              <PencilLine className="size-4" />
+              Rəy yaz
+            </button>
+          </div>
         </aside>
       </section>
+
+      <ReviewDialog
+        courses={professor.courses}
+        isOpen={isReviewDialogOpen}
+        professorId={professor.id}
+        professorName={professor.fullName}
+        onClose={() => setIsReviewDialogOpen(false)}
+        onReviewCreated={handleReviewCreated}
+      />
     </div>
   );
 }

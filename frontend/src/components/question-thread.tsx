@@ -114,7 +114,7 @@ function AnswerItem({
         <p className="mt-4 text-sm leading-6 text-gray-600">{answer.body}</p>
 
         <button
-          className="mt-5 inline-flex min-h-[44px] items-center gap-2 rounded-2xl bg-slate-50 px-4 text-xs font-semibold text-gray-600 transition-all duration-300 md:hover:-translate-y-0.5 md:hover:text-gray-900 md:hover:shadow-md"
+          className="mt-5 inline-flex min-h-[44px] items-center gap-2 rounded-2xl bg-slate-50 px-4 text-xs font-semibold text-gray-600 transition-all duration-200 md:hover:-translate-y-0.5 md:hover:text-gray-900 md:hover:shadow-md"
           type="button"
           onClick={() => setIsReplying((current) => !current)}
         >
@@ -153,8 +153,8 @@ function AnswerItem({
   );
 }
 
-export function QuestionThread({ questionId }: { questionId: string }) {
-  const fallbackQuestion = findMockQuestion(questionId);
+export function QuestionThread({ questionSlug }: { questionSlug: string }) {
+  const fallbackQuestion = findMockQuestion(questionSlug);
   const [question, setQuestion] = useState<ForumQuestion>(fallbackQuestion);
   const [answers, setAnswers] = useState<ForumAnswer[]>(fallbackQuestion.answers);
   const [isLoading, setIsLoading] = useState(false);
@@ -165,7 +165,7 @@ export function QuestionThread({ questionId }: { questionId: string }) {
 
     async function loadQuestion() {
       if (!forumApiBaseUrl) {
-        const fallback = findMockQuestion(questionId);
+        const fallback = findMockQuestion(questionSlug);
         setQuestion(fallback);
         setAnswers(fallback.answers);
         return;
@@ -174,7 +174,7 @@ export function QuestionThread({ questionId }: { questionId: string }) {
       setIsLoading(true);
 
       try {
-        const response = await fetch(`${forumApiBaseUrl}/api/questions/${questionId}`, {
+        const response = await fetch(`${forumApiBaseUrl}/api/questions/${encodeURIComponent(questionSlug)}`, {
           signal: controller.signal,
         });
 
@@ -190,7 +190,7 @@ export function QuestionThread({ questionId }: { questionId: string }) {
         }
       } catch {
         if (!controller.signal.aborted) {
-          const fallback = findMockQuestion(questionId);
+          const fallback = findMockQuestion(questionSlug);
           setQuestion(fallback);
           setAnswers(fallback.answers);
         }
@@ -204,7 +204,7 @@ export function QuestionThread({ questionId }: { questionId: string }) {
     loadQuestion();
 
     return () => controller.abort();
-  }, [questionId]);
+  }, [questionSlug]);
 
   const answerTree = useMemo(() => buildAnswerTree(answers), [answers]);
 
@@ -285,7 +285,7 @@ export function QuestionThread({ questionId }: { questionId: string }) {
   return (
     <div className="space-y-6">
       <Link
-        className="inline-flex min-h-[44px] items-center gap-2 rounded-2xl bg-white px-4 text-xs font-medium text-gray-600 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 md:hover:-translate-y-0.5 md:hover:text-gray-900 md:hover:shadow-md"
+        className="inline-flex min-h-[44px] items-center gap-2 rounded-2xl bg-white px-4 text-xs font-medium text-gray-600 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-200 md:hover:-translate-y-0.5 md:hover:text-gray-900 md:hover:shadow-md"
         href="/forum"
       >
         <ArrowLeft className="size-4" />
@@ -340,8 +340,8 @@ export function QuestionThread({ questionId }: { questionId: string }) {
         </div>
       </section>
 
-      <section className="grid gap-6 xl:grid-cols-[1fr_390px]">
-        <div className="space-y-4">
+      <section className="grid min-w-0 gap-6 xl:grid-cols-[minmax(0,1fr)_390px]">
+        <div className="min-w-0 space-y-4">
           <div>
             <h2 className="text-base font-semibold text-gray-900">Cavablar</h2>
             <p className="mt-1 hidden text-xs text-gray-400 md:block">
@@ -370,11 +370,17 @@ export function QuestionThread({ questionId }: { questionId: string }) {
               <MessageSquare className="mx-auto size-6 text-teal-700" />
               <p className="mt-3 text-sm font-semibold text-gray-900">Hələ cavab yoxdur</p>
               <p className="mt-1 text-sm text-gray-500">İlk faydalı cavabı sən paylaşa bilərsən.</p>
+              <a
+                className="mx-auto mt-5 flex min-h-[44px] w-fit items-center justify-center rounded-2xl bg-gray-900 px-5 text-sm font-semibold text-white"
+                href="#answer-composer"
+              >
+                Cavab yaz
+              </a>
             </div>
           )}
         </div>
 
-        <aside>
+        <aside className="min-w-0">
           <AnswerComposer questionId={question.id} onAnswerCreated={handleAnswerCreated} />
         </aside>
       </section>

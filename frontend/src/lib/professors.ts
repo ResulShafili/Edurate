@@ -24,6 +24,7 @@ export type ReviewSummary = {
 
 export type ProfessorSummary = {
   id: string;
+  slug?: string;
   fullName: string;
   title: string;
   bio: string;
@@ -43,13 +44,13 @@ export type ProfessorProfile = ProfessorSummary & {
 
 export const mockProfessors: ProfessorProfile[] = [
   {
-    id: "11111111-1111-4111-8111-111111111111",
+    id: "professor-nigar-mammadova",
     fullName: "Nigar Mammadova",
     title: "Senior Lecturer",
     bio: "Alqoritmlər və problem həlli dərslərində praktiki yanaşması ilə tanınır.",
     departmentName: "Computer Science",
     universityName: "Qarabağ Universiteti",
-    reviewCount: 24,
+    reviewCount: 2,
     averageRating: 4.8,
     averageTeaching: 4.9,
     averageDifficulty: 3.4,
@@ -104,13 +105,13 @@ export const mockProfessors: ProfessorProfile[] = [
     ],
   },
   {
-    id: "22222222-2222-4222-8222-222222222222",
+    id: "professor-elvin-huseynli",
     fullName: "Elvin Huseynli",
     title: "Assistant Professor",
     bio: "Database design, SQL optimizasiyası və backend arxitekturası üzrə fokuslanır.",
     departmentName: "Software Engineering",
     universityName: "Qarabağ Universiteti",
-    reviewCount: 18,
+    reviewCount: 2,
     averageRating: 4.6,
     averageTeaching: 4.6,
     averageDifficulty: 3.8,
@@ -145,16 +146,33 @@ export const mockProfessors: ProfessorProfile[] = [
         reviewerName: "Anonim tələbə",
         createdAt: "2026-06-02T10:00:00.000Z",
       },
+      {
+        id: "r-5",
+        courseId: "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+        courseCode: "SE310",
+        courseTitle: "Backend Engineering",
+        ratingOverall: 3,
+        ratingTeaching: 4,
+        ratingDifficulty: 5,
+        ratingObjectivity: 3,
+        wouldTakeAgain: true,
+        comment: "Tapşırıqlar öyrədicidir, amma deadline-lar bir-birinə çox yaxın düşür. Həftəlik planla getmək vacibdir.",
+        isAnonymous: false,
+        semester: "spring",
+        academicYear: 2026,
+        reviewerName: "Nihat Əliyev",
+        createdAt: "2026-03-21T10:00:00.000Z",
+      },
     ],
   },
   {
-    id: "33333333-3333-4333-8333-333333333333",
+    id: "professor-aysel-karimova",
     fullName: "Aysel Karimova",
     title: "Lecturer",
     bio: "Frontend, UI sistemləri və web accessibility mövzularını praktiki nümunələrlə keçir.",
     departmentName: "Information Technologies",
     universityName: "Qarabağ Universiteti",
-    reviewCount: 15,
+    reviewCount: 2,
     averageRating: 4.5,
     averageTeaching: 4.7,
     averageDifficulty: 3.1,
@@ -189,12 +207,40 @@ export const mockProfessors: ProfessorProfile[] = [
         reviewerName: "Anonim tələbə",
         createdAt: "2026-04-18T10:00:00.000Z",
       },
+      {
+        id: "r-6",
+        courseId: "ffffffff-ffff-4fff-8fff-ffffffffffff",
+        courseCode: "WEB320",
+        courseTitle: "Product UI",
+        ratingOverall: 4,
+        ratingTeaching: 4,
+        ratingDifficulty: 3,
+        ratingObjectivity: 5,
+        wouldTakeAgain: true,
+        comment: "Dizayn qərarlarını əsaslandırmağı öyrədir. Rəy sessiyaları faydalıdır, təqdimat hissəsi isə bir az daha çox vaxt istəyir.",
+        isAnonymous: true,
+        semester: "fall",
+        academicYear: 2025,
+        reviewerName: "Anonim tələbə",
+        createdAt: "2025-12-09T10:00:00.000Z",
+      },
     ],
   },
 ];
 
-export function findMockProfessor(id: string) {
-  return mockProfessors.find((professor) => professor.id === id) || mockProfessors[0];
+export function getProfessorSlug(professor: Pick<ProfessorSummary, "fullName" | "slug">) {
+  return professor.slug || toSlug(professor.fullName);
+}
+
+export function getMockProfessor(identifier: string) {
+  return mockProfessors.find(
+    (professor) =>
+      professor.id === identifier || getProfessorSlug(professor) === identifier,
+  );
+}
+
+export function findMockProfessor(identifier: string) {
+  return getMockProfessor(identifier) || mockProfessors[0];
 }
 
 export function formatRating(value: number) {
@@ -202,3 +248,4 @@ export function formatRating(value: number) {
 }
 
 export const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "";
+import { toSlug } from "@/lib/slug";

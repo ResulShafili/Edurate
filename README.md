@@ -1,8 +1,8 @@
 # EduRate
 
-EduRate Qarabağ Universiteti tələbələri üçün hazırlanmış kampus platformasıdır. Layihənin məqsədi tələbələrin dərs, müəllim, material və kampus daxilindəki gündəlik ehtiyaclarını tək bir rəqəmsal məkanda birləşdirməkdir.
+EduRate Qarabağ Universiteti tələbələri üçün hazırlanmış akademik kampus platformasıdır. Layihənin məqsədi tələbələrin dərs, müəllim və material ehtiyaclarını tək bir rəqəmsal məkanda birləşdirməkdir.
 
-Platforma tələbələrə universitet emaili ilə təhlükəsiz qeydiyyatdan keçmək, müəllimlər haqqında rəy bildirmək, fənlər üzrə sual-cavab aparmaq, konspekt və PDF materialları paylaşmaq, həmçinin kampus daxilində əşya satmaq və ya dəyişmək imkanı verir.
+Platforma tələbələrə universitet emaili ilə təhlükəsiz qeydiyyatdan keçmək, müəllimlər haqqında rəy bildirmək, fənlər üzrə sual-cavab aparmaq, konspekt və PDF materialları paylaşmaq imkanı verir.
 
 ## Texnologiyalar
 
@@ -33,10 +33,6 @@ Fənlər üzrə sual-cavab mühiti. Tələbələr sual yarada, cavab yaza, neste
 
 Konspekt, cheat sheet və dərs materiallarının paylaşılması üçün resurs modulu. Tələbələr PDF və şəkil tipli materialları fənlərə görə görə və yükləyə bilirlər.
 
-### 5. Swap
-
-Kampus daxili elan lövhəsi. Tələbələr kitab, texnologiya, geyim və digər əşyaları paylaşa, satış və ya dəyiş-toxuş şərtini qeyd edə bilirlər. Platformada daxili ödəniş sistemi yoxdur; tələbələr satıcı ilə WhatsApp və ya email vasitəsilə əlaqə saxlayır.
-
 ## Layihə Strukturu
 
 ```text
@@ -48,7 +44,7 @@ Edurate/
 
 ## Demo Məlumatları
 
-Backend daxilində demo seed skripti mövcuddur. Bu skript Qarabağ Universiteti, test tələbələri, müəllimlər, fənlər, rəylər, forum sualları, resurslar və swap elanları yaradır.
+Backend daxilində demo seed skripti mövcuddur. Bu skript Qarabağ Universiteti, test tələbələri, müəllimlər, fənlər, rəylər, forum sualları və resurslar yaradır.
 
 ```bash
 cd backend

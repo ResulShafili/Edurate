@@ -39,7 +39,7 @@ export const mockResources: ResourceItem[] = [
     fileSizeBytes: 2140000,
     isAnonymous: true,
     uploaderName: "Anonim tələbə",
-    createdAt: "2026-07-06T11:00:00.000Z",
+    createdAt: "2026-06-28T11:00:00.000Z",
   },
   {
     id: "res-2",
@@ -54,7 +54,7 @@ export const mockResources: ResourceItem[] = [
     fileSizeBytes: 860000,
     isAnonymous: true,
     uploaderName: "Anonim tələbə",
-    createdAt: "2026-07-05T15:20:00.000Z",
+    createdAt: "2026-05-14T15:20:00.000Z",
   },
   {
     id: "res-3",
@@ -69,7 +69,7 @@ export const mockResources: ResourceItem[] = [
     fileSizeBytes: 1320000,
     isAnonymous: false,
     uploaderName: "Səbinə",
-    createdAt: "2026-07-04T18:40:00.000Z",
+    createdAt: "2026-04-03T18:40:00.000Z",
   },
 ];
 

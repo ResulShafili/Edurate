@@ -7,8 +7,6 @@ CREATE TYPE academic_term AS ENUM ('spring', 'summer', 'fall', 'winter');
 CREATE TYPE question_status AS ENUM ('open', 'resolved', 'closed');
 CREATE TYPE resource_file_type AS ENUM ('pdf', 'image');
 CREATE TYPE report_status AS ENUM ('open', 'reviewed', 'dismissed', 'actioned');
-CREATE TYPE swap_item_condition AS ENUM ('new', 'like_new', 'good', 'fair', 'poor');
-CREATE TYPE swap_item_status AS ENUM ('available', 'reserved', 'sold', 'removed');
 
 CREATE TABLE universities (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -358,56 +356,11 @@ CREATE TABLE pdf_note_bookmarks (
     REFERENCES users(id, university_id) ON DELETE CASCADE
 );
 
-CREATE TABLE swap_categories (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  university_id UUID NOT NULL REFERENCES universities(id) ON DELETE CASCADE,
-  name TEXT NOT NULL,
-  slug TEXT NOT NULL,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  UNIQUE (university_id, slug),
-  UNIQUE (id, university_id)
-);
-
-CREATE TABLE swap_items (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  university_id UUID NOT NULL,
-  seller_id UUID NOT NULL,
-  category_id UUID NOT NULL,
-  title TEXT NOT NULL,
-  description TEXT NOT NULL,
-  price_cents INT NOT NULL DEFAULT 0 CHECK (price_cents >= 0),
-  currency CHAR(3) NOT NULL DEFAULT 'AZN',
-  condition swap_item_condition NOT NULL,
-  status swap_item_status NOT NULL DEFAULT 'available',
-  campus_location TEXT,
-  swap_note TEXT,
-  contact_method TEXT NOT NULL CHECK (contact_method IN ('whatsapp', 'email')),
-  contact_value TEXT NOT NULL CHECK (btrim(contact_value) <> ''),
-  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  UNIQUE (id, university_id),
-  FOREIGN KEY (seller_id, university_id)
-    REFERENCES users(id, university_id) ON DELETE CASCADE,
-  FOREIGN KEY (category_id, university_id)
-    REFERENCES swap_categories(id, university_id) ON DELETE RESTRICT
-);
-
-CREATE TABLE swap_item_images (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  item_id UUID NOT NULL REFERENCES swap_items(id) ON DELETE CASCADE,
-  image_url TEXT NOT NULL,
-  sort_order INT NOT NULL DEFAULT 0,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  UNIQUE (item_id, sort_order)
-);
-
 CREATE INDEX idx_teacher_reviews_teacher ON teacher_reviews(teacher_id, course_id, created_at DESC);
 CREATE INDEX idx_forum_questions_feed ON forum_questions(university_id, category_id, created_at DESC);
 CREATE INDEX idx_forum_answers_question ON forum_answers(question_id, created_at);
 CREATE INDEX idx_forum_answers_parent ON forum_answers(question_id, parent_answer_id, created_at);
 CREATE INDEX idx_pdf_notes_course ON pdf_notes(course_id, created_at DESC);
-CREATE INDEX idx_swap_items_market ON swap_items(university_id, category_id, status, created_at DESC);
 
 CREATE OR REPLACE FUNCTION set_updated_at()
 RETURNS TRIGGER AS $$
@@ -459,7 +412,7 @@ BEGIN
   FOREACH tbl IN ARRAY ARRAY[
     'universities', 'users', 'departments', 'courses', 'teachers',
     'teacher_reviews', 'forum_categories', 'tags', 'forum_questions',
-    'forum_answers', 'pdf_notes', 'swap_categories', 'swap_items'
+    'forum_answers', 'pdf_notes'
   ]
   LOOP
     EXECUTE format(

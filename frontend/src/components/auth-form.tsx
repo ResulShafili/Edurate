@@ -16,6 +16,8 @@ import Link from "next/link";
 import type { FormEvent } from "react";
 import { useMemo, useState } from "react";
 
+import { showToast } from "@/lib/toast";
+
 type AuthMode = "login" | "register";
 
 type AuthResponse = {
@@ -128,9 +130,12 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
       window.dispatchEvent(new Event("edurate-auth-change"));
       setStatus("success");
       setMessage(data.message || "Uğurlu əməliyyat");
+      showToast({ message: mode === "login" ? "Hesaba uğurla daxil oldun" : "Hesab uğurla yaradıldı" });
     } catch (error) {
       setStatus("error");
-      setMessage(error instanceof Error ? error.message : "Server ilə əlaqə alınmadı");
+      const errorMessage = error instanceof Error ? error.message : "Server ilə əlaqə alınmadı";
+      setMessage(errorMessage);
+      showToast({ message: errorMessage, tone: "error" });
     }
   }
 
@@ -194,7 +199,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
         )}
 
         <button
-          className="flex min-h-[48px] w-full items-center justify-center gap-2 rounded-2xl bg-gray-900 px-4 text-sm font-semibold text-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 md:hover:-translate-y-0.5 md:hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70"
+          className="flex min-h-[48px] w-full items-center justify-center gap-2 rounded-2xl bg-gray-900 px-4 text-sm font-semibold text-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-200 md:hover:-translate-y-0.5 md:hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70"
           disabled={status === "loading"}
           type="submit"
         >

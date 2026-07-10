@@ -17,47 +17,7 @@ async function one(client, query, params = []) {
 }
 
 async function cleanDatabase(client) {
-  await client.query('DROP TABLE IF EXISTS swap_transactions');
-  await client.query('DROP TABLE IF EXISTS swap_messages');
-  await client.query('DROP TABLE IF EXISTS swap_offers');
-  await client.query('DROP FUNCTION IF EXISTS enforce_swap_offer_rules()');
-  await client.query('DROP FUNCTION IF EXISTS enforce_swap_message_sender()');
-  await client.query('DROP TYPE IF EXISTS swap_offer_status');
-
   await client.query('TRUNCATE TABLE universities RESTART IDENTITY CASCADE');
-
-  await client.query('ALTER TABLE swap_items ADD COLUMN IF NOT EXISTS swap_note TEXT');
-  await client.query('ALTER TABLE swap_items ADD COLUMN IF NOT EXISTS contact_method TEXT');
-  await client.query('ALTER TABLE swap_items ADD COLUMN IF NOT EXISTS contact_value TEXT');
-  await client.query(`
-    ALTER TABLE swap_items
-    ALTER COLUMN contact_method SET NOT NULL,
-    ALTER COLUMN contact_value SET NOT NULL
-  `);
-  await client.query(`
-    DO $$
-    BEGIN
-      IF NOT EXISTS (
-        SELECT 1
-        FROM pg_constraint
-        WHERE conname = 'chk_swap_items_contact_method'
-      ) THEN
-        ALTER TABLE swap_items
-        ADD CONSTRAINT chk_swap_items_contact_method
-        CHECK (contact_method IN ('whatsapp', 'email'));
-      END IF;
-
-      IF NOT EXISTS (
-        SELECT 1
-        FROM pg_constraint
-        WHERE conname = 'chk_swap_items_contact_value'
-      ) THEN
-        ALTER TABLE swap_items
-        ADD CONSTRAINT chk_swap_items_contact_value
-        CHECK (btrim(contact_value) <> '');
-      END IF;
-    END $$;
-  `);
 }
 
 async function seedUniversity(client) {
@@ -891,146 +851,6 @@ async function seedResources(client, universityId, users, courses, tags) {
   return resources;
 }
 
-async function seedMarketplace(client, universityId, users) {
-  const categories = {};
-  const categoryRows = [
-    ['books', 'Kitablar', 'books'],
-    ['technology', 'Texnologiya', 'technology'],
-    ['clothing', 'Geyim', 'clothing'],
-    ['other', 'Digər', 'other']
-  ];
-
-  for (const [key, name, slug] of categoryRows) {
-    categories[key] = await one(
-      client,
-      `
-        INSERT INTO swap_categories (university_id, name, slug)
-        VALUES ($1, $2, $3)
-        RETURNING id
-      `,
-      [universityId, name, slug]
-    );
-  }
-
-  const items = {};
-  const itemRows = [
-    {
-      key: 'calculusBook',
-      seller: 'aysu',
-      category: 'books',
-      title: 'Calculus kitabı',
-      description: 'Calculus I üçün təmiz saxlanılmış kitab. İçində vacib səhifələrdə qısa qeydlər var.',
-      priceCents: 1800,
-      swapNote: null,
-      condition: 'good',
-      campusLocation: 'Kitabxana girişi',
-      contactMethod: 'whatsapp',
-      contactValue: '+994501234567',
-      imageUrl: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=900&q=80',
-      days: 1
-    },
-    {
-      key: 'keyboard',
-      seller: 'nihat',
-      category: 'technology',
-      title: 'Mexaniki Klaviatura',
-      description: 'Compact 68-key mexaniki klaviatura. Switch-lər səssizə yaxındır, kod yazmaq üçün rahatdır.',
-      priceCents: 6500,
-      swapNote: null,
-      condition: 'like_new',
-      campusLocation: 'Korpus B, 2-ci mərtəbə',
-      contactMethod: 'whatsapp',
-      contactValue: '+994552224466',
-      imageUrl: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=900&q=80',
-      days: 2
-    },
-    {
-      key: 'deskLamp',
-      seller: 'murad',
-      category: 'other',
-      title: 'Stol lampası',
-      description: 'Gecə oxumaq üçün LED stol lampası. İşıq gücü tənzimlənir.',
-      priceCents: 0,
-      swapNote: 'Notebook, A5 dəftər və ya Type-C kabel ilə dəyişmək olar.',
-      condition: 'good',
-      campusLocation: 'Study room',
-      contactMethod: 'email',
-      contactValue: 'murad@karabakh.edu.az',
-      imageUrl: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=900&q=80',
-      days: 3
-    },
-    {
-      key: 'hoodie',
-      seller: 'test',
-      category: 'clothing',
-      title: 'Holberton hoodie',
-      description: 'M ölçü hoodie, çox az geyinilib. Kampusda təhvil vermək mümkündür.',
-      priceCents: 3500,
-      swapNote: null,
-      condition: 'like_new',
-      campusLocation: 'Cafeteria',
-      contactMethod: 'whatsapp',
-      contactValue: '+994703334455',
-      imageUrl: 'https://images.unsplash.com/photo-1523381294911-8d3cead13475?auto=format&fit=crop&w=900&q=80',
-      days: 4
-    }
-  ];
-
-  for (const item of itemRows) {
-    items[item.key] = await one(
-      client,
-      `
-        INSERT INTO swap_items (
-          university_id,
-          seller_id,
-          category_id,
-          title,
-          description,
-          price_cents,
-          currency,
-          condition,
-          status,
-          campus_location,
-          swap_note,
-          contact_method,
-          contact_value,
-          created_at,
-          updated_at
-        )
-        VALUES ($1, $2, $3, $4, $5, $6, 'AZN', $7, 'available', $8, $9, $10, $11, $12, $12)
-        RETURNING id
-      `,
-      [
-        universityId,
-        users[item.seller].id,
-        categories[item.category].id,
-        item.title,
-        item.description,
-        item.priceCents,
-        item.condition,
-        item.campusLocation,
-        item.swapNote,
-        item.contactMethod,
-        item.contactValue,
-        daysAgo(item.days)
-      ]
-    );
-
-    await client.query(
-      `
-        INSERT INTO swap_item_images (item_id, image_url, sort_order)
-        VALUES ($1, $2, 0)
-      `,
-      [items[item.key].id, item.imageUrl]
-    );
-  }
-
-  return {
-    categories,
-    items
-  };
-}
-
 async function main() {
   if (!process.env.DATABASE_URL) {
     throw new Error('DATABASE_URL is missing. Add it to backend/.env before running the seed script.');
@@ -1061,8 +881,6 @@ async function main() {
       academics.courses,
       forum.tags
     );
-    const marketplace = await seedMarketplace(client, university.id, users);
-
     await client.query('COMMIT');
 
     console.log('EduRate demo seed completed successfully.');
@@ -1081,7 +899,6 @@ async function main() {
     console.log(`  Questions: ${Object.keys(forum.questions).length}`);
     console.log(`  Answers: ${Object.keys(forum.answers).length}`);
     console.log(`  Resources: ${Object.keys(resources).length}`);
-    console.log(`  Marketplace items: ${Object.keys(marketplace.items).length}`);
   } catch (error) {
     await client.query('ROLLBACK');
     console.error('Seed failed. Rolled back all changes.');

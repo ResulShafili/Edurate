@@ -10,6 +10,7 @@ import {
 import { useEffect, useMemo, useState } from "react";
 
 import { ResourceUploadForm } from "@/components/resource-upload-form";
+import { ContentSkeleton } from "@/components/content-skeleton";
 import {
   formatFileSize,
   formatResourceDate,
@@ -64,7 +65,7 @@ function ResourceCard({ resource }: { resource: ResourceItem }) {
   const downloadUrl = resolveResourceUrl(resource.fileUrl);
 
   return (
-    <article className="group rounded-3xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 md:hover:-translate-y-1 md:hover:shadow-md">
+    <article className="group rounded-3xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-200 md:hover:-translate-y-1 md:hover:shadow-md">
       <div className="flex items-start justify-between gap-4">
         <div className="flex min-w-0 gap-4">
           <span
@@ -96,7 +97,7 @@ function ResourceCard({ resource }: { resource: ResourceItem }) {
 
         <a
           aria-label="Yüklə"
-          className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-slate-50 text-gray-500 transition-all duration-300 md:hover:-translate-y-0.5 md:hover:text-gray-900 md:hover:shadow-md"
+          className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-slate-50 text-gray-500 transition-all duration-200 md:hover:-translate-y-0.5 md:hover:text-gray-900 md:hover:shadow-md"
           download
           href={downloadUrl}
         >
@@ -256,10 +257,7 @@ export function ResourcesBoard() {
     <div className="space-y-6">
       <header className="space-y-4 md:flex md:items-end md:justify-between md:space-y-0">
         <div>
-          <p className="hidden text-xs font-medium uppercase tracking-[0.16em] text-gray-400 md:block">
-            Modul D · Resources
-          </p>
-          <h1 className="text-2xl font-semibold tracking-normal text-gray-900 md:mt-1 md:text-3xl">
+          <h1 className="text-2xl font-semibold tracking-normal text-gray-900 md:text-3xl">
             Materiallar
           </h1>
           <p className="mt-2 text-sm text-gray-500">
@@ -271,7 +269,7 @@ export function ResourcesBoard() {
           <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
           <input
             className="min-h-[48px] w-full rounded-2xl border border-gray-200 bg-slate-50 pl-11 pr-4 text-sm text-gray-900 shadow-[0_8px_30px_rgb(0,0,0,0.04)] outline-none transition focus:border-gray-400 focus:ring-0"
-            placeholder="Material, fənn və ya fayl adı axtar"
+            placeholder="Bu bölmədə material və ya fayl axtar"
             type="search"
             value={search}
             onChange={(event) => setSearch(event.target.value)}
@@ -281,9 +279,9 @@ export function ResourcesBoard() {
 
       <section className="grid min-w-0 gap-6 xl:grid-cols-[minmax(0,1fr)_390px]">
         <div className="min-w-0 space-y-4">
-          <div className="flex gap-3 overflow-x-auto pb-1">
+          <div className="scrollbar-none flex gap-3 overflow-x-auto pb-1">
             <button
-              className={`min-h-[44px] shrink-0 rounded-2xl px-4 text-xs font-semibold transition-all duration-300 md:hover:-translate-y-0.5 md:hover:shadow-md ${
+              className={`min-h-[44px] shrink-0 rounded-2xl px-4 text-xs font-semibold transition-all duration-200 md:hover:-translate-y-0.5 md:hover:shadow-md ${
                 selectedCourseId === "all"
                   ? "bg-gray-900 text-white"
                   : "bg-white text-gray-600 shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
@@ -295,7 +293,7 @@ export function ResourcesBoard() {
             </button>
             {courses.map((course) => (
               <button
-                className={`min-h-[44px] shrink-0 rounded-2xl px-4 text-xs font-semibold transition-all duration-300 md:hover:-translate-y-0.5 md:hover:shadow-md ${
+                className={`min-h-[44px] shrink-0 rounded-2xl px-4 text-xs font-semibold transition-all duration-200 md:hover:-translate-y-0.5 md:hover:shadow-md ${
                   selectedCourseId === course.id
                     ? "bg-gray-900 text-white"
                     : "bg-white text-gray-600 shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
@@ -312,7 +310,7 @@ export function ResourcesBoard() {
           <div className="flex gap-3">
             {fileTypeFilters.map((filter) => (
               <button
-                className={`min-h-[44px] rounded-2xl px-4 text-xs font-semibold transition-all duration-300 md:hover:-translate-y-0.5 md:hover:shadow-md ${
+                className={`min-h-[44px] rounded-2xl px-4 text-xs font-semibold transition-all duration-200 md:hover:-translate-y-0.5 md:hover:shadow-md ${
                   selectedFileType === filter.value
                     ? "bg-teal-50 text-teal-700"
                     : "bg-white text-gray-600 shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
@@ -326,22 +324,30 @@ export function ResourcesBoard() {
             ))}
           </div>
 
-          <div className="grid gap-4">
-            {sortedResources.map((resource) => (
+          <div aria-busy={isLoading} className="grid gap-4">
+            {isLoading ? <ContentSkeleton count={3} compact /> : sortedResources.map((resource) => (
               <ResourceCard key={resource.id} resource={resource} />
             ))}
           </div>
 
-          {sortedResources.length === 0 && (
+          {!isLoading && sortedResources.length === 0 && (
             <div className="rounded-3xl bg-white p-8 text-center shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
               <FolderOpen className="mx-auto size-6 text-teal-700" />
               <p className="mt-3 text-sm font-semibold text-gray-900">Material tapılmadı</p>
               <p className="mt-1 text-sm text-gray-500">Başqa fənn və ya fayl adı ilə axtar.</p>
+              <button
+                className="mx-auto mt-5 flex min-h-[44px] items-center justify-center rounded-2xl bg-gray-900 px-5 text-sm font-semibold text-white"
+                type="button"
+                onClick={() => {
+                  setSearch("");
+                  setSelectedCourseId("all");
+                  setSelectedFileType("all");
+                  document.getElementById("resource-upload-form")?.scrollIntoView({ behavior: "smooth" });
+                }}
+              >
+                İlk materialı sən paylaş
+              </button>
             </div>
-          )}
-
-          {isLoading && (
-            <p className="text-center text-xs font-medium text-gray-400">Yenilənir...</p>
           )}
         </div>
 

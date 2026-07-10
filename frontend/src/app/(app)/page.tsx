@@ -4,15 +4,19 @@ import {
   FileText,
   GraduationCap,
   MessageSquare,
-  Search,
   ShieldCheck,
-  ShoppingBag,
   Star,
   Users,
 } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
 
-import { UserActions } from "@/components/user-actions";
+import { getQuestionSlug, mockQuestions } from "@/lib/forum";
+
+export const metadata: Metadata = {
+  title: "EduRate — Qarabağ Universiteti tələbə platforması",
+  description: "Müəllim rəyləri, fənn forumu və dərs materialları bir kampus platformasında.",
+};
 
 const modules = [
   {
@@ -37,10 +41,10 @@ const modules = [
     tone: "bg-slate-100 text-slate-600",
   },
   {
-    title: "Kampus swap",
-    subtitle: "58 elan",
-    href: "/swap",
-    icon: ShoppingBag,
+    title: "Aktiv kurslar",
+    subtitle: "24 kurs",
+    href: "/forum",
+    icon: BookOpen,
     tone: "bg-blue-50 text-blue-600",
   },
 ];
@@ -55,17 +59,17 @@ const pulseStats = [
   ["544", "tələbə"],
   ["4.7", "orta rəy"],
   ["316", "material"],
-  ["58", "elan"],
+  ["42", "açıq sual"],
 ];
 
-const cardMotion = "transition-all duration-300 md:hover:-translate-y-1 md:hover:shadow-md";
+const cardMotion = "transition-all duration-200 md:hover:-translate-y-1 md:hover:shadow-md";
 
 export default function HomePage() {
   return (
     <div className="space-y-6">
-      <header className="space-y-4 md:flex md:items-center md:justify-between md:space-y-0">
+      <header>
         <div>
-          <p className="hidden text-xs font-medium uppercase tracking-[0.16em] text-gray-400 md:block">
+          <p className="hidden text-xs font-medium uppercase tracking-normal text-gray-400 md:block">
             EduRate Kampus
           </p>
           <h1 className="text-2xl font-semibold tracking-normal text-gray-900 md:mt-1 md:text-3xl">
@@ -74,18 +78,6 @@ export default function HomePage() {
           <p className="mt-2 max-w-xl text-sm leading-6 text-gray-500 md:text-gray-600">
             Qarabağ Universiteti tələbələri üçün sakit, sürətli və faydalı kampus paneli.
           </p>
-        </div>
-
-        <div className="space-y-3 md:flex md:items-center md:gap-3 md:space-y-0">
-          <label className="relative block w-full md:w-[340px]">
-            <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
-            <input
-              className="min-h-[48px] w-full rounded-2xl border border-gray-200 bg-slate-50 pl-11 pr-4 text-sm text-gray-900 shadow-[0_8px_30px_rgb(0,0,0,0.04)] outline-none transition focus:border-gray-400 focus:ring-0"
-              placeholder="Müəllim, kurs, konspekt axtar"
-              type="search"
-            />
-          </label>
-          <UserActions />
         </div>
       </header>
 
@@ -100,7 +92,7 @@ export default function HomePage() {
               Kampusdakı lazım olan şeylər bir yerdə.
             </h2>
             <p className="mt-3 hidden max-w-2xl text-sm leading-6 text-gray-300 sm:block">
-              Rəy oxu, sual ver, konspekt tap və kampus elanlarına bax. Hamısı tələbə ritminə uyğun yığcam paneldə.
+              Rəy oxu, sual ver və konspekt tap. Hamısı tələbə ritminə uyğun yığcam paneldə.
             </p>
 
             <div className="mt-5 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
@@ -113,9 +105,9 @@ export default function HomePage() {
               </Link>
               <Link
                 className="flex min-h-[44px] items-center justify-center gap-2 rounded-2xl bg-white/10 px-4 text-sm font-semibold text-white ring-1 ring-white/15 transition hover:bg-white/15"
-                href="/swap"
+                href="/resources"
               >
-                Elanlara bax
+                Material tap
                 <ArrowRight className="size-4" />
               </Link>
             </div>
@@ -132,13 +124,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
+      <section className="grid gap-3 md:grid-cols-2 md:gap-4 lg:grid-cols-4">
         {modules.map((item) => {
           const Icon = item.icon;
 
           return (
             <Link
-              className={`group flex min-h-[112px] flex-col justify-between rounded-3xl bg-white p-4 shadow-[0_8px_30px_rgb(0,0,0,0.035)] md:min-h-[132px] md:p-5 ${cardMotion}`}
+              className={`group flex min-h-[88px] items-center gap-4 rounded-3xl bg-white p-4 shadow-[0_8px_30px_rgb(0,0,0,0.035)] md:min-h-[132px] md:flex-col md:items-stretch md:justify-between md:p-5 ${cardMotion}`}
               href={item.href}
               key={item.title}
             >
@@ -200,16 +192,16 @@ export default function HomePage() {
 
           <Link
             className={`rounded-3xl bg-white p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] ${cardMotion}`}
-            href="/swap"
+            href={`/forum/${getQuestionSlug(mockQuestions[2])}`}
           >
-            <ShoppingBag className="size-6 text-blue-600" />
-            <p className="mt-5 text-base font-semibold text-gray-900">Swap bazarı</p>
+            <MessageSquare className="size-6 text-blue-600" />
+            <p className="mt-5 text-base font-semibold text-gray-900">Həftənin aktiv sualı</p>
             <p className="mt-2 hidden text-sm leading-6 text-gray-600 md:block">
-              Kitab, avadanlıq və kampus əşyaları üçün tələbə elanları.
+              useEffect dependency siyahısında hansı dəyərlər olmalıdır?
             </p>
             <div className="mt-5 flex items-center gap-2 text-sm font-medium text-blue-600">
-              <FileText className="size-4" />
-              12 yeni elan
+              <Users className="size-4" />
+              13 faydalı səs
             </div>
           </Link>
         </div>

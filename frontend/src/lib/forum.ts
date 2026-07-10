@@ -7,6 +7,7 @@ export type ForumCourse = {
 
 export type ForumQuestionSummary = {
   id: string;
+  slug?: string;
   courseId: string;
   courseCode: string;
   courseTitle: string;
@@ -68,7 +69,7 @@ export const mockCourses: ForumCourse[] = [
 
 export const mockQuestions: ForumQuestion[] = [
   {
-    id: "44444444-4444-4444-8444-444444444444",
+    id: "question-linked-list-arraylist",
     courseId: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
     courseCode: "CS201",
     courseTitle: "Data Structures",
@@ -83,8 +84,8 @@ export const mockQuestions: ForumQuestion[] = [
     createdAt: "2026-07-05T09:20:00.000Z",
     answers: [
       {
-        id: "55555555-5555-4555-8555-555555555555",
-        questionId: "44444444-4444-4444-8444-444444444444",
+        id: "answer-random-access",
+        questionId: "question-linked-list-arraylist",
         parentAnswerId: null,
         authorName: "Nihat",
         body: "Əvvəl random access fərqini yaz: ArrayList O(1), Linked List O(n). Sonra insertion/deletion üçün ortada node bilinirsə Linked List daha rahatdır, amma node-u tapmaq yenə traversal tələb edir.",
@@ -93,9 +94,9 @@ export const mockQuestions: ForumQuestion[] = [
         createdAt: "2026-07-05T10:10:00.000Z",
       },
       {
-        id: "66666666-6666-4666-8666-666666666666",
-        questionId: "44444444-4444-4444-8444-444444444444",
-        parentAnswerId: "55555555-5555-4555-8555-555555555555",
+        id: "answer-memory-locality",
+        questionId: "question-linked-list-arraylist",
+        parentAnswerId: "answer-random-access",
         authorName: "Aysu",
         body: "Bir də memory locality qeyd etsən yaxşı olar. ArrayList cache baxımından çox vaxt praktikada daha sürətli olur.",
         voteScore: 9,
@@ -103,8 +104,8 @@ export const mockQuestions: ForumQuestion[] = [
         createdAt: "2026-07-05T10:45:00.000Z",
       },
       {
-        id: "77777777-7777-4777-8777-777777777777",
-        questionId: "44444444-4444-4444-8444-444444444444",
+        id: "answer-comparison-table",
+        questionId: "question-linked-list-arraylist",
         parentAnswerId: null,
         authorName: "Anonim tələbə",
         body: "Mən cavabı cədvəl kimi yazırdım: access, search, insert, delete. Sonda hansı case-də hansını seçərdim deyə bir cümlə əlavə etmək kifayət edir.",
@@ -113,9 +114,9 @@ export const mockQuestions: ForumQuestion[] = [
         createdAt: "2026-07-05T11:15:00.000Z",
       },
       {
-        id: "88888888-8888-4888-8888-888888888888",
-        questionId: "44444444-4444-4444-8444-444444444444",
-        parentAnswerId: "77777777-7777-4777-8777-777777777777",
+        id: "answer-big-o-format",
+        questionId: "question-linked-list-arraylist",
+        parentAnswerId: "answer-comparison-table",
         authorName: "Murad",
         body: "Bu format imtahanda oxunaqlı olur. Big-O notation-u ayrı sətirdə yazmaq da bal qazandırır.",
         voteScore: 4,
@@ -125,7 +126,7 @@ export const mockQuestions: ForumQuestion[] = [
     ],
   },
   {
-    id: "99999999-9999-4999-8999-999999999999",
+    id: "question-normalization-bcnf",
     courseId: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
     courseCode: "SE240",
     courseTitle: "Databases",
@@ -140,8 +141,8 @@ export const mockQuestions: ForumQuestion[] = [
     createdAt: "2026-07-04T14:00:00.000Z",
     answers: [
       {
-        id: "12121212-1212-4121-8121-121212121212",
-        questionId: "99999999-9999-4999-8999-999999999999",
+        id: "answer-bcnf-superkey",
+        questionId: "question-normalization-bcnf",
         parentAnswerId: null,
         authorName: "Elvin",
         body: "BCNF daha sərtdir: hər non-trivial dependency üçün determinant superkey olmalıdır. 3NF-də prime attribute istisnası var, ona görə bəzi 3NF cədvəllər BCNF olmaya bilər.",
@@ -150,8 +151,8 @@ export const mockQuestions: ForumQuestion[] = [
         createdAt: "2026-07-04T15:25:00.000Z",
       },
       {
-        id: "13131313-1313-4131-8131-131313131313",
-        questionId: "99999999-9999-4999-8999-999999999999",
+        id: "answer-bcnf-memory-rule",
+        questionId: "question-normalization-bcnf",
         parentAnswerId: null,
         authorName: "Anonim tələbə",
         body: "Mən belə yadda saxlayıram: BCNF-də determinant həmişə açar kimi davranmalıdır. Bu cümlə çox suala bəs edir.",
@@ -162,7 +163,7 @@ export const mockQuestions: ForumQuestion[] = [
     ],
   },
   {
-    id: "14141414-1414-4141-8141-141414141414",
+    id: "question-useeffect-dependencies",
     courseId: "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee",
     courseCode: "WEB210",
     courseTitle: "React Fundamentals",
@@ -177,8 +178,8 @@ export const mockQuestions: ForumQuestion[] = [
     createdAt: "2026-07-06T17:10:00.000Z",
     answers: [
       {
-        id: "15151515-1515-4151-8151-151515151515",
-        questionId: "14141414-1414-4141-8141-141414141414",
+        id: "answer-reactive-dependencies",
+        questionId: "question-useeffect-dependencies",
         parentAnswerId: null,
         authorName: "Aysel",
         body: "Effect içində oxunan reactive dəyərləri dependency-ə sal. Loop yaranırsa, adətən state-i effect-də sync etməyə çalışırsan. O halda dəyəri render zamanı derive etmək daha yaxşıdır.",
@@ -190,8 +191,18 @@ export const mockQuestions: ForumQuestion[] = [
   },
 ];
 
-export function findMockQuestion(id: string) {
-  return mockQuestions.find((question) => question.id === id) || mockQuestions[0];
+export function getQuestionSlug(question: Pick<ForumQuestionSummary, "slug" | "title">) {
+  return question.slug || toSlug(question.title);
+}
+
+export function getMockQuestion(identifier: string) {
+  return mockQuestions.find(
+    (question) => question.id === identifier || getQuestionSlug(question) === identifier,
+  );
+}
+
+export function findMockQuestion(identifier: string) {
+  return getMockQuestion(identifier) || mockQuestions[0];
 }
 
 export function buildAnswerTree(answers: ForumAnswer[]) {
@@ -236,3 +247,4 @@ export function formatForumDate(value: string) {
 
   return `${year}.${month}.${day}`;
 }
+import { toSlug } from "@/lib/slug";

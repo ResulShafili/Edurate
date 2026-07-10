@@ -11,9 +11,11 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
 import { QuestionForm } from "@/components/question-form";
+import { ContentSkeleton } from "@/components/content-skeleton";
 import {
   formatForumDate,
   forumApiBaseUrl,
+  getQuestionSlug,
   mockCourses,
   mockQuestions,
 } from "@/lib/forum";
@@ -172,10 +174,7 @@ export function ForumBoard() {
     <div className="space-y-6">
       <header className="space-y-4 md:flex md:items-end md:justify-between md:space-y-0">
         <div>
-          <p className="hidden text-xs font-medium uppercase tracking-[0.16em] text-gray-400 md:block">
-            Modul C · Q&A
-          </p>
-          <h1 className="text-2xl font-semibold tracking-normal text-gray-900 md:mt-1 md:text-3xl">
+          <h1 className="text-2xl font-semibold tracking-normal text-gray-900 md:text-3xl">
             Sual-cavab
           </h1>
           <p className="mt-2 text-sm text-gray-500">
@@ -187,7 +186,7 @@ export function ForumBoard() {
           <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
           <input
             className="min-h-[48px] w-full rounded-2xl border border-gray-200 bg-slate-50 pl-11 pr-4 text-sm text-gray-900 shadow-[0_8px_30px_rgb(0,0,0,0.04)] outline-none transition focus:border-gray-400 focus:ring-0"
-            placeholder="Sual, fənn və ya mövzu axtar"
+            placeholder="Bu bölmədə sual və ya mövzu axtar"
             type="search"
             value={search}
             onChange={(event) => setSearch(event.target.value)}
@@ -195,11 +194,11 @@ export function ForumBoard() {
         </label>
       </header>
 
-      <section className="grid gap-6 xl:grid-cols-[1fr_380px]">
-        <div className="space-y-4">
-          <div className="flex gap-3 overflow-x-auto pb-1">
+      <section className="grid min-w-0 gap-6 xl:grid-cols-[minmax(0,1fr)_380px]">
+        <div className="min-w-0 space-y-4">
+          <div className="scrollbar-none flex gap-3 overflow-x-auto pb-1">
             <button
-              className={`min-h-[44px] shrink-0 rounded-2xl px-4 text-xs font-semibold transition-all duration-300 md:hover:-translate-y-0.5 md:hover:shadow-md ${
+              className={`min-h-[44px] shrink-0 rounded-2xl px-4 text-xs font-semibold transition-all duration-200 md:hover:-translate-y-0.5 md:hover:shadow-md ${
                 selectedCourseId === "all"
                   ? "bg-gray-900 text-white"
                   : "bg-white text-gray-600 shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
@@ -211,7 +210,7 @@ export function ForumBoard() {
             </button>
             {courses.map((course) => (
               <button
-                className={`min-h-[44px] shrink-0 rounded-2xl px-4 text-xs font-semibold transition-all duration-300 md:hover:-translate-y-0.5 md:hover:shadow-md ${
+                className={`min-h-[44px] shrink-0 rounded-2xl px-4 text-xs font-semibold transition-all duration-200 md:hover:-translate-y-0.5 md:hover:shadow-md ${
                   selectedCourseId === course.id
                     ? "bg-gray-900 text-white"
                     : "bg-white text-gray-600 shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
@@ -225,11 +224,11 @@ export function ForumBoard() {
             ))}
           </div>
 
-          <div className="grid gap-4">
-            {sortedQuestions.map((question) => (
+          <div aria-busy={isLoading} className="grid gap-4">
+            {isLoading ? <ContentSkeleton count={3} compact /> : sortedQuestions.map((question) => (
               <Link
-                className="group rounded-3xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 md:hover:-translate-y-1 md:hover:shadow-md"
-                href={`/questions/${question.id}`}
+                className="group rounded-3xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-200 md:hover:-translate-y-1 md:hover:shadow-md"
+                href={`/forum/${getQuestionSlug(question)}`}
                 key={question.id}
               >
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -269,20 +268,27 @@ export function ForumBoard() {
             ))}
           </div>
 
-          {sortedQuestions.length === 0 && (
+          {!isLoading && sortedQuestions.length === 0 && (
             <div className="rounded-3xl bg-white p-8 text-center shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
               <MessageSquare className="mx-auto size-6 text-teal-700" />
               <p className="mt-3 text-sm font-semibold text-gray-900">Sual tapılmadı</p>
               <p className="mt-1 text-sm text-gray-500">Başqa fənn və ya mövzu adı ilə axtar.</p>
+              <button
+                className="mx-auto mt-5 flex min-h-[44px] items-center justify-center rounded-2xl bg-gray-900 px-5 text-sm font-semibold text-white"
+                type="button"
+                onClick={() => {
+                  setSearch("");
+                  setSelectedCourseId("all");
+                  document.getElementById("question-form")?.scrollIntoView({ behavior: "smooth" });
+                }}
+              >
+                İlk sualı sən ver
+              </button>
             </div>
-          )}
-
-          {isLoading && (
-            <p className="text-center text-xs font-medium text-gray-400">Yenilənir...</p>
           )}
         </div>
 
-        <aside className="space-y-4">
+        <aside className="min-w-0 space-y-4">
           <QuestionForm courses={courses} onQuestionCreated={handleQuestionCreated} />
         </aside>
       </section>

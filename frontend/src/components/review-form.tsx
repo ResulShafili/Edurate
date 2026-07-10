@@ -1,16 +1,18 @@
 "use client";
 
-import { Check, Loader2, MessageSquare } from "lucide-react";
+import { Check, Loader2, MessageSquare, ShieldCheck, UserRound } from "lucide-react";
 import type { FormEvent } from "react";
 import { useMemo, useState } from "react";
 
 import type { CourseSummary, ReviewSummary } from "@/lib/professors";
 import { apiBaseUrl } from "@/lib/professors";
 import { RatingStars } from "@/components/rating-stars";
+import { showToast } from "@/lib/toast";
 
 type ReviewFormProps = {
   professorId: string;
   courses: CourseSummary[];
+  embedded?: boolean;
   onReviewCreated?: (review: ReviewSummary) => void;
 };
 
@@ -27,10 +29,11 @@ const semesterOptions = [
   { value: "winter", label: "Qış" },
 ];
 
-export function ReviewForm({ professorId, courses, onReviewCreated }: ReviewFormProps) {
+export function ReviewForm({ professorId, courses, embedded = false, onReviewCreated }: ReviewFormProps) {
   const [ratingTeaching, setRatingTeaching] = useState(5);
   const [ratingDifficulty, setRatingDifficulty] = useState(3);
   const [ratingObjectivity, setRatingObjectivity] = useState(5);
+  const [isAnonymous, setIsAnonymous] = useState(true);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
 
@@ -67,7 +70,7 @@ export function ReviewForm({ professorId, courses, onReviewCreated }: ReviewForm
       ratingDifficulty,
       ratingObjectivity,
       wouldTakeAgain: formData.get("wouldTakeAgain") === "on",
-      isAnonymous: formData.get("isAnonymous") === "on",
+      isAnonymous,
       comment: formData.get("comment"),
     };
 
@@ -103,20 +106,28 @@ export function ReviewForm({ professorId, courses, onReviewCreated }: ReviewForm
       setRatingTeaching(5);
       setRatingDifficulty(3);
       setRatingObjectivity(5);
+      setIsAnonymous(true);
       setStatus("success");
       setMessage("Rəyin əlavə edildi. Təşəkkürlər!");
+      showToast({ message: "Rəy uğurla paylaşıldı" });
     } catch (error) {
       setStatus("error");
-      setMessage(error instanceof Error ? error.message : "Server ilə əlaqə alınmadı");
+      const errorMessage = error instanceof Error ? error.message : "Server ilə əlaqə alınmadı";
+      setMessage(errorMessage);
+      showToast({ message: errorMessage, tone: "error" });
     }
   }
 
   return (
     <form
-      className="rounded-3xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
+      className={
+        embedded
+          ? "mt-6"
+          : "rounded-3xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
+      }
       onSubmit={handleSubmit}
     >
-      <div className="flex items-center gap-3">
+      {!embedded && <div className="flex items-center gap-3">
         <span className="flex size-11 items-center justify-center rounded-2xl bg-teal-50 text-teal-700">
           <MessageSquare className="size-5" />
         </span>
@@ -124,7 +135,7 @@ export function ReviewForm({ professorId, courses, onReviewCreated }: ReviewForm
           <h2 className="text-base font-semibold text-gray-900">Rəy yaz</h2>
           <p className="hidden text-xs text-gray-400 md:block">Təcrübəni digər tələbələr üçün faydalı et.</p>
         </div>
-      </div>
+      </div>}
 
       <div className="mt-5 grid gap-4 sm:grid-cols-2">
         <label className="block">
@@ -204,10 +215,33 @@ export function ReviewForm({ professorId, courses, onReviewCreated }: ReviewForm
       </label>
 
       <div className="mt-5 grid gap-3 sm:grid-cols-2">
-        <label className="flex min-h-[44px] items-center gap-3 rounded-2xl border border-gray-200 bg-slate-50 px-4 text-sm font-medium text-gray-700">
-          <input className="size-4 accent-gray-900" defaultChecked name="isAnonymous" type="checkbox" />
-          Rəyimi anonim paylaş
-        </label>
+        <fieldset>
+          <legend className="mb-2 text-xs font-medium text-gray-500">Görünən ad</legend>
+          <div className="grid grid-cols-2 gap-2 rounded-2xl bg-slate-50 p-1">
+            <button
+              aria-pressed={isAnonymous}
+              className={`flex min-h-[44px] items-center justify-center gap-2 rounded-xl px-3 text-xs font-semibold transition active:scale-[0.98] ${
+                isAnonymous ? "bg-white text-gray-900 shadow-sm" : "text-gray-500"
+              }`}
+              type="button"
+              onClick={() => setIsAnonymous(true)}
+            >
+              <ShieldCheck className="size-4" />
+              Anonim
+            </button>
+            <button
+              aria-pressed={!isAnonymous}
+              className={`flex min-h-[44px] items-center justify-center gap-2 rounded-xl px-3 text-xs font-semibold transition active:scale-[0.98] ${
+                !isAnonymous ? "bg-white text-gray-900 shadow-sm" : "text-gray-500"
+              }`}
+              type="button"
+              onClick={() => setIsAnonymous(false)}
+            >
+              <UserRound className="size-4" />
+              Adımla
+            </button>
+          </div>
+        </fieldset>
         <label className="flex min-h-[44px] items-center gap-3 rounded-2xl border border-gray-200 bg-slate-50 px-4 text-sm font-medium text-gray-700">
           <input className="size-4 accent-gray-900" name="wouldTakeAgain" type="checkbox" />
           Yenidən bu müəllimi seçərdim
@@ -227,7 +261,7 @@ export function ReviewForm({ professorId, courses, onReviewCreated }: ReviewForm
       )}
 
       <button
-        className="mt-5 flex min-h-[48px] w-full items-center justify-center gap-2 rounded-2xl bg-gray-900 px-4 text-sm font-semibold text-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 md:hover:-translate-y-0.5 md:hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70"
+        className="mt-5 flex min-h-[48px] w-full items-center justify-center gap-2 rounded-2xl bg-gray-900 px-4 text-sm font-semibold text-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-200 md:hover:-translate-y-0.5 md:hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70"
         disabled={status === "loading"}
         type="submit"
       >
