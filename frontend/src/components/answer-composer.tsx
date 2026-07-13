@@ -96,7 +96,7 @@ export function AnswerComposer({
       className={
         compact
           ? "mt-4 rounded-2xl border border-gray-200 bg-white p-4"
-          : "rounded-3xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
+          : "app-card rounded-[1.65rem] p-5"
       }
       onSubmit={handleSubmit}
     >
@@ -129,7 +129,7 @@ export function AnswerComposer({
       )}
 
       <button
-        className="mt-4 flex min-h-[48px] w-full items-center justify-center gap-2 rounded-2xl bg-gray-900 px-4 text-sm font-semibold text-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-200 md:hover:-translate-y-0.5 md:hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70"
+        className="app-button-primary mt-4 flex min-h-[48px] w-full items-center justify-center gap-2 rounded-2xl px-4 text-sm font-semibold transition-all duration-200 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
         disabled={status === "loading"}
         type="submit"
       >

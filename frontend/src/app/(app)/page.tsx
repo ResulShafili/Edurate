@@ -1,17 +1,20 @@
 import {
   ArrowRight,
   BookOpen,
+  Clock3,
   FileText,
-  GraduationCap,
   MessageSquare,
   ShieldCheck,
+  Sparkles,
   Star,
+  TrendingUp,
   Users,
 } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
 import { getQuestionSlug, mockQuestions } from "@/lib/forum";
+import { getProfessorSlug, mockProfessors } from "@/lib/professors";
 
 export const metadata: Metadata = {
   title: "EduRate — Qarabağ Universiteti tələbə platforması",
@@ -21,189 +24,281 @@ export const metadata: Metadata = {
 const modules = [
   {
     title: "Müəllim rəyləri",
-    subtitle: "128 aktiv rəy",
+    description: "Təcrübələri oxu və paylaş",
+    metric: "128 aktiv rəy",
     href: "/professors",
     icon: Star,
-    tone: "bg-orange-50 text-orange-600",
+    iconTone: "bg-[#fff0e6] text-[#d75a34] dark:bg-orange-500/10 dark:text-orange-300",
+    accent: "bg-[#ed7650]",
   },
   {
     title: "Sual-cavab",
-    subtitle: "42 açıq sual",
+    description: "Kampusdan cavab al",
+    metric: "42 açıq sual",
     href: "/forum",
     icon: MessageSquare,
-    tone: "bg-teal-50 text-teal-700",
+    iconTone: "bg-[#dff4ec] text-[#0e7a65] dark:bg-teal-500/10 dark:text-teal-300",
+    accent: "bg-[#35a58c]",
   },
   {
-    title: "PDF materiallar",
-    subtitle: "316 fayl",
+    title: "Materiallar",
+    description: "Konspekt və PDF-ləri tap",
+    metric: "316 fayl",
     href: "/resources",
     icon: FileText,
-    tone: "bg-slate-100 text-slate-600",
+    iconTone: "bg-[#e9f1ff] text-[#3e6fb1] dark:bg-blue-500/10 dark:text-blue-300",
+    accent: "bg-[#6e9fe0]",
   },
   {
     title: "Aktiv kurslar",
-    subtitle: "24 kurs",
+    description: "Fənn axınına qoşul",
+    metric: "24 kurs",
     href: "/forum",
     icon: BookOpen,
-    tone: "bg-blue-50 text-blue-600",
+    iconTone: "bg-[#fff6cf] text-[#8b6a00] dark:bg-yellow-500/10 dark:text-yellow-200",
+    accent: "bg-[#dfbc3c]",
   },
 ];
 
-const teacherRows = [
-  ["Nigar Mammadova", "Algorithms", "4.8"],
-  ["Elvin Huseynli", "Databases", "4.6"],
-  ["Aysel Karimova", "Web Stack", "4.5"],
-];
-
 const pulseStats = [
-  ["544", "tələbə"],
-  ["4.7", "orta rəy"],
-  ["316", "material"],
-  ["42", "açıq sual"],
+  ["544", "aktiv tələbə"],
+  ["4.7", "orta reytinq"],
+  ["86", "bu həftə paylaşım"],
 ];
 
-const cardMotion = "transition-all duration-200 md:hover:-translate-y-1 md:hover:shadow-md";
+const campusActivity = [
+  {
+    title: "Yeni alqoritmlər rəyi",
+    meta: "Nigar Mammadova · 8 dəq əvvəl",
+    icon: Star,
+    tone: "bg-[#fff0e6] text-[#d75a34] dark:bg-orange-500/10 dark:text-orange-300",
+  },
+  {
+    title: "Express.js cheat sheet paylaşıldı",
+    meta: "CS201 · 24 dəq əvvəl",
+    icon: FileText,
+    tone: "bg-[#e9f1ff] text-[#3e6fb1] dark:bg-blue-500/10 dark:text-blue-300",
+  },
+  {
+    title: "Database mövzusuna cavab gəldi",
+    meta: "CS305 · 1 saat əvvəl",
+    icon: MessageSquare,
+    tone: "bg-[#dff4ec] text-[#0e7a65] dark:bg-teal-500/10 dark:text-teal-300",
+  },
+];
 
 export default function HomePage() {
+  const featuredQuestion = mockQuestions[2];
+
   return (
-    <div className="space-y-6">
-      <header>
+    <div className="space-y-7 md:space-y-8">
+      <header className="flex items-end justify-between gap-4">
         <div>
-          <p className="hidden text-xs font-medium uppercase tracking-normal text-gray-400 md:block">
-            EduRate Kampus
-          </p>
-          <h1 className="text-2xl font-semibold tracking-normal text-gray-900 md:mt-1 md:text-3xl">
-            EduRate
+          <div className="flex items-center gap-2 text-xs font-semibold text-[#0e7a65]">
+            <Sparkles className="size-3.5" />
+            Kampusuna xoş gəldin
+          </div>
+          <h1 className="mt-2 text-2xl font-semibold tracking-normal text-gray-900 md:text-[2rem]">
+            Bu gün nəyi həll edirik?
           </h1>
-          <p className="mt-2 max-w-xl text-sm leading-6 text-gray-500 md:text-gray-600">
-            Qarabağ Universiteti tələbələri üçün sakit, sürətli və faydalı kampus paneli.
+          <p className="mt-2 hidden max-w-xl text-sm leading-6 text-gray-500 sm:block">
+            Rəy, sual və dərs materialları tələbə həyatını bir az daha rahat etsin.
           </p>
+        </div>
+        <div className="hidden items-center gap-2 rounded-full bg-[#dff4ec] px-3 py-2 text-xs font-medium text-[#0e7a65] dark:bg-teal-500/10 dark:text-teal-300 lg:flex">
+          <span className="size-2 rounded-full bg-[#35a58c]" />
+          Kampus aktivdir
         </div>
       </header>
 
-      <section className="rounded-[2rem] bg-gray-900 p-4 text-white shadow-[0_8px_30px_rgb(0,0,0,0.06)] md:p-6">
-        <div className="grid gap-5 lg:grid-cols-[1fr_330px] lg:items-end">
-          <div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-gray-200">
-              <ShieldCheck className="size-3.5 text-teal-300" />
-              Universitet emaili ilə qorunur
-            </div>
-            <h2 className="mt-4 max-w-2xl text-xl font-semibold leading-tight md:text-4xl">
-              Kampusdakı lazım olan şeylər bir yerdə.
-            </h2>
-            <p className="mt-3 hidden max-w-2xl text-sm leading-6 text-gray-300 sm:block">
-              Rəy oxu, sual ver və konspekt tap. Hamısı tələbə ritminə uyğun yığcam paneldə.
-            </p>
-
-            <div className="mt-5 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
-              <Link
-                className="flex min-h-[44px] items-center justify-center gap-2 rounded-2xl bg-white px-4 text-sm font-semibold text-gray-900 transition hover:bg-gray-100"
-                href="/professors"
-              >
-                Müəllim tap
-                <ArrowRight className="size-4" />
-              </Link>
-              <Link
-                className="flex min-h-[44px] items-center justify-center gap-2 rounded-2xl bg-white/10 px-4 text-sm font-semibold text-white ring-1 ring-white/15 transition hover:bg-white/15"
-                href="/resources"
-              >
-                Material tap
-                <ArrowRight className="size-4" />
-              </Link>
-            </div>
-          </div>
-
-          <div className="hidden grid-cols-4 gap-2 sm:grid lg:grid-cols-2">
-            {pulseStats.map(([value, label]) => (
-              <div className="rounded-2xl bg-white/10 p-3 ring-1 ring-white/10 md:p-4" key={label}>
-                <p className="text-lg font-semibold leading-6 md:text-2xl">{value}</p>
-                <p className="mt-1 text-[11px] text-gray-300 md:text-xs">{label}</p>
+      <section className="grid gap-4 lg:grid-cols-[minmax(0,1.55fr)_minmax(280px,0.65fr)]">
+        <div className="relative overflow-hidden rounded-[2rem] bg-[#17362f] p-5 text-white shadow-[0_18px_50px_rgba(23,54,47,0.16)] sm:p-7 lg:min-h-[330px] lg:p-8">
+          <div className="relative z-10 grid h-full gap-8 md:grid-cols-[minmax(0,1fr)_260px] md:items-end">
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/8 px-3 py-1.5 text-[11px] font-medium text-emerald-50">
+                <ShieldCheck className="size-3.5 text-[#7de0c8]" />
+                Yalnız universitet icması
               </div>
-            ))}
+              <h2 className="mt-5 max-w-xl text-2xl font-semibold leading-tight tracking-normal sm:text-3xl lg:text-[2.25rem]">
+                Kampus təcrübəsi paylaşdıqca dəyər qazanır.
+              </h2>
+              <p className="mt-3 hidden max-w-xl text-sm leading-6 text-emerald-50/70 sm:block">
+                Müəllim seçimini daha inamlı et, fənn sualını cavabsız qoyma və faydalı konspekti vaxtında tap.
+              </p>
+              <div className="mt-6 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap">
+                <Link
+                  className="flex min-h-[46px] items-center justify-center gap-2 rounded-2xl bg-[#ffffff] px-5 text-sm font-semibold text-[#17362f] transition active:scale-[0.98] hover:bg-[#f4f7f6]"
+                  href="/professors"
+                >
+                  Müəllim tap
+                  <ArrowRight className="size-4" />
+                </Link>
+                <Link
+                  className="flex min-h-[46px] items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/8 px-5 text-sm font-semibold text-white transition active:scale-[0.98] hover:bg-white/12"
+                  href="/forum"
+                >
+                  Sual ver
+                  <MessageSquare className="size-4" />
+                </Link>
+              </div>
+            </div>
+
+            <div className="hidden divide-y divide-white/10 border-l border-white/10 pl-7 md:block">
+              {pulseStats.map(([value, label]) => (
+                <div className="flex items-center justify-between gap-5 py-3 first:pt-0 last:pb-0" key={label}>
+                  <p className="text-2xl font-semibold">{value}</p>
+                  <p className="text-right text-xs text-emerald-50/60">{label}</p>
+                </div>
+              ))}
+            </div>
           </div>
+        </div>
+
+        <Link
+          className="interactive-lift relative flex min-h-[180px] flex-col justify-between overflow-hidden rounded-[2rem] border border-[#f6d8c7] bg-[#fff0e6] p-5 shadow-[0_12px_36px_rgba(109,64,42,0.06)] dark:border-orange-500/10 dark:bg-orange-500/10 sm:p-6 lg:min-h-[330px]"
+          href={`/forum/${getQuestionSlug(featuredQuestion)}`}
+        >
+          <div className="flex items-start justify-between gap-4">
+            <span className="flex size-11 items-center justify-center rounded-2xl bg-white/75 text-[#d75a34] dark:bg-white/5 dark:text-orange-300">
+              <TrendingUp className="size-5" />
+            </span>
+            <span className="rounded-full bg-white/70 px-3 py-1.5 text-[11px] font-semibold text-[#9b492f] dark:bg-white/5 dark:text-orange-200">
+              Həftənin sualı
+            </span>
+          </div>
+          <div className="mt-5 lg:mt-7">
+            <p className="text-xs font-semibold text-[#9b492f] dark:text-orange-200">
+              {featuredQuestion.courseCode}
+            </p>
+            <h2 className="mt-2 text-lg font-semibold leading-7 text-gray-900 lg:text-xl">
+              {featuredQuestion.title}
+            </h2>
+            <div className="mt-5 flex items-center justify-between gap-3 text-xs text-[#9b6a58] dark:text-orange-200/70">
+              <span className="flex items-center gap-1.5">
+                <Users className="size-3.5" />
+                {featuredQuestion.voteScore} faydalı səs
+              </span>
+              <ArrowRight className="size-4" />
+            </div>
+          </div>
+        </Link>
+      </section>
+
+      <section>
+        <div className="mb-4 flex items-center justify-between gap-4">
+          <div>
+            <h2 className="text-base font-semibold text-gray-900">Qısa yollar</h2>
+            <p className="mt-1 text-xs text-gray-400">Lazım olan bölməyə bir toxunuşla keç</p>
+          </div>
+        </div>
+
+        <div className="stagger-grid grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4">
+          {modules.map((item) => {
+            const Icon = item.icon;
+
+            return (
+              <Link
+                className="app-card interactive-lift group relative min-h-[158px] overflow-hidden rounded-[1.65rem] p-4 sm:p-5 md:min-h-[184px]"
+                href={item.href}
+                key={item.title}
+              >
+                <span className={`absolute inset-x-5 top-0 h-1 rounded-b-full ${item.accent}`} />
+                <div className="flex items-start justify-between gap-3">
+                  <span className={`flex size-11 items-center justify-center rounded-2xl ${item.iconTone}`}>
+                    <Icon className="size-[18px]" />
+                  </span>
+                  <ArrowRight className="size-4 text-gray-300 transition group-hover:translate-x-0.5 group-hover:text-gray-600" />
+                </div>
+                <div className="mt-5">
+                  <h3 className="text-sm font-semibold leading-5 text-gray-900 sm:text-base">{item.title}</h3>
+                  <p className="mt-1 hidden text-xs leading-5 text-gray-500 sm:block">{item.description}</p>
+                  <p className="mt-2 text-[11px] font-medium text-gray-400">{item.metric}</p>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </section>
 
-      <section className="grid gap-3 md:grid-cols-2 md:gap-4 lg:grid-cols-4">
-        {modules.map((item) => {
-          const Icon = item.icon;
-
-          return (
-            <Link
-              className={`group flex min-h-[88px] items-center gap-4 rounded-3xl bg-white p-4 shadow-[0_8px_30px_rgb(0,0,0,0.035)] md:min-h-[132px] md:flex-col md:items-stretch md:justify-between md:p-5 ${cardMotion}`}
-              href={item.href}
-              key={item.title}
-            >
-              <span className={`flex size-10 items-center justify-center rounded-2xl md:size-12 ${item.tone}`}>
-                <Icon className="size-4 md:size-5" />
-              </span>
-              <span>
-                <span className="block text-sm font-semibold leading-5 text-gray-900 md:text-base">
-                  {item.title}
-                </span>
-                <span className="mt-1 block text-xs text-gray-400 md:text-sm">{item.subtitle}</span>
-              </span>
-            </Link>
-          );
-        })}
-      </section>
-
-      <section className="hidden gap-4 md:grid md:grid-cols-2 lg:grid-cols-[0.95fr_1.05fr]">
-        <div className={`rounded-3xl bg-white p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] ${cardMotion}`}>
-          <div className="flex items-center justify-between">
+      <section className="hidden gap-4 md:grid lg:grid-cols-[1.08fr_0.92fr]">
+        <div className="app-card rounded-[1.75rem] p-6">
+          <div className="flex items-center justify-between gap-4">
             <div>
-              <p className="text-base font-semibold text-gray-900">Top müəllimlər</p>
-              <p className="hidden text-sm text-gray-400 md:block">Son rəylərə görə</p>
+              <h2 className="text-base font-semibold text-gray-900">Yüksək qiymətləndirilənlər</h2>
+              <p className="mt-1 text-xs text-gray-400">Son tələbə rəylərinə əsasən</p>
             </div>
-            <GraduationCap className="size-5 text-orange-600" />
+            <Link className="text-xs font-semibold text-[#0e7a65] hover:underline" href="/professors">
+              Hamısına bax
+            </Link>
           </div>
 
           <div className="mt-5 divide-y divide-slate-100">
-            {teacherRows.map(([name, course, rating]) => (
-              <div className="grid grid-cols-[1fr_auto] items-center gap-4 py-4" key={name}>
-                <div>
-                  <p className="text-sm font-medium text-gray-900">{name}</p>
-                  <p className="mt-1 text-xs text-gray-400">{course}</p>
-                </div>
-                <div className="flex min-h-[44px] items-center gap-1 rounded-2xl bg-slate-50 px-3 text-sm font-semibold text-gray-900">
-                  <Star className="size-4 fill-orange-500 text-orange-500" />
-                  {rating}
-                </div>
-              </div>
+            {mockProfessors.slice(0, 3).map((professor, index) => (
+              <Link
+                className="group flex items-center gap-4 py-4 first:pt-0 last:pb-0"
+                href={`/professors/${getProfessorSlug(professor)}`}
+                key={professor.id}
+              >
+                <span
+                  className={`flex size-11 shrink-0 items-center justify-center rounded-2xl text-sm font-semibold ${
+                    index === 0
+                      ? "bg-[#fff0e6] text-[#d75a34] dark:bg-orange-500/10 dark:text-orange-300"
+                      : index === 1
+                        ? "bg-[#dff4ec] text-[#0e7a65] dark:bg-teal-500/10 dark:text-teal-300"
+                        : "bg-[#e9f1ff] text-[#3e6fb1] dark:bg-blue-500/10 dark:text-blue-300"
+                  }`}
+                >
+                  {professor.fullName
+                    .split(" ")
+                    .map((part) => part[0])
+                    .join("")
+                    .slice(0, 2)}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-sm font-semibold text-gray-900">{professor.fullName}</span>
+                  <span className="mt-1 block truncate text-xs text-gray-400">{professor.departmentName}</span>
+                </span>
+                <span className="flex items-center gap-1 rounded-full bg-[#fff6cf] px-3 py-1.5 text-xs font-semibold text-[#745900] dark:bg-yellow-500/10 dark:text-yellow-200">
+                  <Star className="size-3.5 fill-current" />
+                  {professor.averageRating.toFixed(1)}
+                </span>
+              </Link>
             ))}
           </div>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          <Link
-            className={`rounded-3xl bg-white p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] ${cardMotion}`}
-            href="/professors"
-          >
-            <BookOpen className="size-6 text-teal-700" />
-            <p className="mt-5 text-base font-semibold text-gray-900">Kurs mərkəzi</p>
-            <p className="mt-2 hidden text-sm leading-6 text-gray-600 md:block">
-              Rəy, forum və konspektləri kurslar ətrafında tap.
-            </p>
-            <div className="mt-5 flex items-center gap-2 text-sm font-medium text-teal-700">
-              <Users className="size-4" />
-              24 aktiv kurs
+        <div className="rounded-[1.75rem] border border-[#d7e9e3] bg-[#eaf6f2] p-6 dark:border-teal-500/10 dark:bg-teal-500/10">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <h2 className="text-base font-semibold text-gray-900">Kampusda indi</h2>
+              <p className="mt-1 text-xs text-gray-500">Son icma fəaliyyəti</p>
             </div>
-          </Link>
+            <span className="flex items-center gap-1.5 text-[11px] font-medium text-[#0e7a65] dark:text-teal-300">
+              <span className="size-2 rounded-full bg-[#35a58c]" />
+              Canlı
+            </span>
+          </div>
 
-          <Link
-            className={`rounded-3xl bg-white p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] ${cardMotion}`}
-            href={`/forum/${getQuestionSlug(mockQuestions[2])}`}
-          >
-            <MessageSquare className="size-6 text-blue-600" />
-            <p className="mt-5 text-base font-semibold text-gray-900">Həftənin aktiv sualı</p>
-            <p className="mt-2 hidden text-sm leading-6 text-gray-600 md:block">
-              useEffect dependency siyahısında hansı dəyərlər olmalıdır?
-            </p>
-            <div className="mt-5 flex items-center gap-2 text-sm font-medium text-blue-600">
-              <Users className="size-4" />
-              13 faydalı səs
-            </div>
-          </Link>
+          <div className="mt-5 space-y-4">
+            {campusActivity.map((item) => {
+              const Icon = item.icon;
+
+              return (
+                <div className="flex items-center gap-3" key={item.title}>
+                  <span className={`flex size-10 shrink-0 items-center justify-center rounded-2xl ${item.tone}`}>
+                    <Icon className="size-4" />
+                  </span>
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-medium text-gray-900">{item.title}</p>
+                    <p className="mt-1 flex items-center gap-1.5 truncate text-[11px] text-gray-400">
+                      <Clock3 className="size-3" />
+                      {item.meta}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
     </div>

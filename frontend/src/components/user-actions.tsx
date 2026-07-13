@@ -13,7 +13,7 @@ export function UserActions() {
       <div className="flex shrink-0 items-center gap-2">
         <Link
           aria-label="Giriş"
-          className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-3 text-sm font-medium text-gray-900 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-200 active:scale-[0.98] md:hover:-translate-y-0.5 md:hover:shadow-md lg:px-4"
+          className="app-button-secondary flex min-h-[44px] min-w-[44px] items-center justify-center gap-2 rounded-2xl px-3 text-sm font-medium transition-all duration-200 active:scale-[0.98] md:hover:-translate-y-0.5 lg:px-4"
           href="/login"
         >
           <LogIn className="size-4" />
@@ -21,7 +21,7 @@ export function UserActions() {
         </Link>
         <Link
           aria-label="Qeydiyyat"
-          className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-2 rounded-2xl bg-gray-900 px-3 text-sm font-medium text-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-200 active:scale-[0.98] md:hover:-translate-y-0.5 md:hover:shadow-md lg:px-4"
+          className="app-button-primary flex min-h-[44px] min-w-[44px] items-center justify-center gap-2 rounded-2xl px-3 text-sm font-medium transition-all duration-200 active:scale-[0.98] md:hover:-translate-y-0.5 lg:px-4"
           href="/register"
         >
           <UserPlus className="size-4" />
@@ -35,7 +35,7 @@ export function UserActions() {
     <div className="flex shrink-0 items-center">
       <Link
         aria-label="Profil"
-        className="flex size-11 items-center justify-center rounded-2xl bg-gray-900 text-sm font-semibold text-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-200 active:scale-95 md:hover:-translate-y-0.5 md:hover:shadow-md"
+        className="flex size-11 items-center justify-center rounded-2xl bg-[#17362f] text-sm font-semibold text-white shadow-[0_10px_24px_rgba(23,54,47,0.16)] transition-all duration-200 active:scale-95 md:hover:-translate-y-0.5 dark:bg-teal-600"
         href="/profile"
         title="Profil"
       >

@@ -140,13 +140,14 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
   }
 
   return (
-    <div className="mx-auto w-full max-w-[440px] rounded-3xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] sm:p-6">
+    <div className="app-card relative mx-auto w-full max-w-[460px] overflow-hidden rounded-[1.85rem] p-5 sm:p-7">
+      <span className={`absolute inset-x-7 top-0 h-1 rounded-b-full ${mode === "login" ? "bg-[#35a58c]" : "bg-[#ed7650]"}`} />
       <div className="flex items-start justify-between gap-4">
         <div>
           <h2 className="text-xl font-semibold text-gray-900">{copy.title}</h2>
           <p className="mt-2 text-sm leading-6 text-gray-600">{copy.description}</p>
         </div>
-        <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-teal-50 text-teal-700">
+        <div className={`flex size-11 shrink-0 items-center justify-center rounded-2xl ${mode === "login" ? "bg-[#dff4ec] text-[#0e7a65] dark:bg-teal-500/10 dark:text-teal-300" : "bg-[#fff0e6] text-[#d75a34] dark:bg-orange-500/10 dark:text-orange-300"}`}>
           {mode === "login" ? <LockKeyhole className="size-5" /> : <School className="size-5" />}
         </div>
       </div>
@@ -164,10 +165,10 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
 
         <label className="block">
           <span className="text-xs font-medium text-gray-500">Şifrə</span>
-          <span className="mt-2 flex min-h-[44px] items-center rounded-2xl border border-gray-200 bg-slate-50 px-4 focus-within:border-gray-400 focus-within:ring-0">
+          <span className="mt-2 flex min-h-[50px] items-center rounded-2xl border border-gray-200 bg-slate-50 px-4 transition focus-within:border-[#80bcae] focus-within:ring-0">
             <LockKeyhole className="mr-2 size-4 text-gray-400" />
             <input
-              className="min-h-[44px] min-w-0 flex-1 bg-slate-50 text-sm text-gray-900 outline-none placeholder:text-gray-400"
+              className="min-h-[48px] min-w-0 flex-1 bg-slate-50 text-sm text-gray-900 outline-none placeholder:text-gray-400"
               minLength={8}
               name="password"
               placeholder="Minimum 8 simvol"
@@ -199,7 +200,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
         )}
 
         <button
-          className="flex min-h-[48px] w-full items-center justify-center gap-2 rounded-2xl bg-gray-900 px-4 text-sm font-semibold text-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-200 md:hover:-translate-y-0.5 md:hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70"
+          className="app-button-primary flex min-h-[50px] w-full items-center justify-center gap-2 rounded-2xl px-4 text-sm font-semibold transition-all duration-200 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
           disabled={status === "loading"}
           type="submit"
         >
@@ -222,10 +223,10 @@ function UniversitySelect() {
   return (
     <label className="block">
       <span className="text-xs font-medium text-gray-500">Universitetini seç</span>
-      <span className="relative mt-2 flex min-h-[44px] items-center rounded-2xl border border-gray-200 bg-slate-50 px-4 focus-within:border-gray-400 focus-within:ring-0">
+      <span className="relative mt-2 flex min-h-[50px] items-center rounded-2xl border border-gray-200 bg-slate-50 px-4 transition focus-within:border-[#80bcae] focus-within:ring-0">
         <School className="mr-2 size-4 text-gray-400" />
         <select
-          className="min-h-[44px] min-w-0 flex-1 appearance-none bg-slate-50 pr-7 text-sm text-gray-900 outline-none"
+          className="min-h-[48px] min-w-0 flex-1 appearance-none bg-slate-50 pr-7 text-sm text-gray-900 outline-none"
           defaultValue={universities[0].domain}
           name="universityDomain"
           required
@@ -260,10 +261,10 @@ function Field({
   return (
     <label className="block">
       <span className="text-xs font-medium text-gray-500">{label}</span>
-      <span className="mt-2 flex min-h-[44px] items-center rounded-2xl border border-gray-200 bg-slate-50 px-4 focus-within:border-gray-400 focus-within:ring-0">
+      <span className="mt-2 flex min-h-[50px] items-center rounded-2xl border border-gray-200 bg-slate-50 px-4 transition focus-within:border-[#80bcae] focus-within:ring-0">
         <Icon className="mr-2 size-4 text-gray-400" />
         <input
-          className="min-h-[44px] min-w-0 flex-1 bg-slate-50 text-sm text-gray-900 outline-none placeholder:text-gray-400"
+          className="min-h-[48px] min-w-0 flex-1 bg-slate-50 text-sm text-gray-900 outline-none placeholder:text-gray-400"
           name={name}
           placeholder={placeholder}
           required={required}

@@ -87,7 +87,7 @@ export function NotificationCenter() {
     <details className="group relative" ref={detailsRef}>
       <summary
         aria-label={`Bildirişlər${unreadCount ? `, ${unreadCount} oxunmamış` : ""}`}
-        className="relative flex size-11 cursor-pointer list-none items-center justify-center rounded-2xl border border-slate-200 bg-white text-gray-500 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 [&::-webkit-details-marker]:hidden"
+        className="app-card relative flex size-11 cursor-pointer list-none items-center justify-center rounded-2xl text-gray-500 transition active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 [&::-webkit-details-marker]:hidden"
         title="Bildirişlər"
       >
         <Bell className="size-4" />
@@ -98,7 +98,7 @@ export function NotificationCenter() {
         )}
       </summary>
 
-      <div className="fixed inset-x-3 top-[72px] z-50 max-h-[calc(100dvh-96px)] overflow-y-auto rounded-3xl border border-slate-200 bg-white p-2 shadow-[0_8px_30px_rgb(0,0,0,0.08)] sm:absolute sm:inset-x-auto sm:right-0 sm:top-[calc(100%+10px)] sm:w-[390px]">
+      <div className="app-surface fixed inset-x-3 top-[76px] z-50 max-h-[calc(100dvh-100px)] overflow-y-auto rounded-3xl p-2 sm:absolute sm:inset-x-auto sm:right-0 sm:top-[calc(100%+10px)] sm:w-[390px]">
         <div className="flex items-center justify-between gap-3 px-3 py-3">
           <div>
             <p className="text-sm font-semibold text-gray-900">Bildirişlər</p>
@@ -123,8 +123,8 @@ export function NotificationCenter() {
 
             return (
               <Link
-                className={`flex gap-3 rounded-2xl p-3 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 ${
-                  isUnread ? "bg-slate-50/70" : ""
+                className={`flex gap-3 rounded-2xl p-3 transition hover:bg-[#eff8f5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 dark:hover:bg-teal-500/10 ${
+                  isUnread ? "bg-[#f4f8f6] dark:bg-white/5" : ""
                 }`}
                 href={notification.href}
                 key={notification.id}

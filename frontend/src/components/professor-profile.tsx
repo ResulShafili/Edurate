@@ -39,7 +39,7 @@ function RatingCard({
   hint: string;
 }) {
   return (
-    <div className="rounded-3xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-200 md:hover:-translate-y-1 md:hover:shadow-md">
+    <div className="app-card interactive-lift rounded-[1.65rem] p-5">
       <p className="text-xs font-medium text-gray-400">{label}</p>
       <div className="mt-2 flex items-center gap-2">
         <Star className="size-4 fill-orange-500 text-orange-500" />
@@ -136,18 +136,19 @@ export function ProfessorProfile({ professorSlug }: { professorSlug: string }) {
   return (
     <div className="space-y-6">
       <Link
-        className="inline-flex min-h-[44px] items-center gap-2 rounded-2xl bg-white px-4 text-xs font-medium text-gray-600 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-200 md:hover:-translate-y-0.5 md:hover:text-gray-900 md:hover:shadow-md"
+        className="app-button-secondary inline-flex min-h-[44px] items-center gap-2 rounded-2xl px-4 text-xs font-medium transition-all duration-200 hover:text-gray-900"
         href="/professors"
       >
         <ArrowLeft className="size-4" />
         Müəllimlərə qayıt
       </Link>
 
-      <section className="rounded-3xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] md:p-6">
+      <section className="relative overflow-hidden rounded-[1.9rem] border border-[#d6ebe4] bg-[#edf8f4] p-5 shadow-[0_14px_42px_rgba(25,49,42,0.05)] dark:border-teal-500/10 dark:bg-teal-500/10 md:p-7">
+        <span className="absolute inset-y-7 left-0 w-1.5 rounded-r-full bg-[#35a58c]" />
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl">
             <div className="flex items-center gap-3">
-              <span className="flex size-12 items-center justify-center rounded-2xl bg-gray-900 text-white">
+              <span className="flex size-12 items-center justify-center rounded-2xl bg-[#17362f] text-white shadow-[0_8px_20px_rgba(23,54,47,0.16)] dark:bg-teal-600">
                 <GraduationCap className="size-6" />
               </span>
               <div>
@@ -162,7 +163,7 @@ export function ProfessorProfile({ professorSlug }: { professorSlug: string }) {
             <p className="mt-4 text-sm text-gray-600">{professor.title}</p>
             <p className="mt-3 hidden max-w-2xl text-sm leading-6 text-gray-600 md:block">{professor.bio}</p>
             <button
-              className="mt-5 flex min-h-[44px] w-full items-center justify-center gap-2 rounded-2xl bg-gray-900 px-4 text-sm font-semibold text-white transition-all duration-200 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2 sm:w-auto md:hover:-translate-y-0.5 md:hover:shadow-md"
+              className="app-button-primary mt-5 flex min-h-[46px] w-full items-center justify-center gap-2 rounded-2xl px-5 text-sm font-semibold transition-all duration-200 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2 sm:w-auto"
               type="button"
               onClick={() => setIsReviewDialogOpen(true)}
             >
@@ -171,8 +172,8 @@ export function ProfessorProfile({ professorSlug }: { professorSlug: string }) {
             </button>
           </div>
 
-          <div className="grid min-w-[240px] grid-cols-2 gap-3">
-            <div className="rounded-2xl bg-slate-50 p-4">
+          <div className="grid min-w-[240px] grid-cols-2 divide-x divide-[#dcebe6] overflow-hidden rounded-2xl border border-white/80 bg-white/70 dark:divide-white/10 dark:border-white/10 dark:bg-white/5">
+            <div className="p-4">
               <div className="flex items-center gap-2 text-xs text-gray-500">
                 <Star className="size-3.5 fill-orange-500 text-orange-500" />
                 Ümumi
@@ -180,14 +181,14 @@ export function ProfessorProfile({ professorSlug }: { professorSlug: string }) {
               <p className="mt-1 text-2xl font-semibold text-gray-900">
                 {formatRating(professor.averageRating)}
               </p>
-              <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white">
+              <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-[#f4e9df] dark:bg-white/10">
                 <div
                   className="h-full rounded-full bg-orange-500"
                   style={{ width: `${Math.max(0, Math.min(professor.averageRating, 5)) * 20}%` }}
                 />
               </div>
             </div>
-            <div className="rounded-2xl bg-slate-50 p-4">
+            <div className="p-4">
               <div className="flex items-center gap-2 text-xs text-gray-500">
                 <BookOpen className="size-3.5" />
                 Çətinlik
@@ -195,7 +196,7 @@ export function ProfessorProfile({ professorSlug }: { professorSlug: string }) {
               <p className="mt-1 text-2xl font-semibold text-gray-900">
                 {formatRating(professor.averageDifficulty)}
               </p>
-              <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white">
+              <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-[#dcebe6] dark:bg-white/10">
                 <div
                   className="h-full rounded-full bg-teal-600"
                   style={{ width: `${Math.max(0, Math.min(professor.averageDifficulty, 5)) * 20}%` }}
@@ -206,7 +207,7 @@ export function ProfessorProfile({ professorSlug }: { professorSlug: string }) {
         </div>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-3">
+      <section className="grid gap-4 lg:grid-cols-3">
         <RatingCard
           hint="Mövzuları nə qədər aydın izah edir"
           label="İzah"
@@ -249,7 +250,7 @@ export function ProfessorProfile({ professorSlug }: { professorSlug: string }) {
 
           {sortedReviews.map((review) => (
             <article
-              className="rounded-3xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-200 md:hover:-translate-y-1 md:hover:shadow-md"
+              className="app-card interactive-lift rounded-[1.65rem] p-5"
               key={review.id}
             >
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -288,7 +289,7 @@ export function ProfessorProfile({ professorSlug }: { professorSlug: string }) {
           ))}
 
           {sortedReviews.length === 0 && (
-            <div className="rounded-3xl bg-white p-8 text-center shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+            <div className="app-card rounded-3xl p-8 text-center">
               <MessageSquare className="mx-auto size-6 text-teal-700" />
               <p className="mt-3 text-sm font-semibold text-gray-900">Hələ rəy yoxdur</p>
               <p className="mt-1 text-sm text-gray-500">İlk rəyi sən paylaşa bilərsən.</p>
@@ -304,14 +305,14 @@ export function ProfessorProfile({ professorSlug }: { professorSlug: string }) {
         </div>
 
         <aside className="min-w-0 space-y-4">
-          <div className="rounded-3xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+          <div className="app-card rounded-[1.65rem] p-5">
             <div className="flex items-center gap-2 text-sm font-semibold text-gray-900">
               <BookOpen className="size-4 text-teal-700" />
               Dərslər
             </div>
-            <div className="mt-4 space-y-3">
+            <div className="mt-4 divide-y divide-slate-100 dark:divide-white/10">
               {professor.courses.map((course) => (
-                <div className="rounded-2xl bg-slate-50 p-4" key={course.id}>
+                <div className="py-4 first:pt-0 last:pb-0" key={course.id}>
                   <p className="text-sm font-semibold text-gray-900">{course.code}</p>
                   <p className="mt-1 text-xs text-gray-500">{course.title}</p>
                 </div>
@@ -319,14 +320,14 @@ export function ProfessorProfile({ professorSlug }: { professorSlug: string }) {
             </div>
           </div>
 
-          <div className="rounded-3xl bg-gray-900 p-5 text-white shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+          <div className="rounded-[1.65rem] bg-[#17362f] p-5 text-white shadow-[0_14px_36px_rgba(23,54,47,0.14)] dark:bg-[#102921]">
             <MessageSquare className="size-5 text-teal-300" />
             <p className="mt-4 text-base font-semibold">Təcrübən başqasına yol göstərə bilər.</p>
             <p className="mt-2 text-sm leading-6 text-gray-300">
               Qiymətləndirməni anonim və ya öz adınla paylaş.
             </p>
             <button
-              className="mt-5 flex min-h-[44px] w-full items-center justify-center gap-2 rounded-2xl bg-white px-4 text-sm font-semibold text-gray-900 transition active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300"
+              className="mt-5 flex min-h-[44px] w-full items-center justify-center gap-2 rounded-2xl bg-[#ffffff] px-4 text-sm font-semibold text-[#17362f] transition active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300"
               type="button"
               onClick={() => setIsReviewDialogOpen(true)}
             >

@@ -114,11 +114,11 @@ export function ResourceUploadForm({
   return (
     <form
       id="resource-upload-form"
-      className="w-full max-w-full overflow-hidden rounded-3xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
+      className="app-card w-full max-w-full overflow-hidden rounded-[1.65rem] p-5"
       onSubmit={handleSubmit}
     >
       <div className="flex min-w-0 items-center gap-3">
-        <span className="flex size-11 items-center justify-center rounded-2xl bg-teal-50 text-teal-700">
+        <span className="flex size-11 items-center justify-center rounded-2xl bg-[#e9f1ff] text-[#3e6fb1] dark:bg-blue-500/10 dark:text-blue-300">
           <UploadCloud className="size-5" />
         </span>
         <div className="min-w-0">
@@ -167,8 +167,8 @@ export function ResourceUploadForm({
       <label
         className={`mt-4 flex min-h-40 w-full min-w-0 max-w-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-3xl border border-dashed px-4 py-6 text-center transition ${
           isDragging
-            ? "border-teal-300 bg-teal-50"
-            : "border-slate-200 bg-slate-50 hover:border-teal-200 hover:bg-white"
+            ? "border-[#8eb8ec] bg-[#e9f1ff] dark:bg-blue-500/10"
+            : "border-[#cad8e8] bg-[#f4f7fb] hover:border-[#8eb8ec] hover:bg-[#eef4ff] dark:border-white/10 dark:bg-white/5"
         }`}
         onDragLeave={() => setIsDragging(false)}
         onDragOver={(event) => {
@@ -185,7 +185,7 @@ export function ResourceUploadForm({
           type="file"
           onChange={(event) => handleFiles(event.target.files)}
         />
-        <FileUp className="size-7 text-teal-700" />
+        <FileUp className="size-7 text-[#3e6fb1] dark:text-blue-300" />
         <span className="mt-3 max-w-full px-2 text-sm font-semibold leading-5 text-gray-900">
           Faylı sürüşdürüb-burax və ya seç
         </span>
@@ -216,7 +216,7 @@ export function ResourceUploadForm({
         </div>
       )}
 
-      <label className="mt-4 flex min-h-[44px] w-full min-w-0 max-w-full items-center gap-3 rounded-2xl border border-gray-200 bg-slate-50 px-4 text-sm font-medium text-gray-700">
+      <label className="mt-4 flex min-h-[44px] w-full min-w-0 max-w-full items-center gap-3 rounded-2xl border border-[#dcebe6] bg-[#eff8f5] px-4 text-sm font-medium text-gray-700 dark:border-teal-500/10 dark:bg-teal-500/10">
         <input
           checked={isAnonymous}
           className="size-4 accent-gray-900"
@@ -240,7 +240,7 @@ export function ResourceUploadForm({
       )}
 
       <button
-        className="mt-5 flex min-h-[48px] w-full min-w-0 max-w-full items-center justify-center gap-2 rounded-2xl bg-gray-900 px-4 text-center text-sm font-semibold text-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-200 md:hover:-translate-y-0.5 md:hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70"
+        className="app-button-primary mt-5 flex min-h-[48px] w-full min-w-0 max-w-full items-center justify-center gap-2 rounded-2xl px-4 text-center text-sm font-semibold transition-all duration-200 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
         disabled={status === "loading"}
         type="submit"
       >

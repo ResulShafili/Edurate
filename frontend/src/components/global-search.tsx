@@ -283,7 +283,7 @@ export function GlobalSearch() {
             <div className="space-y-1">
               {group.results.map((result) => (
                 <Link
-                  className="block rounded-2xl px-3 py-3 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600"
+                  className="block rounded-2xl px-3 py-3 transition hover:bg-[#eff8f5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 dark:hover:bg-teal-500/10"
                   href={result.href}
                   key={`${group.label}-${result.id}`}
                   onClick={() => {
@@ -308,7 +308,7 @@ export function GlobalSearch() {
     <>
       <button
         aria-label="Qlobal axtarışı aç"
-        className="flex size-11 shrink-0 items-center justify-center rounded-2xl border border-slate-200 bg-white text-gray-500 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 md:hidden"
+        className="app-card flex size-11 shrink-0 items-center justify-center rounded-2xl text-gray-500 transition active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 md:hidden"
         type="button"
         onClick={() => setIsMobileOpen(true)}
       >
@@ -316,11 +316,11 @@ export function GlobalSearch() {
       </button>
 
       <div className="relative hidden md:block" ref={desktopRootRef}>
-        <label className="relative block w-[min(38vw,420px)]">
+        <label className="relative block w-[min(32vw,470px)]">
           <span className="sr-only">Bütün platformada axtar</span>
           <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
           <input
-            className="min-h-[44px] w-full rounded-2xl border border-gray-200 bg-slate-50 pl-11 pr-4 text-sm text-gray-900 outline-none placeholder:text-gray-400 focus:border-gray-400 focus:ring-0"
+            className="app-card min-h-[46px] w-full rounded-2xl bg-white pl-11 pr-4 text-sm text-gray-900 outline-none placeholder:text-gray-400 focus:border-[#80bcae] focus:ring-0"
             placeholder="Müəllim, fənn, sual və material axtar"
             type="search"
             value={query}
@@ -333,14 +333,14 @@ export function GlobalSearch() {
         </label>
 
         {isDesktopOpen && (
-          <div className="absolute left-0 top-[calc(100%+10px)] z-50 w-[520px] max-w-[calc(100vw-2rem)] rounded-3xl border border-slate-200 bg-white shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
+          <div className="app-surface absolute left-0 top-[calc(100%+10px)] z-50 w-[520px] max-w-[calc(100vw-2rem)] rounded-3xl">
             {resultContent}
           </div>
         )}
       </div>
 
       {isMobileOpen && (
-        <div className="fixed inset-0 z-[70] bg-slate-50 p-4 md:hidden">
+        <div className="fixed inset-0 z-[70] bg-[#f4f7f6] p-4 dark:bg-[#0b1118] md:hidden">
           <div className="mx-auto max-w-xl">
             <div className="flex items-center gap-3">
               <label className="relative min-w-0 flex-1">
@@ -348,7 +348,7 @@ export function GlobalSearch() {
                 <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
                 <input
                   autoFocus
-                  className="min-h-[48px] w-full rounded-2xl border border-gray-200 bg-white pl-11 pr-4 text-sm text-gray-900 outline-none placeholder:text-gray-400 focus:border-gray-400 focus:ring-0"
+                  className="app-card min-h-[50px] w-full rounded-2xl bg-white pl-11 pr-4 text-sm text-gray-900 outline-none placeholder:text-gray-400 focus:border-[#80bcae] focus:ring-0"
                   placeholder="Bütün platformada axtar"
                   type="search"
                   value={query}
@@ -357,14 +357,14 @@ export function GlobalSearch() {
               </label>
               <button
                 aria-label="Axtarışı bağla"
-                className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-white text-gray-500"
+                className="app-card flex size-12 shrink-0 items-center justify-center rounded-2xl text-gray-500"
                 type="button"
                 onClick={() => setIsMobileOpen(false)}
               >
                 <X className="size-4" />
               </button>
             </div>
-            <div className="mt-4 rounded-3xl border border-slate-200 bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+            <div className="app-surface mt-4 rounded-3xl">
               {resultContent}
             </div>
           </div>

@@ -92,11 +92,11 @@ export function QuestionForm({
   return (
     <form
       id="question-form"
-      className="rounded-3xl bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
+      className="app-card rounded-[1.65rem] p-5"
       onSubmit={handleSubmit}
     >
       <div className="flex items-center gap-3">
-        <span className="flex size-11 items-center justify-center rounded-2xl bg-teal-50 text-teal-700">
+        <span className="flex size-11 items-center justify-center rounded-2xl bg-[#dff4ec] text-[#0e7a65] dark:bg-teal-500/10 dark:text-teal-300">
           <Plus className="size-5" />
         </span>
         <div>
@@ -157,7 +157,7 @@ export function QuestionForm({
       )}
 
       <button
-        className="mt-5 flex min-h-[48px] w-full items-center justify-center gap-2 rounded-2xl bg-gray-900 px-4 text-sm font-semibold text-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-200 md:hover:-translate-y-0.5 md:hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70"
+        className="app-button-primary mt-5 flex min-h-[48px] w-full items-center justify-center gap-2 rounded-2xl px-4 text-sm font-semibold transition-all duration-200 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
         disabled={status === "loading"}
         type="submit"
       >
