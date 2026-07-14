@@ -2,7 +2,7 @@ import {
   ArrowLeft,
   FileText,
   GraduationCap,
-  MessageCircle,
+  ListChecks,
   ShieldCheck,
 } from "lucide-react";
 import Link from "next/link";
@@ -12,9 +12,9 @@ import { ThemeToggle } from "@/components/theme-toggle";
 
 const benefits = [
   {
-    title: "Anonim rəylər",
-    description: "Dərs və müəllim təcrübəni rahat paylaş.",
-    icon: MessageCircle,
+    title: "Anonim qiymətləndirmə",
+    description: "Müəllim və dərsi təhlükəsiz seçimlərlə qiymətləndir.",
+    icon: ListChecks,
   },
   {
     title: "Dərs materialları",
@@ -70,7 +70,7 @@ export function AuthFrame({
             </h1>
             <p className="mt-4 max-w-md text-sm leading-6 text-emerald-50/70">
               EduRate universitet həyatını daha aydın və rahat etmək üçün
-              rəyləri, sualları və konspektləri bir araya gətirir.
+              qiymətləndirmələri, sualları və konspektləri bir araya gətirir.
             </p>
           </div>
 

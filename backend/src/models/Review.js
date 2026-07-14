@@ -11,10 +11,10 @@ async function listByProfessor(professorId) {
         c.title AS "courseTitle",
         tr.rating_overall AS "ratingOverall",
         tr.rating_teaching AS "ratingTeaching",
-        tr.rating_difficulty AS "ratingDifficulty",
+        tr.rating_course_balance AS "ratingCourseBalance",
+        (6 - tr.rating_course_balance) AS "ratingDifficulty",
         tr.rating_grading_fairness AS "ratingObjectivity",
         tr.would_take_again AS "wouldTakeAgain",
-        tr.comment,
         tr.is_anonymous AS "isAnonymous",
         tr.semester,
         tr.academic_year AS "academicYear",
@@ -49,10 +49,9 @@ async function create({
   academicYear,
   ratingOverall,
   ratingTeaching,
-  ratingDifficulty,
+  ratingCourseBalance,
   ratingObjectivity,
   wouldTakeAgain,
-  comment,
   isAnonymous
 }) {
   const result = await db.query(
@@ -66,23 +65,22 @@ async function create({
         academic_year,
         rating_overall,
         rating_teaching,
-        rating_difficulty,
+        rating_course_balance,
         rating_grading_fairness,
         would_take_again,
-        comment,
         is_anonymous
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
       RETURNING
         id,
         teacher_id AS "professorId",
         course_id AS "courseId",
         rating_overall AS "ratingOverall",
         rating_teaching AS "ratingTeaching",
-        rating_difficulty AS "ratingDifficulty",
+        rating_course_balance AS "ratingCourseBalance",
+        (6 - rating_course_balance) AS "ratingDifficulty",
         rating_grading_fairness AS "ratingObjectivity",
         would_take_again AS "wouldTakeAgain",
-        comment,
         is_anonymous AS "isAnonymous",
         semester,
         academic_year AS "academicYear",
@@ -97,10 +95,9 @@ async function create({
       academicYear,
       ratingOverall,
       ratingTeaching,
-      ratingDifficulty,
+      ratingCourseBalance,
       ratingObjectivity,
       wouldTakeAgain,
-      comment || null,
       isAnonymous
     ]
   );

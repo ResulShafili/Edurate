@@ -10,7 +10,8 @@ const professorSelect = `
   COALESCE(stats.review_count, 0)::int AS "reviewCount",
   ROUND(COALESCE(stats.avg_overall, 0)::numeric, 1)::float AS "averageRating",
   ROUND(COALESCE(stats.avg_teaching, 0)::numeric, 1)::float AS "averageTeaching",
-  ROUND(COALESCE(stats.avg_difficulty, 0)::numeric, 1)::float AS "averageDifficulty",
+  ROUND(COALESCE(stats.avg_course_balance, 0)::numeric, 1)::float AS "averageCourseBalance",
+  ROUND(COALESCE(stats.avg_legacy_difficulty, 0)::numeric, 1)::float AS "averageDifficulty",
   ROUND(COALESCE(stats.avg_grading_fairness, 0)::numeric, 1)::float AS "averageObjectivity",
   COALESCE(course_list.courses, '[]'::jsonb) AS courses
 `;
@@ -43,7 +44,8 @@ function professorJoins() {
         COUNT(*) AS review_count,
         AVG(rating_overall) AS avg_overall,
         AVG(rating_teaching) AS avg_teaching,
-        AVG(rating_difficulty) AS avg_difficulty,
+        AVG(rating_course_balance) AS avg_course_balance,
+        AVG(6 - rating_course_balance) AS avg_legacy_difficulty,
         AVG(rating_grading_fairness) AS avg_grading_fairness
       FROM teacher_reviews tr
       WHERE tr.teacher_id = t.id

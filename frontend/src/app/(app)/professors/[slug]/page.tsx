@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: ProfessorPageProps): Promise<
   if (!professor) {
     return {
       title: "Müəllim profili | EduRate",
-      description: "Müəllim reytinqi və tələbə rəyləri.",
+      description: "Müəllim və fənn üzrə strukturlaşdırılmış tələbə qiymətləndirmələri.",
     };
   }
 
@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: ProfessorPageProps): Promise<
 
   return {
     title: `${professor.fullName}${primaryCourse ? ` — ${primaryCourse}` : ""} | EduRate`,
-    description: `${professor.fullName} üçün reytinq, çətinlik göstəricisi və tələbə rəyləri.`,
+    description: `${professor.fullName} üçün izah, obyektivlik, dərs balansı və ümumi tövsiyə nəticələri.`,
   };
 }
 

@@ -28,15 +28,13 @@ function getDefaultSemester() {
   return 'spring';
 }
 
-function calculateOverall({ ratingTeaching, ratingDifficulty, ratingObjectivity }) {
-  const difficultyAdjusted = 6 - ratingDifficulty;
-  return Math.round((ratingTeaching + ratingObjectivity + difficultyAdjusted) / 3);
-}
-
 function validateCreateReviewBody(body) {
   const errors = [];
+  const ratingOverall = toRating(body.ratingOverall);
   const ratingTeaching = toRating(body.ratingTeaching);
-  const ratingDifficulty = toRating(body.ratingDifficulty);
+  const legacyDifficulty = toRating(body.ratingDifficulty);
+  const ratingCourseBalance = toRating(body.ratingCourseBalance)
+    || (legacyDifficulty ? 6 - legacyDifficulty : null);
   const ratingObjectivity = toRating(body.ratingObjectivity);
 
   if (!body.professorId || !uuidRegex.test(body.professorId)) {
@@ -47,12 +45,16 @@ function validateCreateReviewBody(body) {
     errors.push('Valid courseId is required');
   }
 
+  if (!ratingOverall) {
+    errors.push('ratingOverall must be between 1 and 5');
+  }
+
   if (!ratingTeaching) {
     errors.push('ratingTeaching must be between 1 and 5');
   }
 
-  if (!ratingDifficulty) {
-    errors.push('ratingDifficulty must be between 1 and 5');
+  if (!ratingCourseBalance) {
+    errors.push('ratingCourseBalance must be between 1 and 5');
   }
 
   if (!ratingObjectivity) {
@@ -63,15 +65,16 @@ function validateCreateReviewBody(body) {
     errors.push('semester must be spring, summer, fall, or winter');
   }
 
-  if (body.comment && String(body.comment).trim().length > 1600) {
-    errors.push('comment must be 1600 characters or less');
+  if (Object.prototype.hasOwnProperty.call(body, 'comment')) {
+    errors.push('Open-text comments are not accepted for professor ratings');
   }
 
   return {
     errors,
     values: {
+      ratingOverall,
       ratingTeaching,
-      ratingDifficulty,
+      ratingCourseBalance,
       ratingObjectivity
     }
   };
@@ -97,7 +100,6 @@ async function createReview(req, res, next) {
       });
     }
 
-    const ratingOverall = calculateOverall(values);
     const review = await Review.create({
       universityId: req.user.universityId,
       reviewerId: req.user.id,
@@ -105,19 +107,16 @@ async function createReview(req, res, next) {
       courseId: req.body.courseId,
       semester: req.body.semester || getDefaultSemester(),
       academicYear: Number(req.body.academicYear) || new Date().getFullYear(),
-      ratingOverall,
+      ratingOverall: values.ratingOverall,
       ratingTeaching: values.ratingTeaching,
-      ratingDifficulty: values.ratingDifficulty,
+      ratingCourseBalance: values.ratingCourseBalance,
       ratingObjectivity: values.ratingObjectivity,
-      wouldTakeAgain: typeof req.body.wouldTakeAgain === 'boolean'
-        ? req.body.wouldTakeAgain
-        : null,
-      comment: req.body.comment ? String(req.body.comment).trim() : null,
+      wouldTakeAgain: values.ratingOverall >= 4,
       isAnonymous: req.body.isAnonymous !== false
     });
 
     return res.status(201).json({
-      message: 'Review created successfully',
+      message: 'Structured rating created successfully',
       review
     });
   } catch (error) {

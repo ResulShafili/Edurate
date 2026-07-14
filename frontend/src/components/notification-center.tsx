@@ -20,8 +20,8 @@ const notifications = [
   },
   {
     id: "professor-review",
-    title: "İzlədiyin müəllimə yeni rəy yazıldı",
-    detail: "Nigar Mammadovanın profilində yeni təcrübə var.",
+    title: "İzlədiyin müəllimə yeni qiymətləndirmə gəldi",
+    detail: "Nigar Mammadovanın profilində yeni nəticə var.",
     href: `/professors/${getProfessorSlug(mockProfessors[0])}`,
     time: "2 saat əvvəl",
     icon: Star,

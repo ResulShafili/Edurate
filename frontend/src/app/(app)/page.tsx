@@ -18,14 +18,14 @@ import { getProfessorSlug, mockProfessors } from "@/lib/professors";
 
 export const metadata: Metadata = {
   title: "EduRate — Qarabağ Universiteti tələbə platforması",
-  description: "Müəllim rəyləri, fənn forumu və dərs materialları bir kampus platformasında.",
+  description: "Müəllim qiymətləndirmələri, fənn forumu və dərs materialları bir kampus platformasında.",
 };
 
 const modules = [
   {
-    title: "Müəllim rəyləri",
-    description: "Təcrübələri oxu və paylaş",
-    metric: "128 aktiv rəy",
+    title: "Müəllim qiymətləri",
+    description: "Strukturlaşdırılmış nəticələrə bax",
+    metric: "128 aktiv qiymət",
     href: "/professors",
     icon: Star,
     iconTone: "bg-[#fff0e6] text-[#d75a34] dark:bg-orange-500/10 dark:text-orange-300",
@@ -68,7 +68,7 @@ const pulseStats = [
 
 const campusActivity = [
   {
-    title: "Yeni alqoritmlər rəyi",
+    title: "Yeni alqoritmlər qiyməti",
     meta: "Nigar Mammadova · 8 dəq əvvəl",
     icon: Star,
     tone: "bg-[#fff0e6] text-[#d75a34] dark:bg-orange-500/10 dark:text-orange-300",
@@ -102,7 +102,7 @@ export default function HomePage() {
             Bu gün nəyi həll edirik?
           </h1>
           <p className="mt-2 hidden max-w-xl text-sm leading-6 text-gray-500 sm:block">
-            Rəy, sual və dərs materialları tələbə həyatını bir az daha rahat etsin.
+            Qiymətləndirmə, sual və dərs materialları tələbə həyatını bir az daha rahat etsin.
           </p>
         </div>
         <div className="hidden items-center gap-2 rounded-full bg-[#dff4ec] px-3 py-2 text-xs font-medium text-[#0e7a65] dark:bg-teal-500/10 dark:text-teal-300 lg:flex">
@@ -225,7 +225,7 @@ export default function HomePage() {
           <div className="flex items-center justify-between gap-4">
             <div>
               <h2 className="text-base font-semibold text-gray-900">Yüksək qiymətləndirilənlər</h2>
-              <p className="mt-1 text-xs text-gray-400">Son tələbə rəylərinə əsasən</p>
+              <p className="mt-1 text-xs text-gray-400">Son tələbə qiymətləndirmələrinə əsasən</p>
             </div>
             <Link className="text-xs font-semibold text-[#0e7a65] hover:underline" href="/professors">
               Hamısına bax

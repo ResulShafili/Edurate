@@ -287,12 +287,11 @@ async function seedReviews(client, universityId, users, courses, teachers) {
       academicYear: 2026,
       overall: 5,
       teaching: 5,
-      difficulty: 4,
+      courseBalance: 4,
       fairness: 5,
       wouldTakeAgain: true,
       isAnonymous: false,
-      days: 1,
-      comment: 'Törəmə və limitləri çox aydın izah edir. Tapşırıqlar çətindir, amma imtahana yaxşı hazırlayır.'
+      days: 1
     },
     {
       key: 'calculus-critical',
@@ -303,12 +302,11 @@ async function seedReviews(client, universityId, users, courses, teachers) {
       academicYear: 2025,
       overall: 3,
       teaching: 4,
-      difficulty: 5,
+      courseBalance: 2,
       fairness: 3,
       wouldTakeAgain: true,
       isAnonymous: true,
-      days: 4,
-      comment: 'Mövzular maraqlıdır, sadəcə quiz-lər bəzən dərsdə keçiləndən daha ağır olur.'
+      days: 4
     },
     {
       key: 'programming-great',
@@ -319,12 +317,11 @@ async function seedReviews(client, universityId, users, courses, teachers) {
       academicYear: 2026,
       overall: 5,
       teaching: 5,
-      difficulty: 3,
+      courseBalance: 4,
       fairness: 5,
       wouldTakeAgain: true,
       isAnonymous: false,
-      days: 2,
-      comment: 'Kod review-ları çox faydalıdır. Hər dərsdə real project nümunəsi göstərir.'
+      days: 2
     },
     {
       key: 'structures-balanced',
@@ -335,12 +332,11 @@ async function seedReviews(client, universityId, users, courses, teachers) {
       academicYear: 2025,
       overall: 4,
       teaching: 4,
-      difficulty: 4,
+      courseBalance: 4,
       fairness: 4,
       wouldTakeAgain: true,
       isAnonymous: true,
-      days: 6,
-      comment: 'Linked list və tree mövzuları yaxşı oturdu. Daha çox practice session olsa super olar.'
+      days: 6
     },
     {
       key: 'db-great',
@@ -351,12 +347,11 @@ async function seedReviews(client, universityId, users, courses, teachers) {
       academicYear: 2026,
       overall: 5,
       teaching: 5,
-      difficulty: 2,
+      courseBalance: 5,
       fairness: 5,
       wouldTakeAgain: true,
       isAnonymous: false,
-      days: 3,
-      comment: 'PostgreSQL izahları çox sistemlidir. Normalization mövzusu nəhayət aydın oldu.'
+      days: 3
     },
     {
       key: 'physics-critical',
@@ -367,12 +362,11 @@ async function seedReviews(client, universityId, users, courses, teachers) {
       academicYear: 2026,
       overall: 2,
       teaching: 3,
-      difficulty: 5,
+      courseBalance: 2,
       fairness: 2,
       wouldTakeAgain: false,
       isAnonymous: true,
-      days: 8,
-      comment: 'Nəzəri izahlar güclüdür, amma qiymətləndirmə çox sərt və feedback gec gəlir.'
+      days: 8
     }
   ];
 
@@ -389,15 +383,14 @@ async function seedReviews(client, universityId, users, courses, teachers) {
           academic_year,
           rating_overall,
           rating_teaching,
-          rating_difficulty,
+          rating_course_balance,
           rating_grading_fairness,
           would_take_again,
-          comment,
           is_anonymous,
           created_at,
           updated_at
         )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $14)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $13)
         RETURNING id
       `,
       [
@@ -409,10 +402,9 @@ async function seedReviews(client, universityId, users, courses, teachers) {
         review.academicYear,
         review.overall,
         review.teaching,
-        review.difficulty,
+        review.courseBalance,
         review.fairness,
         review.wouldTakeAgain,
-        review.comment,
         review.isAnonymous,
         daysAgo(review.days)
       ]

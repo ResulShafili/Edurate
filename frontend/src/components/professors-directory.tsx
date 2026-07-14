@@ -1,10 +1,9 @@
 "use client";
 
-import { BookOpen, Check, GraduationCap, Scale, Search, Star, Users, X } from "lucide-react";
+import { BookOpen, GraduationCap, Search, Star, Users } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
-import { ProfessorCompareDialog } from "@/components/professor-compare-dialog";
 import { ContentSkeleton } from "@/components/content-skeleton";
 import {
   apiBaseUrl,
@@ -45,8 +44,6 @@ export function ProfessorsDirectory() {
   const [search, setSearch] = useState("");
   const [professors, setProfessors] = useState<ProfessorSummary[]>(mockProfessors);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedProfessorIds, setSelectedProfessorIds] = useState<string[]>([]);
-  const [isCompareOpen, setIsCompareOpen] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -113,24 +110,6 @@ export function ProfessorsDirectory() {
     });
   }, [professors, search]);
 
-  const selectedProfessors = useMemo(
-    () =>
-      selectedProfessorIds
-        .map((id) => professors.find((professor) => professor.id === id))
-        .filter((professor): professor is ProfessorSummary => Boolean(professor)),
-    [professors, selectedProfessorIds],
-  );
-
-  function toggleProfessorSelection(professorId: string) {
-    setSelectedProfessorIds((currentIds) => {
-      if (currentIds.includes(professorId)) {
-        return currentIds.filter((id) => id !== professorId);
-      }
-
-      return currentIds.length < 3 ? [...currentIds, professorId] : currentIds;
-    });
-  }
-
   return (
     <div className="space-y-6">
       <header className="space-y-4 lg:flex lg:items-end lg:justify-between lg:space-y-0">
@@ -141,9 +120,9 @@ export function ProfessorsDirectory() {
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-gray-400">Kampus təcrübəsi</p>
             <h1 className="mt-1 text-2xl font-semibold tracking-normal text-gray-900 md:text-3xl">
-              Müəllim rəyləri
+              Müəllim qiymətləndirmələri
             </h1>
-            <p className="mt-1 text-xs text-gray-500">{filteredProfessors.length} müəllim · tələbələrin real təcrübəsi</p>
+            <p className="mt-1 text-xs text-gray-500">{filteredProfessors.length} müəllim · strukturlaşdırılmış nəticələr</p>
           </div>
         </div>
 
@@ -162,12 +141,9 @@ export function ProfessorsDirectory() {
       <section aria-busy={isLoading} className="stagger-grid grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
         {isLoading ? <ContentSkeleton count={6} compact /> : filteredProfessors.map((professor, professorIndex) => {
           const tone = professorTones[professorIndex % professorTones.length];
-          const isSelected = selectedProfessorIds.includes(professor.id);
-          const selectionLimitReached = selectedProfessorIds.length >= 3 && !isSelected;
-
           return (
           <article
-            className="app-card interactive-lift group relative flex min-h-[250px] flex-col justify-between overflow-hidden rounded-[1.65rem] p-5"
+            className="app-card interactive-lift group relative flex min-h-[218px] flex-col justify-between overflow-hidden rounded-[1.65rem] p-5"
             key={professor.id}
           >
             <Link
@@ -209,29 +185,13 @@ export function ProfessorsDirectory() {
             <div className="pointer-events-none relative mt-5 flex items-center gap-5 border-t border-[#edf1ef] pt-4 dark:border-white/10">
               <div className="flex items-center gap-2 text-xs text-gray-500">
                   <Users className="size-3.5" />
-                  <span><strong className="font-semibold text-gray-900">{professor.reviewCount}</strong> rəy</span>
+                  <span><strong className="font-semibold text-gray-900">{professor.reviewCount}</strong> qiymət</span>
               </div>
               <div className="flex items-center gap-2 text-xs text-[#0e7a65] dark:text-teal-300">
                   <BookOpen className="size-3.5" />
-                  <span>Çətinlik <strong className="font-semibold">{formatRating(professor.averageDifficulty)}</strong></span>
+                  <span>Dərs balansı <strong className="font-semibold">{formatRating(professor.averageCourseBalance)}</strong></span>
               </div>
             </div>
-
-            <button
-              aria-pressed={isSelected}
-              className={`relative z-10 mt-4 flex min-h-[44px] w-full items-center justify-center gap-2 rounded-2xl border px-4 text-xs font-semibold transition active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 disabled:cursor-not-allowed disabled:opacity-45 ${
-                isSelected
-                  ? "border-[#9dd1c4] bg-[#e7f5f0] text-[#0e705e] dark:bg-teal-500/10 dark:text-teal-300"
-                  : "border-[#e1e9e6] bg-[#f8faf9] text-gray-600 hover:bg-[#eff8f5] dark:border-white/10 dark:bg-white/5"
-              }`}
-              disabled={selectionLimitReached}
-              title={selectionLimitReached ? "Maksimum 3 müəllim seçilə bilər" : undefined}
-              type="button"
-              onClick={() => toggleProfessorSelection(professor.id)}
-            >
-              {isSelected ? <Check className="size-4" /> : <Scale className="size-4" />}
-              {isSelected ? "Müqayisəyə əlavə edildi" : "Müqayisə et"}
-            </button>
           </article>
           );
         })}
@@ -252,40 +212,6 @@ export function ProfessorsDirectory() {
         </div>
       )}
 
-      {selectedProfessors.length >= 2 && (
-        <div className="fixed inset-x-4 bottom-20 z-50 md:bottom-6 md:left-[280px] md:right-8">
-          <div className="mx-auto flex max-w-xl items-center gap-3 rounded-3xl border border-white/70 bg-gray-900 p-3 text-white shadow-[0_8px_30px_rgb(0,0,0,0.14)]">
-            <div className="min-w-0 flex-1 px-2">
-              <p className="text-sm font-semibold">{selectedProfessors.length} müəllim seçildi</p>
-              <p className="mt-0.5 hidden truncate text-xs text-gray-400 sm:block">
-                {selectedProfessors.map((professor) => professor.fullName).join(" · ")}
-              </p>
-            </div>
-            <button
-              aria-label="Seçimi təmizlə"
-              className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-white/10 text-gray-300 transition active:scale-95 hover:bg-white/15 hover:text-white"
-              type="button"
-              onClick={() => setSelectedProfessorIds([])}
-            >
-              <X className="size-4" />
-            </button>
-            <button
-              className="flex min-h-[44px] shrink-0 items-center justify-center gap-2 rounded-2xl bg-white px-4 text-xs font-semibold text-gray-900 transition active:scale-[0.98]"
-              type="button"
-              onClick={() => setIsCompareOpen(true)}
-            >
-              <Scale className="size-4" />
-              Müqayisə et
-            </button>
-          </div>
-        </div>
-      )}
-
-      <ProfessorCompareDialog
-        isOpen={isCompareOpen}
-        professors={selectedProfessors}
-        onClose={() => setIsCompareOpen(false)}
-      />
     </div>
   );
 }

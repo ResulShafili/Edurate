@@ -1,3 +1,19 @@
+import { toSlug } from "@/lib/slug";
+
+export const agreementOptions = [
+  { value: 1, label: "Tamamilə razı deyiləm", shortLabel: "Tam narazı" },
+  { value: 2, label: "Razı deyiləm", shortLabel: "Narazı" },
+  { value: 3, label: "Neytralam", shortLabel: "Neytral" },
+  { value: 4, label: "Razıyam", shortLabel: "Razı" },
+  { value: 5, label: "Tamamilə razıyam", shortLabel: "Tam razı" },
+] as const;
+
+export type AgreementValue = (typeof agreementOptions)[number]["value"];
+
+export function getAgreementLabel(value: number) {
+  return agreementOptions.find((option) => option.value === value)?.label || "Seçilməyib";
+}
+
 export type CourseSummary = {
   id: string;
   code: string;
@@ -11,10 +27,9 @@ export type ReviewSummary = {
   courseTitle: string;
   ratingOverall: number;
   ratingTeaching: number;
-  ratingDifficulty: number;
+  ratingCourseBalance: number;
   ratingObjectivity: number;
   wouldTakeAgain: boolean | null;
-  comment: string;
   isAnonymous: boolean;
   semester: string;
   academicYear: number;
@@ -33,7 +48,7 @@ export type ProfessorSummary = {
   reviewCount: number;
   averageRating: number;
   averageTeaching: number;
-  averageDifficulty: number;
+  averageCourseBalance: number;
   averageObjectivity: number;
   courses: CourseSummary[];
 };
@@ -53,7 +68,7 @@ export const mockProfessors: ProfessorProfile[] = [
     reviewCount: 2,
     averageRating: 4.8,
     averageTeaching: 4.9,
-    averageDifficulty: 3.4,
+    averageCourseBalance: 4.0,
     averageObjectivity: 4.7,
     courses: [
       {
@@ -75,10 +90,9 @@ export const mockProfessors: ProfessorProfile[] = [
         courseTitle: "Data Structures",
         ratingOverall: 5,
         ratingTeaching: 5,
-        ratingDifficulty: 3,
+        ratingCourseBalance: 4,
         ratingObjectivity: 5,
         wouldTakeAgain: true,
-        comment: "Mövzuları çox aydın izah edir və tapşırıqlar real imtahana yaxşı hazırlayır.",
         isAnonymous: true,
         semester: "fall",
         academicYear: 2026,
@@ -92,10 +106,9 @@ export const mockProfessors: ProfessorProfile[] = [
         courseTitle: "Algorithms",
         ratingOverall: 5,
         ratingTeaching: 5,
-        ratingDifficulty: 4,
+        ratingCourseBalance: 4,
         ratingObjectivity: 4,
         wouldTakeAgain: true,
-        comment: "Çətin dərsdir, amma izahlar sistemlidir. Lab-ları vaxtında etmək lazımdır.",
         isAnonymous: true,
         semester: "spring",
         academicYear: 2026,
@@ -114,7 +127,7 @@ export const mockProfessors: ProfessorProfile[] = [
     reviewCount: 2,
     averageRating: 4.6,
     averageTeaching: 4.6,
-    averageDifficulty: 3.8,
+    averageCourseBalance: 3.0,
     averageObjectivity: 4.5,
     courses: [
       {
@@ -136,10 +149,9 @@ export const mockProfessors: ProfessorProfile[] = [
         courseTitle: "Databases",
         ratingOverall: 4,
         ratingTeaching: 4,
-        ratingDifficulty: 4,
+        ratingCourseBalance: 4,
         ratingObjectivity: 5,
         wouldTakeAgain: true,
-        comment: "SQL mövzularını layihə üzərindən izah etməsi çox kömək edir.",
         isAnonymous: true,
         semester: "fall",
         academicYear: 2026,
@@ -153,10 +165,9 @@ export const mockProfessors: ProfessorProfile[] = [
         courseTitle: "Backend Engineering",
         ratingOverall: 3,
         ratingTeaching: 4,
-        ratingDifficulty: 5,
+        ratingCourseBalance: 2,
         ratingObjectivity: 3,
         wouldTakeAgain: true,
-        comment: "Tapşırıqlar öyrədicidir, amma deadline-lar bir-birinə çox yaxın düşür. Həftəlik planla getmək vacibdir.",
         isAnonymous: false,
         semester: "spring",
         academicYear: 2026,
@@ -175,7 +186,7 @@ export const mockProfessors: ProfessorProfile[] = [
     reviewCount: 2,
     averageRating: 4.5,
     averageTeaching: 4.7,
-    averageDifficulty: 3.1,
+    averageCourseBalance: 3.5,
     averageObjectivity: 4.4,
     courses: [
       {
@@ -197,10 +208,9 @@ export const mockProfessors: ProfessorProfile[] = [
         courseTitle: "React Fundamentals",
         ratingOverall: 5,
         ratingTeaching: 5,
-        ratingDifficulty: 3,
+        ratingCourseBalance: 4,
         ratingObjectivity: 4,
         wouldTakeAgain: true,
-        comment: "Kod review-ları çox faydalıdır, dərsdən sonra nəyi düzəltmək lazım olduğunu bilirsən.",
         isAnonymous: true,
         semester: "spring",
         academicYear: 2026,
@@ -214,10 +224,9 @@ export const mockProfessors: ProfessorProfile[] = [
         courseTitle: "Product UI",
         ratingOverall: 4,
         ratingTeaching: 4,
-        ratingDifficulty: 3,
+        ratingCourseBalance: 3,
         ratingObjectivity: 5,
         wouldTakeAgain: true,
-        comment: "Dizayn qərarlarını əsaslandırmağı öyrədir. Rəy sessiyaları faydalıdır, təqdimat hissəsi isə bir az daha çox vaxt istəyir.",
         isAnonymous: true,
         semester: "fall",
         academicYear: 2025,
@@ -248,4 +257,3 @@ export function formatRating(value: number) {
 }
 
 export const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "";
-import { toSlug } from "@/lib/slug";

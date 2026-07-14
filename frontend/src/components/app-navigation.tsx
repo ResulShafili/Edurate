@@ -19,7 +19,7 @@ import { clearStoredAuth, useAuthUser } from "@/hooks/use-auth-user";
 
 const navItems = [
   { href: "/", label: "Ana səhifə", icon: Home },
-  { href: "/professors", label: "Rəylər", icon: Star },
+  { href: "/professors", label: "Müəllimlər", icon: Star },
   { href: "/forum", label: "Forum", icon: MessageSquare },
   { href: "/resources", label: "Resurs", icon: FileText },
 ];
@@ -147,7 +147,7 @@ export function AppNavigation() {
             <div className="rounded-2xl border border-[#f3ddcf] bg-[#fff5ef] p-4 dark:border-orange-500/10 dark:bg-orange-500/10">
               <p className="text-sm font-semibold text-gray-900">Kampus hesabına qoşul</p>
               <p className="mt-1 text-xs leading-5 text-gray-500">
-                Rəy, sual və material paylaşmaq üçün daxil ol.
+                Qiymətləndirmə, sual və material paylaşmaq üçün daxil ol.
               </p>
               <div className="mt-4 grid grid-cols-2 gap-2">
                 <Link

@@ -30,10 +30,10 @@ export const metadata: Metadata = {
       (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"),
   ),
   title: "EduRate",
-  description: "Qarabağ Universiteti üçün müəllim rəyləri, forum və dərs materialları platforması.",
+  description: "Qarabağ Universiteti üçün müəllim qiymətləndirmələri, forum və dərs materialları platforması.",
   openGraph: {
     title: "EduRate",
-    description: "Qarabağ Universiteti üçün müəllim rəyləri, forum və dərs materialları platforması.",
+    description: "Qarabağ Universiteti üçün müəllim qiymətləndirmələri, forum və dərs materialları platforması.",
     locale: "az_AZ",
     siteName: "EduRate",
     type: "website",

@@ -3,12 +3,17 @@
 import {
   ArrowLeft,
   BookOpen,
+  CircleCheck,
+  Gauge,
   GraduationCap,
-  MessageSquare,
+  Lightbulb,
+  ListChecks,
   PencilLine,
+  Scale,
   ShieldCheck,
   Star,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
@@ -17,6 +22,7 @@ import {
   apiBaseUrl,
   findMockProfessor,
   formatRating,
+  getAgreementLabel,
 } from "@/lib/professors";
 import type {
   ProfessorProfile as ProfessorProfileType,
@@ -30,28 +36,63 @@ type ProfessorResponse = {
 type ReviewSort = "newest" | "highest";
 
 function RatingCard({
+  barClass,
+  icon: Icon,
+  iconClass,
   label,
   value,
   hint,
 }: {
+  barClass: string;
+  icon: LucideIcon;
+  iconClass: string;
   label: string;
   value: number;
   hint: string;
 }) {
   return (
     <div className="app-card interactive-lift rounded-[1.65rem] p-5">
-      <p className="text-xs font-medium text-gray-400">{label}</p>
-      <div className="mt-2 flex items-center gap-2">
-        <Star className="size-4 fill-orange-500 text-orange-500" />
-        <p className="text-2xl font-semibold text-gray-900">{formatRating(value)}</p>
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-xs font-medium text-gray-400">{label}</p>
+          <p className="mt-2 text-2xl font-semibold text-gray-900">{formatRating(value)}</p>
+        </div>
+        <span className={`flex size-10 items-center justify-center rounded-2xl ${iconClass}`}>
+          <Icon className="size-4" />
+        </span>
       </div>
       <p className="mt-1 hidden text-xs text-gray-500 md:block">{hint}</p>
       <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-slate-100">
         <div
-          className="h-full rounded-full bg-teal-600 transition-[width] duration-200"
+          className={`h-full rounded-full transition-[width] duration-200 ${barClass}`}
           style={{ width: `${Math.max(0, Math.min(value, 5)) * 20}%` }}
         />
       </div>
+    </div>
+  );
+}
+
+function StructuredRating({
+  label,
+  tone,
+  value,
+}: {
+  label: string;
+  tone: string;
+  value: number;
+}) {
+  return (
+    <div className={`rounded-2xl border p-3.5 ${tone}`}>
+      <dt className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.06em] opacity-70">
+        <CircleCheck className="size-3.5" />
+        {label}
+      </dt>
+      <dd className="mt-2 flex items-center justify-between gap-3">
+        <span className="text-xs font-semibold leading-4">{getAgreementLabel(value)}</span>
+        <span className="shrink-0 rounded-full bg-white/70 px-2 py-1 text-[10px] font-semibold dark:bg-white/10">
+          {value}/5
+        </span>
+      </dd>
     </div>
   );
 }
@@ -168,7 +209,7 @@ export function ProfessorProfile({ professorSlug }: { professorSlug: string }) {
               onClick={() => setIsReviewDialogOpen(true)}
             >
               <PencilLine className="size-4" />
-              Rəy yaz
+              Qiymətləndir
             </button>
           </div>
 
@@ -191,15 +232,15 @@ export function ProfessorProfile({ professorSlug }: { professorSlug: string }) {
             <div className="p-4">
               <div className="flex items-center gap-2 text-xs text-gray-500">
                 <BookOpen className="size-3.5" />
-                Çətinlik
+                Dərs balansı
               </div>
               <p className="mt-1 text-2xl font-semibold text-gray-900">
-                {formatRating(professor.averageDifficulty)}
+                {formatRating(professor.averageCourseBalance)}
               </p>
               <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-[#dcebe6] dark:bg-white/10">
                 <div
                   className="h-full rounded-full bg-teal-600"
-                  style={{ width: `${Math.max(0, Math.min(professor.averageDifficulty, 5)) * 20}%` }}
+                  style={{ width: `${Math.max(0, Math.min(professor.averageCourseBalance, 5)) * 20}%` }}
                 />
               </div>
             </div>
@@ -209,17 +250,26 @@ export function ProfessorProfile({ professorSlug }: { professorSlug: string }) {
 
       <section className="grid gap-4 lg:grid-cols-3">
         <RatingCard
+          barClass="bg-orange-500"
           hint="Mövzuları nə qədər aydın izah edir"
+          icon={Lightbulb}
+          iconClass="bg-orange-50 text-orange-600"
           label="İzah"
           value={professor.averageTeaching}
         />
         <RatingCard
-          hint="Dərs yükü və imtahan səviyyəsi"
-          label="Çətinlik"
-          value={professor.averageDifficulty}
+          barClass="bg-teal-600"
+          hint="Dərs tempi, tapşırıq yükü və imtahan səviyyəsi"
+          icon={Gauge}
+          iconClass="bg-teal-50 text-teal-700"
+          label="Dərs balansı"
+          value={professor.averageCourseBalance}
         />
         <RatingCard
+          barClass="bg-blue-500"
           hint="Qiymətləndirmə və davranış balansı"
+          icon={Scale}
+          iconClass="bg-blue-50 text-blue-600"
           label="Obyektivlik"
           value={professor.averageObjectivity}
         />
@@ -229,20 +279,20 @@ export function ProfessorProfile({ professorSlug }: { professorSlug: string }) {
         <div className="min-w-0 space-y-4">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div>
-              <h2 className="text-base font-semibold text-gray-900">Tələbə rəyləri</h2>
-              <p className="mt-1 text-xs text-gray-400">{reviewCount} paylaşılmış təcrübə</p>
+              <h2 className="text-base font-semibold text-gray-900">Tələbə qiymətləndirmələri</h2>
+              <p className="mt-1 text-xs text-gray-400">{reviewCount} strukturlaşdırılmış nəticə</p>
             </div>
             <div className="flex items-center gap-2">
               {isLoading && <span className="text-xs text-gray-400">Yenilənir...</span>}
               <label>
-                <span className="sr-only">Rəyləri sırala</span>
+                <span className="sr-only">Qiymətləndirmələri sırala</span>
                 <select
                   className="min-h-[44px] rounded-2xl border border-gray-200 bg-slate-50 px-4 text-xs font-semibold text-gray-700 outline-none focus:border-gray-400 focus:ring-0"
                   value={reviewSort}
                   onChange={(event) => setReviewSort(event.target.value as ReviewSort)}
                 >
                   <option value="newest">Ən yeni</option>
-                  <option value="highest">Ən yüksək reytinq</option>
+                  <option value="highest">Ən yüksək nəticə</option>
                 </select>
               </label>
             </div>
@@ -268,37 +318,47 @@ export function ProfessorProfile({ professorSlug }: { professorSlug: string }) {
                     {review.courseCode} · {review.courseTitle} · {formatReviewDate(review.createdAt)}
                   </p>
                 </div>
-                <div className="flex min-h-[44px] items-center gap-1 rounded-2xl bg-slate-50 px-3 text-sm font-semibold text-gray-900">
-                  <Star className="size-4 fill-orange-500 text-orange-500" />
-                  {review.ratingOverall}
+                <div className="flex min-h-[44px] items-center gap-2 rounded-2xl bg-[#fff6cf] px-3 text-xs font-semibold text-[#745900] dark:bg-yellow-500/10 dark:text-yellow-200">
+                  <CircleCheck className="size-4" />
+                  {getAgreementLabel(review.ratingOverall)}
                 </div>
               </div>
-              <p className="mt-4 text-sm leading-6 text-gray-600">{review.comment}</p>
-              <div className="mt-4 flex flex-wrap gap-2 md:gap-3">
-                <span className="rounded-2xl bg-teal-50 px-3 py-2 text-xs font-medium text-teal-700">
-                  İzah {review.ratingTeaching}/5
-                </span>
-                <span className="rounded-2xl bg-slate-50 px-3 py-2 text-xs font-medium text-gray-600">
-                  Çətinlik {review.ratingDifficulty}/5
-                </span>
-                <span className="rounded-2xl bg-orange-50 px-3 py-2 text-xs font-medium text-orange-600">
-                  Obyektivlik {review.ratingObjectivity}/5
-                </span>
-              </div>
+              <dl className="mt-4 grid gap-2 sm:grid-cols-2">
+                <StructuredRating
+                  label="İzah"
+                  tone="border-orange-100 bg-orange-50 text-orange-700"
+                  value={review.ratingTeaching}
+                />
+                <StructuredRating
+                  label="Obyektivlik"
+                  tone="border-blue-100 bg-blue-50 text-blue-700"
+                  value={review.ratingObjectivity}
+                />
+                <StructuredRating
+                  label="Dərs balansı"
+                  tone="border-teal-100 bg-teal-50 text-teal-700"
+                  value={review.ratingCourseBalance}
+                />
+                <StructuredRating
+                  label="Ümumi tövsiyə"
+                  tone="border-yellow-100 bg-[#fffaf0] text-[#745900] dark:border-yellow-500/10 dark:bg-yellow-500/10 dark:text-yellow-200"
+                  value={review.ratingOverall}
+                />
+              </dl>
             </article>
           ))}
 
           {sortedReviews.length === 0 && (
             <div className="app-card rounded-3xl p-8 text-center">
-              <MessageSquare className="mx-auto size-6 text-teal-700" />
-              <p className="mt-3 text-sm font-semibold text-gray-900">Hələ rəy yoxdur</p>
-              <p className="mt-1 text-sm text-gray-500">İlk rəyi sən paylaşa bilərsən.</p>
+              <ListChecks className="mx-auto size-6 text-teal-700" />
+              <p className="mt-3 text-sm font-semibold text-gray-900">Hələ qiymətləndirmə yoxdur</p>
+              <p className="mt-1 text-sm text-gray-500">İlk strukturlaşdırılmış qiymətləndirməni sən et.</p>
               <button
                 className="mx-auto mt-5 flex min-h-[44px] items-center justify-center rounded-2xl bg-gray-900 px-5 text-sm font-semibold text-white"
                 type="button"
                 onClick={() => setIsReviewDialogOpen(true)}
               >
-                İlk rəyi yaz
+                İlk qiymətləndirməni et
               </button>
             </div>
           )}
@@ -321,10 +381,10 @@ export function ProfessorProfile({ professorSlug }: { professorSlug: string }) {
           </div>
 
           <div className="rounded-[1.65rem] bg-[#17362f] p-5 text-white shadow-[0_14px_36px_rgba(23,54,47,0.14)] dark:bg-[#102921]">
-            <MessageSquare className="size-5 text-teal-300" />
+            <ListChecks className="size-5 text-teal-300" />
             <p className="mt-4 text-base font-semibold">Təcrübən başqasına yol göstərə bilər.</p>
             <p className="mt-2 text-sm leading-6 text-gray-300">
-              Qiymətləndirməni anonim və ya öz adınla paylaş.
+              Dörd qısa kateqoriyanı anonim və ya öz adınla qiymətləndir.
             </p>
             <button
               className="mt-5 flex min-h-[44px] w-full items-center justify-center gap-2 rounded-2xl bg-[#ffffff] px-4 text-sm font-semibold text-[#17362f] transition active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300"
@@ -332,7 +392,7 @@ export function ProfessorProfile({ professorSlug }: { professorSlug: string }) {
               onClick={() => setIsReviewDialogOpen(true)}
             >
               <PencilLine className="size-4" />
-              Rəy yaz
+              Qiymətləndir
             </button>
           </div>
         </aside>
